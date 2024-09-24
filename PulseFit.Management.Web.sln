@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35303.130
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PulseFit.Management.Web", "PulseFit.Management.Web.csproj", "{645AE645-3ADD-4AFB-8C10-998FE88428B2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{645AE645-3ADD-4AFB-8C10-998FE88428B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{645AE645-3ADD-4AFB-8C10-998FE88428B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{645AE645-3ADD-4AFB-8C10-998FE88428B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{645AE645-3ADD-4AFB-8C10-998FE88428B2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {56C420B6-24E9-46A8-BEA1-655D26450884}
+	EndGlobalSection
+EndGlobal
