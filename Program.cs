@@ -1,6 +1,5 @@
-using PulseFit.Management.Web.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
+using PulseFit.Management.Web.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
