@@ -28,7 +28,7 @@ namespace PulseFit.Management.Web.Data.Entities
 
         public string ClientImagePath { get; set; } // Caminho para a imagem do cliente
 
-        // Identificador do utilizador r. É obrigatório e serve como chave estrangeira.
+        // Identificador do utilizador. É obrigatório e serve como chave estrangeira.
         [Required]
         public string UserId { get; set; }
 
