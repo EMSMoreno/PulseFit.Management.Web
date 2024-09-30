@@ -1,13 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PulseFit.Management.Web.Data.Entities;
 
 namespace PulseFit.Management.Web.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<User>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
-
         }
 
         public DbSet<Alert> Alerts { get; set; }
@@ -31,8 +31,7 @@ namespace PulseFit.Management.Web.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Delete All Connections using Cascate Delete Rule
-
+            // Delete All Connections using Cascade Delete Rule
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
@@ -40,6 +39,5 @@ namespace PulseFit.Management.Web.Data
 
             base.OnModelCreating(modelBuilder);
         }
-
     }
 }

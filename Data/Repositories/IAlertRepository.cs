@@ -1,7 +1,9 @@
-﻿namespace PulseFit.Management.Web.Data.Repositories
+﻿using PulseFit.Management.Web.Data.Entities;
+
+namespace PulseFit.Management.Web.Data.Repositories
 {
-    public interface IAlertRepository
+    public interface IAlertRepository : IGenericRepository<Alert>
     {
-        //Interface para o repositório de alertas.
+        Task<IEnumerable<Alert>> GetActiveAlertsAsync();
     }
 }

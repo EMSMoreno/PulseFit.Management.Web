@@ -56,22 +56,19 @@ namespace PulseFit.Management.Web.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ClientProfilePicPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ProfilePictureId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastLogin = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -119,6 +116,7 @@ namespace PulseFit.Management.Web.Migrations
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsResolved = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     GymId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -131,8 +129,8 @@ namespace PulseFit.Management.Web.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Alerts_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Alerts_Users_UserId1",
+                        column: x => x.UserId1,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -151,15 +149,14 @@ namespace PulseFit.Management.Web.Migrations
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Shift = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId1 = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Employees_Users_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Employees_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -174,15 +171,14 @@ namespace PulseFit.Management.Web.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Specialization = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ExperienceYears = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId1 = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Nutritionists", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Nutritionists_Users_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Nutritionists_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -199,6 +195,7 @@ namespace PulseFit.Management.Web.Migrations
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Duration = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     GymId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false)
@@ -213,8 +210,8 @@ namespace PulseFit.Management.Web.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_NutritionPlans_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_NutritionPlans_Users_UserId1",
+                        column: x => x.UserId1,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -232,14 +229,15 @@ namespace PulseFit.Management.Web.Migrations
                     Duration = table.Column<int>(type: "int", nullable: false),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     InstructorId = table.Column<int>(type: "int", nullable: false),
+                    InstructorId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Rating = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OnlineClasses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OnlineClasses_Users_InstructorId",
-                        column: x => x.InstructorId,
+                        name: "FK_OnlineClasses_Users_InstructorId1",
+                        column: x => x.InstructorId1,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -254,6 +252,7 @@ namespace PulseFit.Management.Web.Migrations
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -262,8 +261,8 @@ namespace PulseFit.Management.Web.Migrations
                 {
                     table.PrimaryKey("PK_Payments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Payments_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Payments_Users_UserId1",
+                        column: x => x.UserId1,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -281,15 +280,14 @@ namespace PulseFit.Management.Web.Migrations
                     Certification = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     HireDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId1 = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PersonalTrainers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PersonalTrainers_Users_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_PersonalTrainers_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -305,15 +303,14 @@ namespace PulseFit.Management.Web.Migrations
                     GenerationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Data = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId1 = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Reports", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reports_Users_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Reports_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -326,6 +323,7 @@ namespace PulseFit.Management.Web.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SubscriptionId = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -341,8 +339,8 @@ namespace PulseFit.Management.Web.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_UserSubscriptions_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_UserSubscriptions_Users_UserId1",
+                        column: x => x.UserId1,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -365,6 +363,7 @@ namespace PulseFit.Management.Web.Migrations
                     MaxCapacity = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     InstructorId = table.Column<int>(type: "int", nullable: false),
+                    InstructorId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     GymId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -377,8 +376,8 @@ namespace PulseFit.Management.Web.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Workouts_Users_InstructorId",
-                        column: x => x.InstructorId,
+                        name: "FK_Workouts_Users_InstructorId1",
+                        column: x => x.InstructorId1,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -391,6 +390,7 @@ namespace PulseFit.Management.Web.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClientId = table.Column<int>(type: "int", nullable: false),
+                    ClientId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     DietaryRestrictions = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     HealthConditions = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CaloricGoal = table.Column<int>(type: "int", nullable: false),
@@ -407,8 +407,8 @@ namespace PulseFit.Management.Web.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ClientPreferences_Users_ClientId",
-                        column: x => x.ClientId,
+                        name: "FK_ClientPreferences_Users_ClientId1",
+                        column: x => x.ClientId1,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -430,8 +430,7 @@ namespace PulseFit.Management.Web.Migrations
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ClientImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId1 = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PersonalTrainerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -450,8 +449,8 @@ namespace PulseFit.Management.Web.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Clients_Users_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Clients_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -467,6 +466,7 @@ namespace PulseFit.Management.Web.Migrations
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WorkoutId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     TrainingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     GymId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -480,8 +480,8 @@ namespace PulseFit.Management.Web.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Bookings_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Bookings_Users_UserId1",
+                        column: x => x.UserId1,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -500,6 +500,7 @@ namespace PulseFit.Management.Web.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     WorkoutId = table.Column<int>(type: "int", nullable: false),
                     GymId = table.Column<int>(type: "int", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false),
@@ -516,8 +517,8 @@ namespace PulseFit.Management.Web.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Feedbacks_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Feedbacks_Users_UserId1",
+                        column: x => x.UserId1,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -535,9 +536,9 @@ namespace PulseFit.Management.Web.Migrations
                 column: "GymId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Alerts_UserId",
+                name: "IX_Alerts_UserId1",
                 table: "Alerts",
-                column: "UserId");
+                column: "UserId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_GymId",
@@ -545,9 +546,9 @@ namespace PulseFit.Management.Web.Migrations
                 column: "GymId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bookings_UserId",
+                name: "IX_Bookings_UserId1",
                 table: "Bookings",
-                column: "UserId");
+                column: "UserId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_WorkoutId",
@@ -555,9 +556,9 @@ namespace PulseFit.Management.Web.Migrations
                 column: "WorkoutId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientPreferences_ClientId",
+                name: "IX_ClientPreferences_ClientId1",
                 table: "ClientPreferences",
-                column: "ClientId");
+                column: "ClientId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClientPreferences_NutritionistId",
@@ -575,14 +576,14 @@ namespace PulseFit.Management.Web.Migrations
                 column: "SubscriptionPlanId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Clients_UserId1",
+                name: "IX_Clients_UserId",
                 table: "Clients",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employees_UserId1",
+                name: "IX_Employees_UserId",
                 table: "Employees",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Equipments_GymId",
@@ -595,9 +596,9 @@ namespace PulseFit.Management.Web.Migrations
                 column: "GymId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Feedbacks_UserId",
+                name: "IX_Feedbacks_UserId1",
                 table: "Feedbacks",
-                column: "UserId");
+                column: "UserId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Feedbacks_WorkoutId",
@@ -605,9 +606,9 @@ namespace PulseFit.Management.Web.Migrations
                 column: "WorkoutId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Nutritionists_UserId1",
+                name: "IX_Nutritionists_UserId",
                 table: "Nutritionists",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_NutritionPlans_GymId",
@@ -615,29 +616,29 @@ namespace PulseFit.Management.Web.Migrations
                 column: "GymId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_NutritionPlans_UserId",
+                name: "IX_NutritionPlans_UserId1",
                 table: "NutritionPlans",
-                column: "UserId");
+                column: "UserId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OnlineClasses_InstructorId",
+                name: "IX_OnlineClasses_InstructorId1",
                 table: "OnlineClasses",
-                column: "InstructorId");
+                column: "InstructorId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payments_UserId",
+                name: "IX_Payments_UserId1",
                 table: "Payments",
+                column: "UserId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonalTrainers_UserId",
+                table: "PersonalTrainers",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PersonalTrainers_UserId1",
-                table: "PersonalTrainers",
-                column: "UserId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reports_UserId1",
+                name: "IX_Reports_UserId",
                 table: "Reports",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserSubscriptions_SubscriptionId",
@@ -645,9 +646,9 @@ namespace PulseFit.Management.Web.Migrations
                 column: "SubscriptionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserSubscriptions_UserId",
+                name: "IX_UserSubscriptions_UserId1",
                 table: "UserSubscriptions",
-                column: "UserId");
+                column: "UserId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Workouts_GymId",
@@ -655,9 +656,9 @@ namespace PulseFit.Management.Web.Migrations
                 column: "GymId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Workouts_InstructorId",
+                name: "IX_Workouts_InstructorId1",
                 table: "Workouts",
-                column: "InstructorId");
+                column: "InstructorId1");
         }
 
         /// <inheritdoc />
