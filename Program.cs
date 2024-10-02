@@ -73,6 +73,14 @@ builder.Services.AddScoped<IBlobHelper, BlobHelper>();
 builder.Services.AddScoped<IAlertRepository, AlertRepository>();
 //builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/NotAuthorized";
+
+    options.AccessDeniedPath = "/Account/NotAuthorized";
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

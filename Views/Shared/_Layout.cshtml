@@ -44,8 +44,13 @@
 
                     @* Login *@
                     <ul class="nav navbar-nav navbar-right">
+                        <!--Para saber se o utlizador está autenticado ou nao-->
+                        <!--Se o utilizador estiver autenticado-->
                         @if (this.User.Identity.IsAuthenticated)
                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Gyms" asp-action="Index">Gyms</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ChangeUser">@this.User.Identity.Name</a>
                             </li>
@@ -53,6 +58,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
                             </li>
                         }
+                        @*Se o utilizador nao estiver autenticado*@
                         else
                         {
                             <li class="nav-item">
