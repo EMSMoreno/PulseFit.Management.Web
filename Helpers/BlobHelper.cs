@@ -1,44 +1,72 @@
-﻿using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace PulseFit.Management.Web.Helpers
 {
     public class BlobHelper : IBlobHelper
     {
-        private readonly CloudBlobClient _blobClient;
+        private readonly string _storagePath;
 
         public BlobHelper(IConfiguration configuration)
         {
-            // Conexão com Azure Blob Storage
-            string keys = configuration["Blob:ConnectionStrings"];
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(keys);
-            _blobClient = storageAccount.CreateCloudBlobClient();
+            var keys = configuration["Blob:ConnectionStrings"];
+            // TODO: Configure a conexão com o Azure Blob Storage antes de ir para produção ESTAMOS A ARMAZENAR LOCALMENTE TENDO ASSIM O BLOB
+            //nao esquecer de por o blob a armazenar no AZURE e modifcar o appsettings com a connection string
+            // Verifique se a chave de conexão está vazia para usar o armazenamento local
+            if (string.IsNullOrEmpty(keys))
+            {
+                _storagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                if (!Directory.Exists(_storagePath))
+                {
+                    Directory.CreateDirectory(_storagePath);
+                }
+            }
+            else
+            {
+                // Lógica do Azure Blob Storage
+                // CloudStorageAccount storageAccount = CloudStorageAccount.Parse(keys);
+                // _blobClient = storageAccount.CreateCloudBlobClient();
+            }
         }
 
         public async Task<Guid> UploadBlobAsync(IFormFile file, string containerName)
         {
-            Stream stream = file.OpenReadStream();
+            using var stream = file.OpenReadStream();
             return await UploadStreamAsync(stream, containerName);
         }
 
         public async Task<Guid> UploadBlobAsync(byte[] file, string containerName)
         {
-            MemoryStream stream = new MemoryStream(file);
+            using var stream = new MemoryStream(file);
             return await UploadStreamAsync(stream, containerName);
         }
 
         public async Task<Guid> UploadBlobAsync(string image, string containerName)
         {
-            Stream stream = File.OpenRead(image);
+            using var stream = File.OpenRead(image);
             return await UploadStreamAsync(stream, containerName);
         }
 
         private async Task<Guid> UploadStreamAsync(Stream stream, string containerName)
         {
-            Guid name = Guid.NewGuid();
-            CloudBlobContainer container = _blobClient.GetContainerReference(containerName);
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference($"{name}");
-            await blockBlob.UploadFromStreamAsync(stream);
+            var name = Guid.NewGuid();
+
+            // Salva o arquivo no sistema de arquivos local
+            var path = Path.Combine(_storagePath, containerName);
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            var filePath = Path.Combine(path, $"{name}");
+            using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+            {
+                await stream.CopyToAsync(fileStream);
+            }
+
             return name;
         }
     }

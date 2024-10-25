@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace PulseFit.Management.Web.Data.Entities
 {
@@ -6,17 +7,17 @@ namespace PulseFit.Management.Web.Data.Entities
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
-
+        [Required]
         public string Specialization { get; set; }
 
         public int ExperienceYears { get; set; }
 
-        // Identificador do utilizador r. É obrigatório e serve como chave estrangeira.
+        public Status Status { get; set; } = Status.Active;
+
+        // FK para User
         [Required]
         public string UserId { get; set; }
 
-        // Navegação para a entidade `User`. Representa o utilizador.
         public User User { get; set; }
     }
 }

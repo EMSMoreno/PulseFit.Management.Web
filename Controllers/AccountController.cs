@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using PulseFit.Management.Web.Data.Entities;
 using PulseFit.Management.Web.Helpers;
 using PulseFit.Management.Web.Models;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PulseFit.Management.Web.Controllers
 {
@@ -10,15 +13,18 @@ namespace PulseFit.Management.Web.Controllers
     {
         private readonly IUserHelper _userHelper;
         private readonly IMailHelper _mailHelper;
+        private readonly IBlobHelper _blobHelper;
         private readonly IConfiguration _configuration;
 
         public AccountController(
             IUserHelper userHelper,
             IMailHelper mailHelper,
+            IBlobHelper blobHelper,
             IConfiguration configuration)
         {
             _userHelper = userHelper;
             _mailHelper = mailHelper;
+            _blobHelper = blobHelper;
             _configuration = configuration;
         }
 
@@ -61,14 +67,14 @@ namespace PulseFit.Management.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // Displays the registration page
+        // Displays the registration page for clients
         public IActionResult Register()
         {
             var model = new RegisterNewUserViewModel();
             return View(model);
         }
 
-        // Processes the registration
+        // Processes the registration for clients
         [HttpPost]
         public async Task<IActionResult> Register(RegisterNewUserViewModel model)
         {
@@ -89,6 +95,14 @@ namespace PulseFit.Management.Web.Controllers
                         DateCreated = DateTime.UtcNow
                     };
 
+                    // Verificar se foi enviada uma imagem de perfil
+                    if (model.ProfilePicture != null)
+                    {
+                        // Fazer o upload da imagem e obter o ID do blob armazenado
+                        var profilePictureId = await _blobHelper.UploadBlobAsync(model.ProfilePicture, "profile-pics");
+                        user.ProfilePictureId = profilePictureId;
+                    }
+
                     var result = await _userHelper.AddUserAsync(user, model.Password);
                     if (result != IdentityResult.Success)
                     {
@@ -96,14 +110,10 @@ namespace PulseFit.Management.Web.Controllers
                         return View(model);
                     }
 
-                    // Automatically assign the role "Pending" to the new user
-                    await _userHelper.AddUserToRoleAsync(user, "Pending");
+                    // Atribuir diretamente o role "Client" ao utilizador
+                    await _userHelper.AddUserToRoleAsync(user, "Client");
 
-
-                    // Notifica os funcionários da secretaria sobre o novo utilizador "Pending"
-                    //await _userHelper.NotifySecretaryPendingUserAsync(user);
-
-                    // Email confirmation logic (optional)
+                    // Lógica de confirmação de email (opcional)
                     string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
                     string tokenLink = Url.Action("ConfirmEmail", "Account", new { userid = user.Id, token = myToken }, protocol: HttpContext.Request.Scheme);
 
@@ -117,6 +127,10 @@ namespace PulseFit.Management.Web.Controllers
                     }
 
                     ModelState.AddModelError(string.Empty, "Error sending confirmation email.");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "This email is already registered.");
                 }
             }
 
@@ -276,30 +290,33 @@ namespace PulseFit.Management.Web.Controllers
         // Displays the password reset page
         public IActionResult ResetPassword(string token)
         {
-            return View();
+            return View(new ResetPasswordViewModel { Token = token });
         }
 
         // Processes the password reset request
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
-            var user = await _userHelper.GetUserByEmailAsync(model.UserName);
-            if (user != null)
+            if (ModelState.IsValid)
             {
-                var result = await _userHelper.ResetPasswordAsync(user, model.Token, model.Password);
-                if (result.Succeeded)
+                var user = await _userHelper.GetUserByEmailAsync(model.UserName);
+                if (user != null)
                 {
-                    ViewBag.Message = "Password reset successfully.";
-                    return View();
+                    var result = await _userHelper.ResetPasswordAsync(user, model.Token, model.Password);
+                    if (result.Succeeded)
+                    {
+                        ViewBag.Message = "Password reset successfully.";
+                        return View();
+                    }
+
+                    ViewBag.Message = "Error resetting the password.";
+                    return View(model);
                 }
 
-                ViewBag.Message = "Error resetting the password.";
-                return View(model);
+                ViewBag.Message = "User not found.";
             }
 
-            ViewBag.Message = "User not found.";
             return View(model);
         }
     }
 }
-

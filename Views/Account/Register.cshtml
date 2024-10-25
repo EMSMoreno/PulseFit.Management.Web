@@ -54,6 +54,12 @@
             </div>
 
             <div class="form-group">
+                <label asp-for="ProfilePicture"></label>
+                <input asp-for="ProfilePicture" type="file" class="form-control" />
+                <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
                 <input type="submit" value="Register New User" class="btn btn-primary" />
             </div>
         </form>

@@ -1,60 +1,35 @@
-﻿@model PulseFit.Management.Web.Data.Entities.PersonalTrainer
+﻿@model PulseFit.Management.Web.Models.PersonalTrainerViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Personal Trainer Details";
 }
 
-<h1>Details</h1>
+<h2>@ViewData["Title"]</h2>
 
 <div>
-    <h4>PersonalTrainer</h4>
+    <h4>Personal Trainer</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Specialty)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Specialty)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Certification)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Certification)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HireDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HireDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserId)
+        <dt class="col-sm-2">Specialty</dt>
+        <dd class="col-sm-10">@Model.Specialty</dd>
+
+        <dt class="col-sm-2">Certification</dt>
+        <dd class="col-sm-10">@Model.Certification</dd>
+
+        <dt class="col-sm-2">Hire Date</dt>
+        <dd class="col-sm-10">@Model.HireDate.ToShortDateString()</dd>
+
+        <dt class="col-sm-2">Status</dt>
+        <dd class="col-sm-10">@Model.Status</dd>
+
+        <dt class="col-sm-2">Email</dt>
+        <dd class="col-sm-10">@Model.Email</dd>
+
+        <dt class="col-sm-2">Profile Picture</dt>
+        <dd class="col-sm-10">
+            <img src="@Model.ProfilePictureUrl" alt="Profile Picture" style="width: 100px; height: auto;" />
         </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>

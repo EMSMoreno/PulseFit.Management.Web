@@ -71,7 +71,9 @@ builder.Services.AddScoped<IUserHelper, UserHelper>();
 builder.Services.AddTransient<IMailHelper, MailHelper>();
 builder.Services.AddScoped<IBlobHelper, BlobHelper>();
 builder.Services.AddScoped<IAlertRepository, AlertRepository>();
-//builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IPersonalTrainerRepository, PersonalTrainerRepository>();
+builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -104,29 +106,21 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-async Task CreateRoles(IServiceProvider serviceProvider)
-{
-    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    string[] roleNames = { "Admin", "User", "Pending" }; // Adicione os papéis que deseja criar
-    IdentityResult roleResult;
-
-    foreach (var roleName in roleNames)
-    {
-        var roleExist = await roleManager.RoleExistsAsync(roleName);
-        if (!roleExist)
-        {
-            // Criar o papel e armazenar no banco de dados
-            roleResult = await roleManager.CreateAsync(new IdentityRole(roleName));
-        }
-    }
-}
-
-// Chamar o método para criar os roles
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    await CreateRoles(services);
+    var userHelper = services.GetRequiredService<IUserHelper>();
+
+    // Lista dos roles que devem existir na aplicação
+    string[] roles = { "Admin", "Employee", "Client", "PersonalTrainer", "Nutritionist", "Pending", "Anonymous" };
+
+    // Verifica e cria os roles se necessário
+    foreach (var role in roles)
+    {
+        await userHelper.CheckRoleAsync(role);
+    }
 }
+
 
 
 app.Run();
