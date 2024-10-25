@@ -6,14 +6,31 @@
 
         public string Name { get; set; }
 
-        public string Type { get; set; } // Ex: Cardio, Strength
+        // Equipment Type: Cardio, Bodybuilding and Others
+        public EquipmentType Type { get; set; }
 
         public int Quantity { get; set; }
 
-        public string Status { get; set; }
+        // Equipment Status: Active or Inactive
+        public EquipmentStatus Status { get; set; }
 
         public int GymId { get; set; }
 
         public Gym Gym { get; set; }
+    }
+
+    // Enum for Equipment Type
+    public enum EquipmentType
+    {
+        Cardio,
+        Bodybuilding,
+        Others
+    }
+
+    // Enum for Equipment Status
+    public enum EquipmentStatus
+    {
+        Active,
+        Inactive
     }
 }

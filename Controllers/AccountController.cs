@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using PulseFit.Management.Web.Data.Entities;
 using PulseFit.Management.Web.Helpers;
 using PulseFit.Management.Web.Models;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PulseFit.Management.Web.Controllers
 {
@@ -111,7 +108,7 @@ namespace PulseFit.Management.Web.Controllers
                     }
 
                     // Atribuir diretamente o role "Client" ao utilizador
-                    await _userHelper.AddUserToRoleAsync(user, "Client");
+                    await _userHelper.AddUserToRoleAsync(user, "Admin");
 
                     // Lógica de confirmação de email (opcional)
                     string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
