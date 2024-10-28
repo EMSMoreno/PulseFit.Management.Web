@@ -1,7 +1,9 @@
-﻿namespace PulseFit.Management.Web.Data.Repositories
+﻿using PulseFit.Management.Web.Data.Entities;
+
+namespace PulseFit.Management.Web.Data.Repositories
 {
-    public interface IWorkoutRepository
+    public interface IWorkoutRepository : IGenericRepository<Workout>
     {
-        //Interface para o repositório de treinos.
+        
     }
 }

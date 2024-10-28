@@ -7,24 +7,76 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PulseFit.Management.Web.Data;
 using PulseFit.Management.Web.Data.Entities;
+using PulseFit.Management.Web.Data.Repositories;
 
 namespace PulseFit.Management.Web.Controllers
 {
     public class WorkoutsController : Controller
     {
         private readonly DataContext _context;
+        private readonly IWorkoutRepository _workoutRepository;
 
-        public WorkoutsController(DataContext context)
+        public WorkoutsController(DataContext context, IWorkoutRepository workoutRepository)
         {
             _context = context;
+            _workoutRepository = workoutRepository;
         }
 
         // GET: Workouts
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchTerm, Workout.WorkoutType? type, string instructorName, string gymName,
+                                       Workout.WorkoutDifficulty? difficulty, Workout.WorkoutStatus? status,
+                                       string sortOrder)
         {
-            var dataContext = _context.Workouts.Include(w => w.Gym).Include(w => w.Instructor);
-            return View(await dataContext.ToListAsync());
+            var workouts = _workoutRepository.GetAll()
+                .Include(w => w.Gym)
+                .Include(w => w.Instructor)
+                .AsQueryable();
+
+            // Filtro de pesquisa simples
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                workouts = workouts.Where(w => w.Name.Contains(searchTerm) || w.Description.Contains(searchTerm));
+            }
+
+            if (type.HasValue)
+            {
+                workouts = workouts.Where(w => w.Type == type.Value);
+            }
+
+            if (!string.IsNullOrEmpty(instructorName))
+            {
+                workouts = workouts.Where(w => w.Instructor.FullName.Contains(instructorName));
+            }
+
+            if (!string.IsNullOrEmpty(gymName))
+            {
+                workouts = workouts.Where(w => w.Gym.Name.Contains(gymName));
+            }
+
+            if (difficulty.HasValue)
+            {
+                workouts = workouts.Where(w => w.DifficultyLevel == difficulty.Value);
+            }
+
+            if (status.HasValue)
+            {
+                workouts = workouts.Where(w => w.Status == status.Value);
+            }
+
+            // Ordenação baseada no sortOrder
+            workouts = sortOrder switch
+            {
+                "type_desc" => workouts.OrderByDescending(w => w.Type),
+                "type_asc" or "type" => workouts.OrderBy(w => w.Type),
+                "duration_desc" => workouts.OrderByDescending(w => w.Duration),
+                "duration_asc" or "duration" => workouts.OrderBy(w => w.Duration),
+                _ => workouts.OrderBy(w => w.Name), // Ordenação padrão
+            };
+
+            return View(await workouts.ToListAsync());
         }
+
+
 
         // GET: Workouts/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -34,10 +86,9 @@ namespace PulseFit.Management.Web.Controllers
                 return NotFound();
             }
 
-            var workout = await _context.Workouts
-                .Include(w => w.Gym)
-                .Include(w => w.Instructor)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var workout = await _workoutRepository.GetByIdAsync(id.Value);
+
+            //TODO : verificar se passa o gym e o instrutor
             if (workout == null)
             {
                 return NotFound();
