@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using PulseFit.Management.Web.Data;
 using PulseFit.Management.Web.Data.Entities;
 using PulseFit.Management.Web.Data.Repositories;
+using PulseFit.Management.Web.Helpers;
 
 namespace PulseFit.Management.Web.Controllers
 {
@@ -15,11 +16,20 @@ namespace PulseFit.Management.Web.Controllers
     {
         private readonly DataContext _context;
         private readonly IWorkoutRepository _workoutRepository;
+        private readonly IBookingRepository _bookingRepository;
+        private readonly IUserHelper _userHelper;
 
-        public WorkoutsController(DataContext context, IWorkoutRepository workoutRepository)
+        public WorkoutsController(
+            DataContext context, 
+            IWorkoutRepository workoutRepository,
+            IBookingRepository bookingRepository,
+            IUserHelper userHelper
+            )
         {
             _context = context;
             _workoutRepository = workoutRepository;
+            _bookingRepository = bookingRepository;
+            _userHelper = userHelper;
         }
 
         // GET: Workouts
@@ -216,6 +226,55 @@ namespace PulseFit.Management.Web.Controllers
         private bool WorkoutExists(int id)
         {
             return _context.Workouts.Any(e => e.Id == id);
+        }
+
+
+        public async Task<IActionResult> MyBookings()
+        {
+            var userLoged = User.Identity.Name;
+            int userId = await _userHelper.GetUserIdByEmailAsync(userLoged);
+
+            var bookings = await _bookingRepository.GetBookingsByUserAsync(userId);
+
+            return View(bookings);
+        }
+
+        public async Task<IActionResult> CreateBooking(int workoutId, DateTime trainingDate)
+        {
+            try
+            {
+                var userLoged = User.Identity.Name;
+                int userId = await _userHelper.GetUserIdByEmailAsync(userLoged);
+
+                var booking = new Booking
+                {
+                    WorkoutId = workoutId,
+                    UserId = userId,
+                    TrainingDate = trainingDate,
+                };
+
+                await _bookingRepository.CreateBookingAsync(booking);
+                TempData["SuccessMessage"] = "Booking Confirmed.";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+            return RedirectToAction("MyBookings");
+        }
+
+        public async Task<IActionResult> CancelBooking(int bookingId)
+        {
+            try
+            {
+                await _bookingRepository.CancelBookingAsync(bookingId);
+                TempData["SuccessMessage"] = "Booking Cancelled Successfully.";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+            return RedirectToAction("MyBookings");
         }
     }
 }
