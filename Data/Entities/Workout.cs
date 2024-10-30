@@ -8,7 +8,7 @@
 
         public string Description { get; set; }
 
-        public int Duration { get; set; } // Em minutos
+        public int Duration { get; set; } 
 
         public WorkoutType Type { get; set; }
 
@@ -23,7 +23,7 @@
 
         public int Popularity { get; set; }
 
-        public WorkoutDifficulty DifficultyLevel { get; set; } // Ex: 1 a 5
+        public WorkoutDifficulty DifficultyLevel { get; set; } 
 
         public enum WorkoutDifficulty
         {
@@ -55,5 +55,7 @@
         public int GymId { get; set; }
 
         public Gym Gym { get; set; }
+
+        public int Bookings { get; set; }
     }
 }

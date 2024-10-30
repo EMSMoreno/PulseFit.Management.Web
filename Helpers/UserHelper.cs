@@ -75,6 +75,17 @@ namespace PulseFit.Management.Web.Helpers
         public async Task<List<User>> GetAllUsersInRoleAsync(string roleName) =>
             (await _userManager.GetUsersInRoleAsync(roleName)).ToList();
 
+        public async Task<int> GetUserIdByEmailAsync(string email)
+        {
+            var user = await _userManager.FindByIdAsync(email);
+            if(user == null)
+            {
+                throw new Exception("User Not Found!");
+            }
+
+            return Convert.ToInt32(user.Id);
+        }
+
         // Optional: Uncomment if needed for specific notifications
         // public async Task NotifySecretaryPendingUserAsync(User user)
         // {
