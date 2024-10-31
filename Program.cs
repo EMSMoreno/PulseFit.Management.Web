@@ -76,8 +76,9 @@ builder.Services.AddScoped<IPersonalTrainerRepository, PersonalTrainerRepository
 builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
 builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>(); // tópico 7
 
-builder.Services.AddScoped<IAdminLogRepository, AdminLogRepository>(); // teste tópico 8
+builder.Services.AddScoped<IAdminLogRepository, AdminLogRepository>(); // tópico 8
 
 builder.Services.ConfigureApplicationCookie(options =>
 {

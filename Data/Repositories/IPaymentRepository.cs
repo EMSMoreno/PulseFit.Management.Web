@@ -1,7 +1,11 @@
-﻿namespace PulseFit.Management.Web.Data.Repositories
+﻿using PulseFit.Management.Web.Data.Entities;
+
+namespace PulseFit.Management.Web.Data.Repositories
 {
     public interface IPaymentRepository
     {
-        //Interface para o repositório de pagamentos.
+        PaymentResult ProcessPayment(Payment payment);
+
+        IEnumerable<Payment> GetPaymentsByUserId(int userId);
     }
 }

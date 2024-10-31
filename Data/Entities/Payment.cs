@@ -1,19 +1,41 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PulseFit.Management.Web.Data.Entities
 {
     public class Payment : IEntity
     {
         public int Id { get; set; }
-        [Range(0.01, 10000.00)]
+
+        [Range(0.01, 10000.00, ErrorMessage = "Value must be between {1} and {2}.")]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Amount { get; set; }
-        public DateTime PaymentDate { get; set; }
-        public string UserId { get; set; } // Tipo alterado para string
+
+        public DateTime PaymentDate { get; set; } = DateTime.UtcNow;
+
+        public string UserId { get; set; }
+
         public User User { get; set; }
-        public string PaymentMethod { get; set; } // Ex: Credit Card, PayPal, Bitcoin
-        public string Status { get; set; } // Ex: Success, Failed
+
+        public PaymentMethod PaymentMethodSelected { get; set; }
+
+        public PaymentStatus Status { get; set; }
+
         public string TransactionId { get; set; }
+
+        public enum PaymentMethod
+        {
+            CreditCard,
+            PayPal,
+            Crypto
+        }
+
+        public enum PaymentStatus
+        {
+            Success,
+            Failed,
+            Pending
+        }
     }
 }
