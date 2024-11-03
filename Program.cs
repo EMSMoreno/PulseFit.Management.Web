@@ -76,7 +76,10 @@ builder.Services.AddScoped<IPersonalTrainerRepository, PersonalTrainerRepository
 builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
 builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
-builder.Services.AddScoped<IPaymentRepository, PaymentRepository>(); // tópico 7
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+
+// tópico 7
 
 builder.Services.AddScoped<IAdminLogRepository, AdminLogRepository>(); // tópico 8
 

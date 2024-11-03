@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PulseFit.Management.Web.Data;
 
@@ -11,9 +12,11 @@ using PulseFit.Management.Web.Data;
 namespace PulseFit.Management.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241103145313_UpdatePaymentAndSubscription")]
+    partial class UpdatePaymentAndSubscription
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -879,7 +882,10 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("SubscriptionId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId1")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -887,7 +893,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasIndex("SubscriptionId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("UserSubscriptions");
                 });
@@ -1232,7 +1238,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasOne("PulseFit.Management.Web.Data.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserId1")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

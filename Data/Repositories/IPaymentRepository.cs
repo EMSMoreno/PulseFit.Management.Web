@@ -4,8 +4,8 @@ namespace PulseFit.Management.Web.Data.Repositories
 {
     public interface IPaymentRepository
     {
-        PaymentResult ProcessPayment(Payment payment);
+        void ProcessPayment(Payment payment);
 
-        IEnumerable<Payment> GetPaymentsByUserId(int userId);
+        IEnumerable<Payment> GetPaymentsByUserId(string userId);
     }
 }

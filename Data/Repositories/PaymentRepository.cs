@@ -1,4 +1,8 @@
 ﻿using PulseFit.Management.Web.Data.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PulseFit.Management.Web.Data.Repositories
 {
@@ -11,43 +15,15 @@ namespace PulseFit.Management.Web.Data.Repositories
             _context = context;
         }
 
-        public IEnumerable<Payment> GetPaymentsByUserId(int userId)
+        public IEnumerable<Payment> GetPaymentsByUserId(string userId)
         {
-            return _context.Payments
-            .Where(p => p.UserId == userId.ToString())
-            .ToList();
+            return _context.Payments.Where(p => p.UserId == userId).ToList();
         }
 
-        public PaymentResult ProcessPayment(Payment payment)
+        public void ProcessPayment(Payment payment)
         {
-            if (payment.Amount <= 0)
-            {
-                return new PaymentResult
-                {
-                    IsSuccess = false,
-                    Message = "Payment amount must be greater than zero."
-                };
-            }
-
-            try
-            {
-                _context.Payments.Add(payment);
-                _context.SaveChanges();
-
-                return new PaymentResult
-                {
-                    IsSuccess = true,
-                    Message = "Payment processed successfully."
-                };
-            }
-            catch (Exception ex)
-            {
-                return new PaymentResult
-                {
-                    IsSuccess = false,
-                    Message = $"An error occurred while processing the payment: {ex.Message}"
-                };
-            }
+            _context.Payments.Add(payment);
+            _context.SaveChanges();
         }
     }
 }

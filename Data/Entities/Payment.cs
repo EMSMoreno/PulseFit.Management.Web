@@ -24,6 +24,10 @@ namespace PulseFit.Management.Web.Data.Entities
 
         public string TransactionId { get; set; }
 
+        // Novo campo para associar o pagamento a uma assinatura específica
+        public int SubscriptionId { get; set; }
+        public Subscription Subscription { get; set; }
+
         public enum PaymentMethod
         {
             CreditCard,

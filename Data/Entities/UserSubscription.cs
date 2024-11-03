@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PulseFit.Management.Web.Data.Entities
 {
@@ -6,12 +7,14 @@ namespace PulseFit.Management.Web.Data.Entities
     {
         public int Id { get; set; }
 
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
+        [ForeignKey("UserId")]
         public User User { get; set; }
 
         public int SubscriptionId { get; set; }
 
+        [ForeignKey("SubscriptionId")]
         public Subscription Subscription { get; set; }
 
         public DateTime StartDate { get; set; }

@@ -1,0 +1,21 @@
+﻿@using PulseFit.Management.Web.Data.Entities
+@model IEnumerable<Payment>
+
+<h2>Payment History</h2>
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Method</th>
+        <th>Status</th>
+    </tr>
+    @foreach (var payment in Model)
+    {
+        <tr>
+            <td>@payment.PaymentDate.ToString("dd/MM/yyyy")</td>
+            <td>@payment.Amount.ToString("C")</td>
+            <td>@payment.PaymentMethodSelected</td>
+            <td>@payment.Status</td>
+        </tr>
+    }
+</table>

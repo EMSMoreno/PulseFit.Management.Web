@@ -1,0 +1,21 @@
+﻿@model PulseFit.Management.Web.ViewModels.PaymentViewModel
+
+<h2>Choose a Subscription Plan</h2>
+<form asp-action="ProcessPayment" method="post">
+    <label for="subscription">Subscription Plan:</label>
+    <select asp-for="SubscriptionId" class="form-control">
+        @foreach (var subscription in Model.AvailableSubscriptions)
+        {
+            <option value="@subscription.Id">@subscription.Name - @subscription.Price.ToString("C")</option>
+        }
+    </select>
+
+    <label for="paymentMethod">Payment Method:</label>
+    <select asp-for="PaymentMethodSelected" class="form-control">
+        <option value="CreditCard">Credit Card</option>
+        <option value="PayPal">PayPal</option>
+        <option value="Crypto">Cryptocurrency</option>
+    </select>
+
+    <button type="submit" class="btn btn-primary">Pay Now</button>
+</form>
