@@ -13,6 +13,7 @@ namespace PulseFit.Management.Web.Data.Entities
 
         // Relação com Subscription
         public int SubscriptionId { get; set; }
+
         public Subscription Subscription { get; set; }
 
         // Relação com Client
@@ -20,6 +21,7 @@ namespace PulseFit.Management.Web.Data.Entities
         public Client Client { get; set; }  // Adiciona a propriedade de navegação para Client
 
         public DateTime StartDate { get; set; }
+
         public DateTime EndDate { get; set; }
 
         public SubscriptionStatus Status { get; set; }

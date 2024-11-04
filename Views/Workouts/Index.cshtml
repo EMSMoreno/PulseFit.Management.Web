@@ -4,98 +4,107 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Workouts</h1>
+
+<!-- Search Formulary -->
+<form asp-action="Index" method="get" class="mb-4">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="searchTerm">Simple Search</label>
+            <input type="text" name="searchTerm" class="form-control" placeholder="Name or Description">
+        </div>
+        <div class="col-md-3">
+            <label for="type">Tipo</label>
+            <select name="type" class="form-control">
+                <option value="">Select...</option>
+                <option value="Cardio">Cardio</option>
+                <option value="Strenght">Strenght</option>
+                <option value="Yoga">Yoga</option>
+                <option value="Cycling">Cycling</option>
+                <option value="Bumbum">Bumbum</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="difficulty">Workout Difficulty</label>
+            <select name="difficulty" class="form-control">
+                <option value="">Select...</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="status">Status</label>
+            <select name="status" class="form-control">
+                <option value="">Select...</option>
+                <option value="Ongoing">Ongoing</option>
+                <option value="Cancelled">Cancelled</option>
+                <option value="Finished">Finished</option>
+            </select>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-3">
+            <label for="instructorName">Instructor</label>
+            <input type="text" name="instructorName" class="form-control" placeholder="Instructor Name">
+        </div>
+        <div class="col-md-3">
+            <label for="gymName">Gym</label>
+            <input type="text" name="gymName" class="form-control" placeholder="Gym Name">
+        </div>
+        <div class="col-md-3 align-self-end">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a asp-action="Index" class="btn btn-secondary">Clear</a>
+        </div>
+    </div>
+</form>
+
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
+
+<!--Workouts Table -->
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Duration)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Popularity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DifficultyLevel)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaxCapacity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Instructor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Gym)
-            </th>
-            <th></th>
+            <th><a asp-action="Index" asp-route-sortOrder="name">@Html.DisplayNameFor(model => model.Name)</a></th>
+            <th>@Html.DisplayNameFor(model => model.Description)</th>
+            <th><a asp-action="Index" asp-route-sortOrder="@ViewData["DurationSortParam"]">Duration</a></th>
+            <th><a asp-action="Index" asp-route-sortOrder="@ViewData["TypeSortParam"]">Type</a></th>
+            <th>@Html.DisplayNameFor(model => model.Popularity)</th>
+            <th>@Html.DisplayNameFor(model => model.DifficultyLevel)</th>
+            <th>@Html.DisplayNameFor(model => model.StartDate)</th>
+            <th>@Html.DisplayNameFor(model => model.EndDate)</th>
+            <th>@Html.DisplayNameFor(model => model.MaxCapacity)</th>
+            <th>@Html.DisplayNameFor(model => model.Status)</th>
+            <th>@Html.DisplayNameFor(model => model.Instructor)</th>
+            <th>@Html.DisplayNameFor(model => model.Gym)</th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Duration)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Popularity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DifficultyLevel)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaxCapacity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Instructor.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Gym.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                <td>@Html.DisplayFor(modelItem => item.Duration)</td>
+                <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                <td>@Html.DisplayFor(modelItem => item.Popularity)</td>
+                <td>@Html.DisplayFor(modelItem => item.DifficultyLevel)</td>
+                <td>@Html.DisplayFor(modelItem => item.StartDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.MaxCapacity)</td>
+                <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                <td>@Html.DisplayFor(modelItem => item.Instructor.FullName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Gym.Name)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

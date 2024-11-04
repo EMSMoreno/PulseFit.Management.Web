@@ -50,11 +50,29 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+
+                        @* Testar o q foi criado no tópico 7 *@
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Payment" asp-action="ProcessPayment">Payment</a>
+                        </li>
+
+                        @* Testar o q foi criado no tópico 8 *@
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Equipment" asp-action="Index">Equipment</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Alerts" asp-action="Index">Alerts</a>
+                        </li>
                     </ul>
 
                     @* Login *@
                     <ul class="nav navbar-nav navbar-right">
-                        <!--Para saber se o utlizador está autenticado ou nao-->
+                        <!--Para saber se o utlizador está autenticado ou não-->
                         <!--Se o utilizador estiver autenticado-->
                         @if (this.User.Identity.IsAuthenticated)
                         {

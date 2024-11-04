@@ -1,7 +1,11 @@
-﻿namespace PulseFit.Management.Web.Data.Repositories
+﻿using PulseFit.Management.Web.Data.Entities;
+
+namespace PulseFit.Management.Web.Data.Repositories
 {
-    public class WorkoutRepository
+    public class WorkoutRepository : GenericRepository<Workout>, IWorkoutRepository
     {
-        //Repositório para treinos que implementa IWorkoutRepository.
+        public WorkoutRepository(DataContext context) : base(context)
+        {
+        }
     }
 }

@@ -1,0 +1,51 @@
+﻿@model IEnumerable<PulseFit.Management.Web.Data.Entities.Payment>
+
+@{
+    ViewData["Title"] = "Payment History";
+}
+
+<h2>Payment History</h2>
+
+@if (!Model.Any())
+{
+    <p>No payments found for this user.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Transaction ID</th>
+                <th>Payment Date</th>
+                <th>Amount</th>
+                <th>Payment Method</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var payment in Model)
+            {
+                <tr>
+                    <td>@payment.TransactionId</td>
+                    <td>@payment.PaymentDate.ToString("MM/dd/yyyy")</td>
+                    <td>@payment.Amount.ToString("C")</td>
+                    <td>@payment.PaymentMethodSelected.ToString()</td>
+                    <td>
+                        @if (payment.Status == PulseFit.Management.Web.Data.Entities.Payment.PaymentStatus.Success)
+                        {
+                            <span class="badge bg-success">Paid</span>
+                        }
+                        else if (payment.Status == PulseFit.Management.Web.Data.Entities.Payment.PaymentStatus.Pending)
+                        {
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Failed</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

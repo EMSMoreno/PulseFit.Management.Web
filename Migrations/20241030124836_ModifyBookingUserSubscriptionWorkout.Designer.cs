@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PulseFit.Management.Web.Data;
 
@@ -11,9 +12,11 @@ using PulseFit.Management.Web.Data;
 namespace PulseFit.Management.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241030124836_ModifyBookingUserSubscriptionWorkout")]
+    partial class ModifyBookingUserSubscriptionWorkout
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,37 +158,7 @@ namespace PulseFit.Management.Web.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("NutritionistSpecialization", b =>
-                {
-                    b.Property<int>("NutritionistsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SpecializationsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("NutritionistsId", "SpecializationsId");
-
-                    b.HasIndex("SpecializationsId");
-
-                    b.ToTable("NutritionistSpecializations", (string)null);
-                });
-
-            modelBuilder.Entity("PersonalTrainerSpecialty", b =>
-                {
-                    b.Property<int>("PersonalTrainersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SpecialtiesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PersonalTrainersId", "SpecialtiesId");
-
-                    b.HasIndex("SpecialtiesId");
-
-                    b.ToTable("PersonalTrainerSpecialties", (string)null);
-                });
-
-            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Alert", b =>
+            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.AdminLog", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -373,11 +346,11 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("EmployeeType")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("HireDate")
+                    b.Property<DateTime>("HireDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Shift")
-                        .HasColumnType("int");
+                    b.Property<string>("Shift")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -601,6 +574,10 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("ExperienceYears")
                         .HasColumnType("int");
 
+                    b.Property<string>("Specialization")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -701,11 +678,15 @@ namespace PulseFit.Management.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Certification")
-                        .HasColumnType("int");
+                    b.Property<string>("Certification")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("HireDate")
+                    b.Property<DateTime>("HireDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Specialty")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -753,58 +734,6 @@ namespace PulseFit.Management.Web.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Reports");
-                });
-
-            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Specialization", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Specializations");
-                });
-
-            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Specialty", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Specialties");
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Subscription", b =>
@@ -1073,36 +1002,6 @@ namespace PulseFit.Management.Web.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("NutritionistSpecialization", b =>
-                {
-                    b.HasOne("PulseFit.Management.Web.Data.Entities.Nutritionist", null)
-                        .WithMany()
-                        .HasForeignKey("NutritionistsId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("PulseFit.Management.Web.Data.Entities.Specialization", null)
-                        .WithMany()
-                        .HasForeignKey("SpecializationsId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PersonalTrainerSpecialty", b =>
-                {
-                    b.HasOne("PulseFit.Management.Web.Data.Entities.PersonalTrainer", null)
-                        .WithMany()
-                        .HasForeignKey("PersonalTrainersId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("PulseFit.Management.Web.Data.Entities.Specialty", null)
-                        .WithMany()
-                        .HasForeignKey("SpecialtiesId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 

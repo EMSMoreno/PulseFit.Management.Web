@@ -9,7 +9,7 @@ namespace PulseFit.Management.Web.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
         }
-
+        public DbSet<AdminLog> AdminLogs { get; set; }
         public DbSet<Alert> Alerts { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Client> Clients { get; set; }
@@ -20,6 +20,7 @@ namespace PulseFit.Management.Web.Data
         public DbSet<Gym> Gyms { get; set; }
         public DbSet<Nutritionist> Nutritionists { get; set; }
         public DbSet<NutritionPlan> NutritionPlans { get; set; }
+        public DbSet<Membership> Memberships { get; set; }
         public DbSet<OnlineClass> OnlineClasses { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<PersonalTrainer> PersonalTrainers { get; set; }

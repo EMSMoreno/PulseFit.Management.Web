@@ -8,13 +8,13 @@ namespace PulseFit.Management.Web.Data.Entities
     {
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         public string Name { get; set; }
 
-        public string? Description { get; set; } // Opcional
+        public string? Description { get; set; }
 
         [Column(TypeName = "decimal(18, 2)")]
-        [Range(0, double.MaxValue, ErrorMessage = "The field {0} must be greater than or equal to {1}.")]
+        [Range(0, double.MaxValue, ErrorMessage = "O campo {0} deve ser maior ou igual a {1}.")]
         public decimal Price { get; set; }
 
         public int MaxWorkouts { get; set; }
