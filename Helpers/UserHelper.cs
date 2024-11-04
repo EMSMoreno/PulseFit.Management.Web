@@ -78,6 +78,11 @@ namespace PulseFit.Management.Web.Helpers
         public async Task<IdentityResult> DeleteUserAsync(User user) =>
     await _userManager.DeleteAsync(user);
 
+        public Task<int> GetUserIdByEmailAsync(string email)
+        {
+            throw new NotImplementedException();
+        }
+
 
         // Optional: Uncomment if needed for specific notifications
         // public async Task NotifySecretaryPendingUserAsync(User user)

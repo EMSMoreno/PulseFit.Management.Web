@@ -9,6 +9,7 @@ namespace PulseFit.Management.Web.Data.Entities
 
         // Relação com User
         public string UserId { get; set; }
+
         public User User { get; set; }
 
         // Relação com Subscription

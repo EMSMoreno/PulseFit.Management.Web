@@ -56,6 +56,7 @@ builder.Services.AddScoped<IPersonalTrainerRepository, PersonalTrainerRepository
 builder.Services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
 builder.Services.AddScoped<INutritionistRepository, NutritionistRepository>();
 builder.Services.AddScoped<ISpecializationRepository, SpecializationRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
 builder.Services.AddScoped<SeedDb>(); // Registro do SeedDb
 

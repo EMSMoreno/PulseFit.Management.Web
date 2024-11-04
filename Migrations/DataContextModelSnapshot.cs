@@ -185,7 +185,7 @@ namespace PulseFit.Management.Web.Migrations
                     b.ToTable("PersonalTrainerSpecialties", (string)null);
                 });
 
-            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Alert", b =>
+            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.AdminLog", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -295,6 +295,9 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.Property<DateTime>("Birthdate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<int?>("PersonalTrainerId")
                         .HasColumnType("int");
@@ -670,13 +673,11 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PaymentMethodSelected")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("TransactionId")
                         .IsRequired()
@@ -824,6 +825,9 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("DurationMonths")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("MaxWorkouts")
                         .HasColumnType("int");
 
@@ -938,6 +942,9 @@ namespace PulseFit.Management.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
@@ -950,18 +957,17 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("SubscriptionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClientId");
+
                     b.HasIndex("SubscriptionId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserSubscriptions");
                 });
@@ -1320,17 +1326,25 @@ namespace PulseFit.Management.Web.Migrations
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.UserSubscription", b =>
                 {
+                    b.HasOne("PulseFit.Management.Web.Data.Entities.Client", "Client")
+                        .WithMany("UserSubscriptions")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("PulseFit.Management.Web.Data.Entities.Subscription", "Subscription")
-                        .WithMany()
+                        .WithMany("UserSubscriptions")
                         .HasForeignKey("SubscriptionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("PulseFit.Management.Web.Data.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Client");
 
                     b.Navigation("Subscription");
 
@@ -1356,9 +1370,19 @@ namespace PulseFit.Management.Web.Migrations
                     b.Navigation("Instructor");
                 });
 
+            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Client", b =>
+                {
+                    b.Navigation("UserSubscriptions");
+                });
+
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.PersonalTrainer", b =>
                 {
                     b.Navigation("Clients");
+                });
+
+            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Subscription", b =>
+                {
+                    b.Navigation("UserSubscriptions");
                 });
 #pragma warning restore 612, 618
         }
