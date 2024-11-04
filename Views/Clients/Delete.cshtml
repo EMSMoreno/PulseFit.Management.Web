@@ -1,0 +1,32 @@
+﻿@model PulseFit.Management.Web.Models.ClientViewModel
+
+@{
+    ViewData["Title"] = "Delete Client";
+}
+
+<div class="container mt-4">
+    <h2 class="text-danger">Delete Client</h2>
+
+    <h3>Are you sure you want to delete this client?</h3>
+
+    <div class="alert alert-danger">
+        Are you sure you want to delete this client: <strong>@Model.FirstName @Model.LastName</strong>?
+    </div>
+
+    <form id="deleteForm" asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="button" class="btn btn-danger" id="confirmDelete">
+            <i class="fas fa-trash-alt"></i> Delete
+        </button>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-times"></i> Cancel
+        </a>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/js/formHelpers.js"></script>
+    <script>
+        setupSweetAlertOnDelete("confirmDelete", "deleteForm", "You won't be able to revert this!");
+    </script>
+}

@@ -1,0 +1,80 @@
+﻿@model PulseFit.Management.Web.Models.ClientViewModel
+
+@{
+    ViewData["Title"] = "Client Details";
+}
+
+<div class="container mt-4">
+    <h2>Client Details</h2>
+
+    <div class="card shadow-lg p-4">
+        <div class="row align-items-center mb-4">
+            <div class="col-md-4 d-flex justify-content-center">
+                <img src="@Model.ProfilePictureUrl" alt="Profile Picture" class="rounded-circle shadow-sm" style="width: 180px; height: 180px;" />
+            </div>
+            <div class="col-md-8">
+                <h3 class="text-primary">@Model.FirstName @Model.LastName</h3>
+                <hr class="my-3" />
+                <dl class="row">
+                    <dt class="col-sm-4 fw-semibold text-muted">Email:</dt>
+                    <dd class="col-sm-8">@Model.Email</dd>
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Phone:</dt>
+                    <dd class="col-sm-8">@Model.PhoneNumber</dd>
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Address:</dt>
+                    <dd class="col-sm-8">@Model.Address</dd>
+
+@*                     <dt class="col-sm-4 fw-semibold text-muted">Subscription Plan:</dt>
+                    <dd class="col-sm-8">@Model.SubscriptionPlanName</dd> *@
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Status:</dt>
+                    <dd class="col-sm-8">@Model.Status</dd>
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Gender:</dt>
+                    <dd class="col-sm-8">@Model.Gender</dd>
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Birth Date:</dt>
+                    <dd class="col-sm-8">@Model.Birthdate.ToString("d")</dd>
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Registration Date:</dt>
+                    <dd class="col-sm-8">@Model.RegistrationDate.ToString("d")</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end mt-3">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Edit</a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger me-2">Delete</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 8px;
+        padding: 1.5rem;
+    }
+
+        .card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+    h3 {
+        color: #007bff;
+        font-weight: bold;
+    }
+
+    dl.row dt {
+        font-weight: 500;
+        color: #6c757d;
+    }
+
+    dl.row dd {
+        font-weight: 400;
+        color: #212529;
+    }
+</style>

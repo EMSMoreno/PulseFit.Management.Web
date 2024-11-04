@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using PulseFit.Management.Web.Data;
 using PulseFit.Management.Web.Data.Entities;
@@ -9,123 +10,90 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Adiciona os serviços ao contêiner.
 builder.Services.AddControllersWithViews();
 
-// DbContext Configuration
+// Configuração do DbContext com SQL Server
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-// Identity Configuration
 
-builder.Services.AddIdentity<User, IdentityRole>(cfg =>
+// Configuração do Identity
+builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
-    // Configure token provider for authentication
-    cfg.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+    options.User.RequireUniqueEmail = true;
+    options.SignIn.RequireConfirmedEmail = true;
 
-    // Require email confirmation for login
-    cfg.SignIn.RequireConfirmedEmail = true;
-
-    // Ensure unique email for each user
-    cfg.User.RequireUniqueEmail = true;
-
-    // Password settings
-    cfg.Password.RequireDigit = false;
-    cfg.Password.RequiredUniqueChars = 0;
-    cfg.Password.RequireUppercase = false;
-    cfg.Password.RequireLowercase = false;
-    cfg.Password.RequireNonAlphanumeric = false;
-    cfg.Password.RequiredLength = 6;
+    options.Password.RequireDigit = false;
+    options.Password.RequiredUniqueChars = 0;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
 })
+.AddEntityFrameworkStores<DataContext>()
+.AddDefaultTokenProviders();
 
-.AddDefaultTokenProviders()
-
-.AddEntityFrameworkStores<DataContext>();
-
-// Authentication services
+// Configuração de Autenticação JWT
 builder.Services.AddAuthentication()
-
-    // Enable cookie-based authentication
     .AddCookie()
-
-    // Enable JWT authentication
     .AddJwtBearer(cfg =>
     {
-        // Configure JWT token validation parameters
         cfg.TokenValidationParameters = new TokenValidationParameters
         {
             ValidIssuer = builder.Configuration["Tokens:Issuer"],
-
             ValidAudience = builder.Configuration["Tokens:Audience"],
-
-            IssuerSigningKey = new SymmetricSecurityKey(
-
-                Encoding.UTF8.GetBytes(builder.Configuration["Tokens:Key"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Tokens:Key"]))
         };
     });
 
-// Generic repository
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
-// Inject UserHelper and MailHelper
+// Registro de helpers e repositórios
 builder.Services.AddScoped<IUserHelper, UserHelper>();
 builder.Services.AddTransient<IMailHelper, MailHelper>();
 builder.Services.AddScoped<IBlobHelper, BlobHelper>();
 builder.Services.AddScoped<IAlertRepository, AlertRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IPersonalTrainerRepository, PersonalTrainerRepository>();
+builder.Services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
+builder.Services.AddScoped<INutritionistRepository, NutritionistRepository>();
+builder.Services.AddScoped<ISpecializationRepository, SpecializationRepository>();
 builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
-builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
-builder.Services.AddScoped<IBookingRepository, BookingRepository>();
-builder.Services.AddScoped<IPaymentRepository, PaymentRepository>(); // tópico 7
+builder.Services.AddScoped<SeedDb>(); // Registro do SeedDb
 
-builder.Services.AddScoped<IAdminLogRepository, AdminLogRepository>(); // tópico 8
-
+// Configuração de cookies para o Identity
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/NotAuthorized";
-
     options.AccessDeniedPath = "/Account/NotAuthorized";
 });
 
-
 var app = builder.Build();
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NDaF5cWWtCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWH9ec3RTRWhfWUx3XUY=");
 
-// Configure the HTTP request pipeline.
+// Configuração do pipeline de requisições HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Errors/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-//Quando nao encontrar a página vai à procura de um error
-app.UseStatusCodePagesWithReExecute("/error/{0}");
-
+// Configuração de redirecionamento e arquivos estáticos
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Rota padrão
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+// Executa o seeding dos dados no início da aplicação
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var userHelper = services.GetRequiredService<IUserHelper>();
-
-    // Lista dos roles que devem existir na aplicação
-    string[] roles = { "Admin", "Employee", "Client", "PersonalTrainer", "Nutritionist", "Pending", "Anonymous" };
-
-    // Verifica e cria os roles se necessário
-    foreach (var role in roles)
-    {
-        await userHelper.CheckRoleAsync(role);
-    }
+    var seedDb = services.GetRequiredService<SeedDb>();
+    await seedDb.SeedAsync();
 }
-
-
 
 app.Run();

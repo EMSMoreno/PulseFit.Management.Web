@@ -1,7 +1,14 @@
-﻿namespace PulseFit.Management.Web.Data.Repositories
+﻿using PulseFit.Management.Web.Data.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace PulseFit.Management.Web.Data.Repositories
 {
-    public interface ISubscriptionRepository
+    public interface ISubscriptionRepository : IGenericRepository<Subscription>
     {
-        //Interface para o repositório de assinaturas.
+        Task<IEnumerable<Subscription>> GetAllActiveSubscriptionsAsync();
+        Task<Subscription> GetByIdWithDetailsAsync(int id);
+        Task<bool> ExistsByNameAsync(string name);
     }
 }

@@ -18,8 +18,8 @@ namespace PulseFit.Management.Web.Data.Entities
         public Guid? ProfilePictureId { get; set; }
 
         public string ProfilePictureUrl => ProfilePictureId == null
-            ? "/images/default-profile.png"
-            : $"https://myblobstorage.blob.core.windows.net/profile-pics/{ProfilePictureId}";
+            ? "/images/noimage.png"
+            : $"/uploads/profile-pics/{ProfilePictureId}.jpg";
 
         [Display(Name = "Date Created")]
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;

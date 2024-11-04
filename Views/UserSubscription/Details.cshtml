@@ -1,0 +1,37 @@
+﻿@model IEnumerable<PulseFit.Management.Web.Models.UserSubscriptionViewModel>
+
+@{
+    ViewData["Title"] = "Client Subscriptions";
+}
+
+<h2>Client Subscriptions</h2>
+
+@if (!Model.Any())
+{
+    <p>No subscriptions found for this client.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var subscription in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="@subscription.Subscription.ImageUrl" class="card-img-top" alt="@subscription.Subscription.Name" style="max-height: 200px; object-fit: cover;" />
+                    <div class="card-body">
+                        <h5 class="card-title">@subscription.Subscription.Name</h5>
+                        <p class="card-text">@subscription.Subscription.Description</p>
+                        <p><strong>Start Date:</strong> @subscription.StartDate.ToShortDateString()</p>
+                        <p><strong>End Date:</strong> @subscription.EndDate.ToShortDateString()</p>
+                        <p><strong>Status:</strong> @subscription.Status</p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <a asp-action="Delete" asp-route-id="@subscription.Id" class="btn btn-danger btn-sm">Delete</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<a asp-action="Create" asp-route-clientId="@Model.FirstOrDefault()?.ClientId" class="btn btn-primary mt-4">Add New Subscription</a>

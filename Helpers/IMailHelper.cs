@@ -1,4 +1,5 @@
-﻿using Azure;
+﻿using System.Threading.Tasks;
+using Azure;
 
 namespace PulseFit.Management.Web.Helpers
 {
@@ -9,5 +10,8 @@ namespace PulseFit.Management.Web.Helpers
         // 'subject' - o assunto do email,
         // 'body' - o corpo da mensagem.
         Response SendEmail(string to, string subject, string body);
+
+
+        string LoadAndProcessEmailTemplate(string templatePath, Dictionary<string, string> placeholders);
     }
 }

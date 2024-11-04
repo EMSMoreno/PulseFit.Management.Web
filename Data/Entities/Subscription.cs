@@ -25,11 +25,22 @@ namespace PulseFit.Management.Web.Data.Entities
 
         public SubscriptionStatus Status { get; set; } = SubscriptionStatus.Active;
 
-        public enum SubscriptionStatus
-        {
-            Active,
-            Inactive,
-            Expired
-        }
+        public ICollection<UserSubscription> UserSubscriptions { get; set; } = new List<UserSubscription>();
+
+
+        // Novas propriedades para a imagem associada
+        public Guid ImageId { get; set; } = Guid.Empty;
+
+        [NotMapped]
+        public string ImageUrl => ImageId == Guid.Empty
+            ? "/images/noimage.png"
+            : $"/uploads/subscription-images/{ImageId}.jpg";
+    }
+
+    public enum SubscriptionStatus
+    {
+        Active,
+        Inactive,
+        Expired
     }
 }

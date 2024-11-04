@@ -1,6 +1,9 @@
-﻿public enum Status
+﻿namespace PulseFit.Management.Web.Data.Entities
 {
-    Active,
-    Inactive,
-    Pending
+    public enum Status
+    {
+        Pending,
+        Active,
+        Inactive
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace PulseFit.Management.Web.Data.Entities
@@ -7,8 +8,8 @@ namespace PulseFit.Management.Web.Data.Entities
     {
         public int Id { get; set; }
 
-        [Required]
-        public string Specialization { get; set; }
+        // Relacionamento com Specializations, semelhante a como os Personal Trainers têm Specialties
+        public List<Specialization> Specializations { get; set; } = new List<Specialization>();
 
         public int ExperienceYears { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using PulseFit.Management.Web.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,19 +12,21 @@ namespace PulseFit.Management.Web.Models
         public int Id { get; set; }
 
         [Required]
-        public string Specialty { get; set; }
+        public List<int> SpecialtyIds { get; set; } = new List<int>(); // IDs das especialidades selecionadas
 
-        public string? Certification { get; set; }
+        public List<SpecialtyItemViewModel> Specialties { get; set; } = new List<SpecialtyItemViewModel>();
+
+        public CertificationType? Certification { get; set; }
 
         public List<Client> Clients { get; set; } = new List<Client>();
 
         [Required]
-        public DateTime HireDate { get; set; }
+        public DateTime? HireDate { get; set; }
 
         public Status Status { get; set; }
 
         // Propriedades do User
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
 
         [Required]
         public string FirstName { get; set; }
@@ -42,6 +45,8 @@ namespace PulseFit.Management.Web.Models
 
         public Guid ImageId { get; set; }
 
-        public string ProfilePictureUrl => ImageId == Guid.Empty ? "/images/default-profile.png" : $"https://myblobstorage.blob.core.windows.net/profile-pics/{ImageId}";
+        public string ProfilePictureUrl => ImageId == Guid.Empty
+            ? "/images/noimage.png"
+            : $"/uploads/personaltrainers-pics/{ImageId}.jpg";
     }
 }

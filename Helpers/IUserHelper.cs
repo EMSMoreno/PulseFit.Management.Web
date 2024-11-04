@@ -86,6 +86,9 @@ namespace PulseFit.Management.Web.Helpers
 
         Task<List<User>> GetAllUsersInRoleAsync(string roleName);
 
+        Task<IdentityResult> DeleteUserAsync(User user);
+
+
         // Adiciona o método para notificar a secretaria sobre novos utilizadores "Pending"
 
         //Task NotifySecretaryPendingUserAsync(User user);

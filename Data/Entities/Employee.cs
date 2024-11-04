@@ -10,11 +10,11 @@ namespace PulseFit.Management.Web.Data.Entities
         [Required]
         public EmployeeType EmployeeType { get; set; } // Define o tipo de funcionário
 
-        public DateTime HireDate { get; set; }
+        public DateTime? HireDate { get; set; } // Data de contratação opcional
 
         public Status Status { get; set; } = Status.Active;
 
-        public string? Shift { get; set; } // Opcional, dependendo do tipo de função
+        public ShiftType Shift { get; set; } // Usa o enum ShiftType
 
         [Required]
         public string UserId { get; set; } // FK para User
@@ -29,5 +29,15 @@ namespace PulseFit.Management.Web.Data.Entities
         Receptionist,
         Manager,
         Other
+    }
+
+    public enum ShiftType
+    {
+        Morning,
+        Afternoon,
+        Evening,
+        Night,
+        Flexible,
+        None
     }
 }

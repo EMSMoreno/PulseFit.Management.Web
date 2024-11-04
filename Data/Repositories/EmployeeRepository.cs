@@ -22,5 +22,14 @@ namespace PulseFit.Management.Web.Data.Repositories
                 .AsNoTracking()
                 .ToListAsync();
         }
+
+        public async Task<Employee> GetByIdWithUserAsync(int id)
+        {
+            return await _context.Employees
+                .Include(e => e.User) // Inclui o User para evitar NullReferenceException
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == id);
+        }
+
     }
 }

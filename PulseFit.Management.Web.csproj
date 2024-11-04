@@ -7,6 +7,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\formHelpers.js" />
+    <Content Remove="wwwroot\uploads\employees-pics\9e83c348-5d91-4f69-9b85-6cbb17e1591c" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Views\Emails\WelcomeEmailTemplate.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="appsettings.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\formHelpers.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Views\Emails\WelcomeEmailTemplate.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Azure.Storage.Common" Version="12.21.0" />
     <PackageReference Include="MailKit" Version="4.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
@@ -19,12 +37,21 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.5" />
+    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="27.1.57" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\formHelpers.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="wwwroot\uploads\employees-pics\9e83c348-5d91-4f69-9b85-6cbb17e1591c" />
   </ItemGroup>
 
 </Project>
