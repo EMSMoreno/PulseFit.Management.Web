@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -8,64 +10,81 @@ using PulseFit.Management.Web.Models;
 using PulseFit.Management.Web.Data.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PulseFit.Management.Web.Controllers
 {
     public class PersonalTrainersController : Controller
     {
         private readonly IPersonalTrainerRepository _personalTrainerRepository;
-        private readonly IUserHelper _userHelper;
+        private readonly ISpecialtyRepository _specialtyRepository;
         private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
+        private readonly IUserHelper _userHelper;
+        private readonly IMailHelper _mailHelper;
         private readonly ILogger<PersonalTrainersController> _logger;
 
         public PersonalTrainersController(
             IPersonalTrainerRepository personalTrainerRepository,
-            IUserHelper userHelper,
+            ISpecialtyRepository specialtyRepository,
             IBlobHelper blobHelper,
             IConverterHelper converterHelper,
+            IUserHelper userHelper,
+            IMailHelper mailHelper,
             ILogger<PersonalTrainersController> logger)
         {
             _personalTrainerRepository = personalTrainerRepository;
-            _userHelper = userHelper;
+            _specialtyRepository = specialtyRepository;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
+            _userHelper = userHelper;
+            _mailHelper = mailHelper;
             _logger = logger;
         }
 
-        // GET: PersonalTrainers
         public async Task<IActionResult> Index()
         {
-            var personalTrainers = await _personalTrainerRepository.GetAllWithUsersAsync();
-            return View(personalTrainers);
+            var trainers = await _personalTrainerRepository.GetAllWithUsersAsync();
+            var trainerViewModels = trainers.Select(t => _converterHelper.ToPersonalTrainerViewModel(t)).ToList();
+            return View(trainerViewModels);
         }
 
-        // GET: PersonalTrainers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null) return new NotFoundViewResult("PersonalTrainerNotFound");
+            if (id == null) return new NotFoundViewResult("TrainerNotFound");
 
-            var personalTrainer = await _personalTrainerRepository.GetByIdAsync(id.Value);
-            if (personalTrainer == null) return new NotFoundViewResult("PersonalTrainerNotFound");
+            var trainer = await _personalTrainerRepository.GetByIdWithUserAndSpecialtiesAsync(id.Value);
+            if (trainer == null) return new NotFoundViewResult("TrainerNotFound");
 
-            var model = _converterHelper.ToPersonalTrainerViewModel(personalTrainer);
+            var model = _converterHelper.ToPersonalTrainerViewModel(trainer);
             return View(model);
         }
 
-        // GET: PersonalTrainers/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View(new PersonalTrainerViewModel());
+            var model = new PersonalTrainerViewModel
+            {
+                SpecialtyIds = new List<int>(),
+                Specialties = await GetSpecialtySelectListAsync()
+            };
+            return View(model);
         }
 
-        // POST: PersonalTrainers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PersonalTrainerViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // Verifica se o utilizador com o mesmo email já existe
+                // Verificar tamanho da imagem
+                if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 2 * 1024 * 1024) // Limite de 2 MB
+                {
+                    ModelState.AddModelError("ProfilePictureFile", "The file size should not exceed 2 MB.");
+                    model.Specialties = await GetSpecialtySelectListAsync(); // Recarregar especialidades em caso de erro
+                    return View(model);
+                }
+
+                // Verificar se o usuário com o email já existe
                 var existingUser = await _userHelper.GetUserByEmailAsync(model.Email);
                 if (existingUser != null)
                 {
@@ -75,7 +94,7 @@ namespace PulseFit.Management.Web.Controllers
 
                 try
                 {
-                    // Cria o utilizador associado ao PersonalTrainer com uma senha gerada automaticamente
+                    // Criação do novo User
                     var user = new User
                     {
                         FirstName = model.FirstName,
@@ -86,33 +105,67 @@ namespace PulseFit.Management.Web.Controllers
                         DateCreated = DateTime.UtcNow
                     };
 
-                    // Gera uma senha temporária ou aleatória para o utilizador
-                    var randomPassword = "Temp@123";  // Podes optar por uma senha aleatória ou temporária mais segura
+                    // Upload da imagem de perfil se uma imagem for enviada
+                    if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 0)
+                    {
+                        user.ProfilePictureId = await _blobHelper.UploadBlobAsync(model.ProfilePictureFile, "personaltrainers-pics");
+                    }
 
-                    // Adiciona o utilizador ao sistema com a senha gerada
-                    var result = await _userHelper.AddUserAsync(user, randomPassword);
-                    if (result != IdentityResult.Success)
+                    // Gerar senha temporária
+                    string temporaryPassword = GenerateRandomPassword();
+                    var createUserResult = await _userHelper.AddUserAsync(user, temporaryPassword);
+
+
+                    if (!createUserResult.Succeeded)
                     {
                         ModelState.AddModelError(string.Empty, "The user could not be created.");
                         return View(model);
                     }
 
-                    // Atribui o role "PersonalTrainer" ao utilizador
                     await _userHelper.AddUserToRoleAsync(user, "PersonalTrainer");
 
-                    // Upload da imagem de perfil (opcional)
-                    Guid imageId = Guid.Empty;
-                    if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 0)
+                    // Gera e envia o e-mail de boas-vindas
+                    string token = await _userHelper.GeneratePasswordResetTokenAsync(user);
+                    string resetLink = Url.Action("ChangeFirstPassword", "Account", new { email = user.Email, token = token }, protocol: HttpContext.Request.Scheme);
+
+                    var placeholders = new Dictionary<string, string>
+            {
+                { "FirstName", user.FirstName },
+                { "TemporaryPassword", temporaryPassword },
+                { "ResetLink", resetLink }
+            };
+
+                    string emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Views/Emails/WelcomeEmailTemplate.html");
+                    string emailBody = _mailHelper.LoadAndProcessEmailTemplate(emailTemplatePath, placeholders);
+
+                    var emailResponse = _mailHelper.SendEmail(user.Email, "Welcome to PulseFit", emailBody);
+                    if (!emailResponse.IsSuccess)
                     {
-                        imageId = await _blobHelper.UploadBlobAsync(model.ProfilePictureFile, "personal-trainers");
+                        ModelState.AddModelError(string.Empty, "Error sending email. Please check email settings.");
                     }
 
-                    // Converte o ViewModel em PersonalTrainer
-                    var personalTrainer = await _converterHelper.ToPersonalTrainerAsync(model, imageId, true);
-                    personalTrainer.UserId = user.Id;
+                    // Verificar se o usuário foi salvo antes de associá-lo ao Personal Trainer
+                    var userFromDb = await _userHelper.GetUserByEmailAsync(user.Email);
+                    if (userFromDb == null)
+                    {
+                        ModelState.AddModelError("", "User could not be found after creation.");
+                        return View(model);
+                    }
 
-                    await _personalTrainerRepository.CreateAsync(personalTrainer);
+                    // Criação do Personal Trainer e associação ao User já salvo
+                    var trainer = new PersonalTrainer
+                    {
+                        UserId = userFromDb.Id,
+                        User = userFromDb,
+                        Certification = model.Certification,
+                        HireDate = model.HireDate,
+                        Status = model.Status,
+                        Specialties = await _specialtyRepository.GetSpecialtiesByIdsAsync(model.SpecialtyIds)
+                    };
 
+                    await _personalTrainerRepository.CreateAsync(trainer);
+
+                    TempData["SuccessMessage"] = "Personal Trainer created successfully and email sent with login instructions.";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -122,6 +175,7 @@ namespace PulseFit.Management.Web.Controllers
                 }
             }
 
+            model.Specialties = await GetSpecialtySelectListAsync();
             return View(model);
         }
 
@@ -129,12 +183,15 @@ namespace PulseFit.Management.Web.Controllers
         // GET: PersonalTrainers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null) return new NotFoundViewResult("PersonalTrainerNotFound");
+            if (id == null) return new NotFoundViewResult("TrainerNotFound");
 
-            var personalTrainer = await _personalTrainerRepository.GetByIdAsync(id.Value);
-            if (personalTrainer == null) return new NotFoundViewResult("PersonalTrainerNotFound");
+            var trainer = await _personalTrainerRepository.GetByIdWithUserAndSpecialtiesAsync(id.Value);
+            if (trainer == null) return new NotFoundViewResult("TrainerNotFound");
 
-            var model = _converterHelper.ToPersonalTrainerViewModel(personalTrainer);
+            var model = _converterHelper.ToPersonalTrainerViewModel(trainer);
+            model.SpecialtyIds = trainer.Specialties.Select(s => s.Id).ToList();
+            model.Specialties = await GetSpecialtySelectListAsync();
+
             return View(model);
         }
 
@@ -143,30 +200,51 @@ namespace PulseFit.Management.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, PersonalTrainerViewModel model)
         {
-            if (id != model.Id) return new NotFoundViewResult("PersonalTrainerNotFound");
+            if (id != model.Id) return new NotFoundViewResult("TrainerNotFound");
 
             if (ModelState.IsValid)
             {
+                // Verificar tamanho da imagem
+                if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 2 * 1024 * 1024) // Limite de 2 MB
+                {
+                    ModelState.AddModelError("ProfilePictureFile", "The file size should not exceed 2 MB.");
+                    model.Specialties = await GetSpecialtySelectListAsync(); // Recarregar especialidades em caso de erro
+                    return View(model);
+                }
+
                 try
                 {
-                    Guid imageId = model.ImageId;
+                    var trainer = await _personalTrainerRepository.GetByIdWithUserAndSpecialtiesAsync(id);
+                    if (trainer == null || trainer.User == null)
+                    {
+                        _logger.LogWarning("Trainer or associated User not found for ID: {0}", id);
+                        return new NotFoundViewResult("TrainerNotFound");
+                    }
+
+                    // Atualizar dados do User sem modificar Email e UserName
+                    trainer.User.FirstName = model.FirstName;
+                    trainer.User.LastName = model.LastName;
+                    trainer.User.PhoneNumber = model.PhoneNumber;
+
+                    // Atualizar a imagem do perfil se uma nova imagem for enviada
                     if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 0)
                     {
-                        imageId = await _blobHelper.UploadBlobAsync(model.ProfilePictureFile, "personal-trainers");
+                        trainer.User.ProfilePictureId = await _blobHelper.UploadBlobAsync(model.ProfilePictureFile, "personaltrainers-pics");
                     }
 
-                    var personalTrainer = await _converterHelper.ToPersonalTrainerAsync(model, imageId, false);
-                    await _personalTrainerRepository.UpdateAsync(personalTrainer);
+                    // Atualizar especialidades
+                    var selectedSpecialties = await _specialtyRepository.GetSpecialtiesByIdsAsync(model.SpecialtyIds);
+                    trainer.Specialties.Clear();
+                    trainer.Specialties.AddRange(selectedSpecialties);
 
-                    var user = await _userHelper.GetUserByIdAsync(model.UserId);
-                    if (user != null)
-                    {
-                        user.FirstName = model.FirstName;
-                        user.LastName = model.LastName;
-                        user.PhoneNumber = model.PhoneNumber;
-                        await _userHelper.UpdateUserAsync(user);
-                    }
+                    // Atualizar os campos específicos do Personal Trainer
+                    trainer.Certification = model.Certification;
+                    trainer.HireDate = model.HireDate;
+                    trainer.Status = model.Status;
 
+                    await _personalTrainerRepository.UpdateAsync(trainer);
+
+                    TempData["SuccessMessage"] = "Personal Trainer updated successfully.";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -176,18 +254,20 @@ namespace PulseFit.Management.Web.Controllers
                 }
             }
 
+            model.Specialties = await GetSpecialtySelectListAsync();
             return View(model);
         }
 
         // GET: PersonalTrainers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null) return new NotFoundViewResult("PersonalTrainerNotFound");
+            if (id == null) return new NotFoundViewResult("TrainerNotFound");
 
-            var personalTrainer = await _personalTrainerRepository.GetByIdAsync(id.Value);
-            if (personalTrainer == null) return new NotFoundViewResult("PersonalTrainerNotFound");
+            var trainer = await _personalTrainerRepository.GetByIdWithUserAndSpecialtiesAsync(id.Value);
+            if (trainer == null) return new NotFoundViewResult("TrainerNotFound");
 
-            return View(_converterHelper.ToPersonalTrainerViewModel(personalTrainer));
+            var model = _converterHelper.ToPersonalTrainerViewModel(trainer);
+            return View(model);
         }
 
         // POST: PersonalTrainers/Delete/5
@@ -195,40 +275,68 @@ namespace PulseFit.Management.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var personalTrainer = await _personalTrainerRepository.GetByIdAsync(id);
-            if (personalTrainer == null) return new NotFoundViewResult("PersonalTrainerNotFound");
+            var trainer = await _personalTrainerRepository.GetByIdWithUserAndSpecialtiesAsync(id);
+            if (trainer == null) return new NotFoundViewResult("TrainerNotFound");
 
             try
             {
-                await _personalTrainerRepository.DeleteAsync(personalTrainer);
+                // Apaga todas as associações do Personal Trainer, como Specialties e Clients, se necessário
+                if (trainer.Specialties != null && trainer.Specialties.Any())
+                {
+                    trainer.Specialties.Clear();
+                }
+
+                if (trainer.Clients != null && trainer.Clients.Any())
+                {
+                    trainer.Clients.Clear();
+                }
+
+                // Remover o Personal Trainer
+                await _personalTrainerRepository.DeleteAsync(trainer);
+
+                // Apagar o usuário associado ao Personal Trainer
+                if (trainer.User != null)
+                {
+                    await _userHelper.DeleteUserAsync(trainer.User);
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateException ex)
             {
                 if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
                 {
-                    ViewBag.ErrorTitle = $"{personalTrainer.Id} is being used!";
-                    ViewBag.ErrorMessage = "This personal trainer cannot be deleted. Please delete associations first.";
+                    ViewBag.ErrorTitle = $"Trainer ID {trainer.Id} is currently in use.";
+                    ViewBag.ErrorMessage = "This trainer cannot be deleted due to active associations. Please remove or reassign these associations before trying again.";
                 }
                 else
                 {
-                    ViewBag.ErrorTitle = "Error Deleting Personal Trainer";
-                    ViewBag.ErrorMessage = "An unexpected error occurred while trying to delete this personal trainer.";
+                    ViewBag.ErrorTitle = "Deletion Error";
+                    ViewBag.ErrorMessage = "An unexpected error occurred during deletion. Please try again later.";
                 }
-
                 return View("Error");
             }
         }
 
 
-        private async Task<bool> PersonalTrainerExists(int id)
+
+        private async Task<List<SpecialtyItemViewModel>> GetSpecialtySelectListAsync()
         {
-            return await _personalTrainerRepository.ExistAsync(id);
+            var specialties = await _specialtyRepository.GetAllAsync();
+            return specialties.Select(s => new SpecialtyItemViewModel
+            {
+                Value = s.Id.ToString(),
+                Text = s.Name,
+                ImageUrl = !string.IsNullOrEmpty(s.ImageName) ? $"/images/specialties/{s.ImageName}" : "/images/default-image.jpg"
+            }).ToList();
         }
 
-        public IActionResult PersonalTrainerNotFound()
+
+        private string GenerateRandomPassword(int length = 8)
         {
-            return View();
+            const string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()?_-";
+            Random random = new Random();
+            return new string(Enumerable.Repeat(validChars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

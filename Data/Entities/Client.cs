@@ -1,4 +1,4 @@
-﻿using System;
+﻿using PulseFit.Management.Web.Data.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace PulseFit.Management.Web.Data.Entities
@@ -7,6 +7,7 @@ namespace PulseFit.Management.Web.Data.Entities
     {
         public int Id { get; set; }
 
+        [Required]
         public DateTime Birthdate { get; set; }
 
         [MaxLength(100)]
@@ -16,14 +17,28 @@ namespace PulseFit.Management.Web.Data.Entities
 
         public Subscription SubscriptionPlan { get; set; }
 
+        [Required]
         public int SubscriptionPlanId { get; set; }
 
         public Status Status { get; set; } = Status.Active;
 
-        // FK para User (removendo redundâncias com a entidade User)
+        [Required]
+        public Gender Gender { get; set; }
+
         [Required]
         public string UserId { get; set; }
 
         public User User { get; set; }
+
+        public ICollection<UserSubscription> UserSubscriptions { get; set; } = new List<UserSubscription>();
+
+
+    }
+
+    public enum Gender
+    {
+        Male,
+        Female,
+        Other
     }
 }

@@ -1,0 +1,94 @@
+﻿@model IEnumerable<PulseFit.Management.Web.Models.ClientViewModel>
+@using Newtonsoft.Json
+
+@{
+    ViewData["Title"] = "Client List";
+    var jsonSerializerSettings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                Formatting = Formatting.Indented
+            };
+    var serializedData = JsonConvert.SerializeObject(Model, jsonSerializerSettings);
+}
+
+<h2>Client List</h2>
+
+<div>
+    <a asp-action="Create" class="btn btn-primary mb-3">Create New Client</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No clients found.</div>
+}
+else
+{
+    <div id="Grid"></div>
+}
+
+@section Scripts {
+    <script id="profilePictureTemplate" type="text/x-template">
+        <img src="${ProfilePictureUrl}" alt="Profile Picture" style="width: 50px; height: 50px; border-radius: 50%;" />
+    </script>
+
+    <script id="actionTemplate" type="text/x-template">
+        <a href="/Clients/Edit/${Id}" class="btn btn-warning me-2">Edit</a>
+        <a href="/Clients/Delete/${Id}" class="btn btn-danger me-2">Delete</a>
+        <a href="/Clients/Details/${Id}" class="btn btn-primary">Details</a>
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            var serializedData = @Html.Raw(serializedData);
+
+            // Mapeamento de Status e Gender
+            serializedData.forEach(function (client) {
+                // Mapeia Status
+                switch (client.Status) {
+                    case 0:
+                        client.StatusText = "Pending";
+                        break;
+                    case 1:
+                        client.StatusText = "Active";
+                        break;
+                    case 2:
+                        client.StatusText = "Inactive";
+                        break;
+                }
+
+                // Mapeia Gender
+                switch (client.Gender) {
+                    case 0:
+                        client.GenderText = "Male";
+                        break;
+                    case 1:
+                        client.GenderText = "Female";
+                        break;
+                    case 2:
+                        client.GenderText = "Other";
+                        break;
+                }
+            });
+
+            // Configuração do Grid
+            var grid = new ej.grids.Grid({
+                dataSource: serializedData,
+                allowPaging: true,
+                allowSorting: true,
+                allowFiltering: true,
+                pageSettings: { pageSize: 10 },
+                toolbar: ['Search'],
+                columns: [
+                    { field: "ProfilePictureUrl", headerText: "Profile Picture", width: 100, template: "#profilePictureTemplate" },
+                    { field: "FirstName", headerText: "First Name", width: 120 },
+                    { field: "LastName", headerText: "Last Name", width: 120 },
+                    { field: "SubscriptionPlanId", headerText: "Subscription Plan", width: 150 },
+                    { field: "GenderText", headerText: "Gender", width: 100 },
+                    { field: "StatusText", headerText: "Status", width: 100 },
+                    { headerText: "Actions", width: 180, template: "#actionTemplate" }
+                ]
+            });
+            grid.appendTo("#Grid");
+        });
+    </script>
+}

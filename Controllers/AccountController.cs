@@ -15,17 +15,21 @@ namespace PulseFit.Management.Web.Controllers
         private readonly IMailHelper _mailHelper;
         private readonly IBlobHelper _blobHelper;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AccountController> _logger; // Adicione este campo
+
 
         public AccountController(
             IUserHelper userHelper,
             IMailHelper mailHelper,
             IBlobHelper blobHelper,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ILogger<AccountController> logger)
         {
             _userHelper = userHelper;
             _mailHelper = mailHelper;
             _blobHelper = blobHelper;
             _configuration = configuration;
+            _logger = logger;
         }
 
         // Displays the login page
@@ -39,6 +43,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // Processes the login
+        // POST: Account/Login
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -48,17 +53,34 @@ namespace PulseFit.Management.Web.Controllers
 
                 if (result.Succeeded)
                 {
-                    if (this.Request.Query.Keys.Contains("ReturnUrl"))
+                    if (Request.Query.Keys.Contains("ReturnUrl"))
                     {
-                        return Redirect(this.Request.Query["ReturnUrl"].First());
+                        return Redirect(Request.Query["ReturnUrl"].First());
                     }
                     return RedirectToAction("Index", "Home");
                 }
-            }
+                else
+                {
+                    // Adiciona um log detalhado sobre a falha no login
+                    _logger.LogWarning("Failed login attempt for user: {Email}", model.Username);
 
-            ModelState.AddModelError(string.Empty, "Failed to log in.");
+                    if (result.IsLockedOut)
+                    {
+                        ModelState.AddModelError("", "This account is temporarily locked.");
+                    }
+                    else if (result.IsNotAllowed)
+                    {
+                        ModelState.AddModelError("", "Login not allowed. Please confirm your email.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Failed to log in. Please check your credentials.");
+                    }
+                }
+            }
             return View(model);
         }
+
 
         // Logs out the user
         public async Task<IActionResult> Logout()
@@ -318,5 +340,57 @@ namespace PulseFit.Management.Web.Controllers
 
             return View(model);
         }
+
+        // GET: Account/ChangeFirstPassword
+        public IActionResult ChangeFirstPassword(string email, string token)
+        {
+            var model = new ChangeFirstPasswordViewModel
+            {
+                Email = email,
+                Token = token
+            };
+            return View(model);
+        }
+
+        // POST: Account/ChangeFirstPassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeFirstPassword(ChangeFirstPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userHelper.GetUserByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "User not found.");
+                    return View(model);
+                }
+
+                // Atualiza a senha usando o token de redefinição
+                var resetPasswordResult = await _userHelper.ResetPasswordAsync(user, model.Token, model.NewPassword);
+                if (resetPasswordResult.Succeeded)
+                {
+                    // Confirma automaticamente o email, caso ainda não esteja
+                    if (!user.EmailConfirmed)
+                    {
+                        user.EmailConfirmed = true;
+                        await _userHelper.UpdateUserAsync(user);
+                    }
+
+                    TempData["SuccessMessage"] = "Your password has been changed successfully.";
+                    return RedirectToAction("Login", "Account");
+                }
+
+                foreach (var error in resetPasswordResult.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            return View(model);
+        }
+
+
+
     }
 }

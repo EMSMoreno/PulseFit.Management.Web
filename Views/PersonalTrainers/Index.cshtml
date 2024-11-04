@@ -1,41 +1,126 @@
-﻿@model IEnumerable<PulseFit.Management.Web.Data.Entities.PersonalTrainer>
+﻿@model IEnumerable<PulseFit.Management.Web.Models.PersonalTrainerViewModel>
+@using Newtonsoft.Json
 
 @{
-    ViewData["Title"] = "Personal Trainers";
+    ViewData["Title"] = "Personal Trainer List";
+    var jsonSerializerSettings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                Formatting = Formatting.Indented
+            };
+    var serializedData = JsonConvert.SerializeObject(Model, jsonSerializerSettings);
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2>Personal Trainer List</h2>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Add Personal Trainer</a>
-</p>
+<div>
+    <a asp-action="Create" class="btn btn-primary mb-3">Create New Personal Trainer</a>
+</div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Specialty</th>
-            <th>Certification</th>
-            <th>Hire Date</th>
-            <th>Status</th>
-            <th>Email</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var trainer in Model)
-        {
-            <tr>
-                <td>@trainer.Specialty</td>
-                <td>@trainer.Certification</td>
-                <td>@trainer.HireDate.ToShortDateString()</td>
-                <td>@trainer.Status</td>
-                <td>@trainer.User.Email</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@trainer.Id" class="btn btn-info">Details</a>
-                    <a asp-action="Edit" asp-route-id="@trainer.Id" class="btn btn-warning">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@trainer.Id" class="btn btn-danger">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No personal trainers found.</div>
+}
+else
+{
+    <div id="Grid"></div>
+}
+
+@section Scripts {
+    <script id="profilePictureTemplate" type="text/x-template">
+        <img src="${ProfilePictureUrl}" alt="Profile Picture" style="width: 50px; height: 50px; border-radius: 50%;" />
+    </script>
+
+    <script id="actionTemplate" type="text/x-template">
+        <a href="/PersonalTrainers/Edit/${Id}" class="btn btn-warning me-2">Edit</a>
+        <a href="/PersonalTrainers/Delete/${Id}" class="btn btn-danger me-2">Delete</a>
+        <a href="/PersonalTrainers/Details/${Id}" class="btn btn-primary">Details</a>
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            var serializedData = @Html.Raw(serializedData);
+
+            // Mapeamento de Status e CertificationType
+            serializedData.forEach(function (trainer) {
+                // Mapeia Status
+                switch (trainer.Status) {
+                    case 0:
+                        trainer.StatusText = "Pending";
+                        break;
+                    case 1:
+                        trainer.StatusText = "Active";
+                        break;
+                    case 2:
+                        trainer.StatusText = "Inactive";
+                        break;
+                }
+
+                // Mapeia CertificationType
+                switch (trainer.Certification) {
+                    case 0:
+                        trainer.CertificationText = "None";
+                        break;
+                    case 1:
+                        trainer.CertificationText = "CEFAD CPT";
+                        break;
+                    case 2:
+                        trainer.CertificationText = "Gnosies PT";
+                        break;
+                    case 3:
+                        trainer.CertificationText = "ESDRM";
+                        break;
+                    case 4:
+                        trainer.CertificationText = "IPDJ Coach";
+                        break;
+                    case 5:
+                        trainer.CertificationText = "IPDJ Trainer";
+                        break;
+                    case 6:
+                        trainer.CertificationText = "Sports Degree";
+                        break;
+                    case 7:
+                        trainer.CertificationText = "Sports Master's";
+                        break;
+                    case 8:
+                        trainer.CertificationText = "NSCA CPT";
+                        break;
+                    case 9:
+                        trainer.CertificationText = "ACE CPT";
+                        break;
+                    case 10:
+                        trainer.CertificationText = "RYT 200";
+                        break;
+                    case 11:
+                        trainer.CertificationText = "FMS";
+                        break;
+                    case 12:
+                        trainer.CertificationText = "CPR AED";
+                        break;
+                    case 13:
+                        trainer.CertificationText = "First Aid";
+                        break;
+                }
+            });
+
+            // Configuração do Grid
+            var grid = new ej.grids.Grid({
+                dataSource: serializedData,
+                allowPaging: true,
+                allowSorting: true,
+                allowFiltering: true,
+                pageSettings: { pageSize: 10 },
+                toolbar: ['Search'],
+                columns: [
+                    { field: "ProfilePictureUrl", headerText: "Profile Picture", width: 100, template: "#profilePictureTemplate" },
+                    { field: "FirstName", headerText: "First Name", width: 120 },
+                    { field: "LastName", headerText: "Last Name", width: 120 },
+                    { field: "CertificationText", headerText: "Certification", width: 150 },
+                    { field: "StatusText", headerText: "Status", width: 100 },
+                    { headerText: "Actions", width: 180, template: "#actionTemplate" }
+                ]
+            });
+            grid.appendTo("#Grid");
+        });
+    </script>
+}

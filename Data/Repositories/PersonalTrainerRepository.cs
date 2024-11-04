@@ -22,5 +22,13 @@ namespace PulseFit.Management.Web.Data.Repositories
                 .AsNoTracking()
                 .ToListAsync();
         }
+
+        public async Task<PersonalTrainer> GetByIdWithUserAndSpecialtiesAsync(int id)
+        {
+            return await _context.PersonalTrainers
+                .Include(pt => pt.User)
+                .Include(pt => pt.Specialties) // Certifique-se de incluir as especialidades
+                .FirstOrDefaultAsync(pt => pt.Id == id);
+        }
     }
 }

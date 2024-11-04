@@ -53,15 +53,14 @@ namespace PulseFit.Management.Web.Helpers
         private async Task<Guid> UploadStreamAsync(Stream stream, string containerName)
         {
             var name = Guid.NewGuid();
-
-            // Salva o arquivo no sistema de arquivos local
             var path = Path.Combine(_storagePath, containerName);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
 
-            var filePath = Path.Combine(path, $"{name}");
+            // Adiciona uma extensão padrão, como .jpg
+            var filePath = Path.Combine(path, $"{name}.jpg");
             using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
             {
                 await stream.CopyToAsync(fileStream);
@@ -69,5 +68,6 @@ namespace PulseFit.Management.Web.Helpers
 
             return name;
         }
+
     }
 }

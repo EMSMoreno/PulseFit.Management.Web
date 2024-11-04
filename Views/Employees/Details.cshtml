@@ -4,36 +4,77 @@
     ViewData["Title"] = "Employee Details";
 }
 
-<h1>Employee Details</h1>
+<div class="container mt-4">
+    <h2>Employee Details</h2>
 
-<div>
-    <h4>Employee</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">First Name</dt>
-        <dd class="col-sm-10">@Model.FirstName</dd>
+    <div class="card shadow-lg p-4">
+        <div class="row align-items-center mb-4">
+            <div class="col-md-4 d-flex justify-content-center">
+                <img src="@Model.ProfilePictureUrl" alt="Profile Picture" class="rounded-circle shadow-sm" style="width: 180px; height: 180px;" />
+            </div>
+            <div class="col-md-8">
+                <h3 class="text-primary">@Model.FirstName @Model.LastName</h3>
+                <hr class="my-3" />
+                <dl class="row">
+                    <dt class="col-sm-4 fw-semibold text-muted">Email:</dt>
+                    <dd class="col-sm-8">@Model.Email</dd>
 
-        <dt class="col-sm-2">Last Name</dt>
-        <dd class="col-sm-10">@Model.LastName</dd>
+                    <dt class="col-sm-4 fw-semibold text-muted">Phone:</dt>
+                    <dd class="col-sm-8">@Model.PhoneNumber</dd>
 
-        <dt class="col-sm-2">Email</dt>
-        <dd class="col-sm-10">@Model.Email</dd>
+                    <dt class="col-sm-4 fw-semibold text-muted">Employee Type:</dt>
+                    <dd class="col-sm-8">@Model.EmployeeType</dd>
 
-        <dt class="col-sm-2">Phone Number</dt>
-        <dd class="col-sm-10">@Model.PhoneNumber</dd>
+                    <dt class="col-sm-4 fw-semibold text-muted">Status:</dt>
+                    <dd class="col-sm-8">@Model.Status</dd>
 
-        <dt class="col-sm-2">Hire Date</dt>
-        <dd class="col-sm-10">@Model.HireDate.ToShortDateString()</dd>
+                    <dt class="col-sm-4 fw-semibold text-muted">Shift:</dt>
+                    <dd class="col-sm-8">@Model.Shift</dd>
 
-        <dt class="col-sm-2">Status</dt>
-        <dd class="col-sm-10">@Model.Status</dd>
+                    <dt class="col-sm-4 fw-semibold text-muted">Hire Date:</dt>
+                    <dd class="col-sm-8">@Model.HireDate?.ToString("d")</dd>
+                </dl>
+            </div>
+        </div>
 
-        <dt class="col-sm-2">Profile Picture</dt>
-        <dd class="col-sm-10">
-            <img src="@Model.ProfilePictureUrl" alt="Profile Picture" style="width: 100px; height: auto;" />
-        </dd>
-    </dl>
+        <div class="d-flex justify-content-end mt-3">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Edit</a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger me-2">Delete</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
 </div>
 
-<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
-<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+<style>
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 8px;
+        padding: 1.5rem;
+    }
+
+        .card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+    .card-img-wrapper {
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
+        border-radius: 8px 8px 0 0;
+    }
+
+    h3 {
+        color: #007bff;
+        font-weight: bold;
+    }
+
+    dl.row dt {
+        font-weight: 500;
+        color: #6c757d;
+    }
+
+    dl.row dd {
+        font-weight: 400;
+        color: #212529;
+    }
+</style>

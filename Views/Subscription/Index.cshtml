@@ -1,0 +1,30 @@
+﻿@model IEnumerable<PulseFit.Management.Web.Models.SubscriptionViewModel>
+
+@{
+    ViewData["Title"] = "Subscriptions";
+}
+
+<h2>Available Subscriptions</h2>
+
+<div class="row">
+    @foreach (var subscription in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="@subscription.ImageUrl" class="card-img-top" alt="@subscription.Name" style="max-height: 200px; object-fit: cover;" />
+                <div class="card-body">
+                    <h5 class="card-title">@subscription.Name</h5>
+                    <p class="card-text">@subscription.Description</p>
+                    <p class="card-text"><strong>Price:</strong> @subscription.Price.ToString("C")</p>
+                    <p class="card-text"><strong>Duration:</strong> @subscription.DurationMonths months</p>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <a asp-action="Edit" asp-route-id="@subscription.Id" class="btn btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@subscription.Id" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<a asp-action="Create" class="btn btn-primary mt-4">Add New Subscription</a>

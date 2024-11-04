@@ -66,5 +66,20 @@ namespace PulseFit.Management.Web.Helpers
             };
         }
 
+        public string LoadAndProcessEmailTemplate(string templatePath, Dictionary<string, string> placeholders)
+        {
+            // Lê o template de email a partir do caminho fornecido
+            string templateContent = System.IO.File.ReadAllText(templatePath);
+
+            // Substitui os placeholders no template
+            foreach (var placeholder in placeholders)
+            {
+                templateContent = templateContent.Replace($"{{{{{placeholder.Key}}}}}", placeholder.Value);
+            }
+
+            return templateContent;
+        }
+
+
     }
 }

@@ -4,32 +4,90 @@
     ViewData["Title"] = "Personal Trainer Details";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container mt-4">
+    <h2>Personal Trainer Details</h2>
 
-<div>
-    <h4>Personal Trainer</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Specialty</dt>
-        <dd class="col-sm-10">@Model.Specialty</dd>
+    <div class="card shadow-lg p-4">
+        <div class="row align-items-center mb-4">
+            <div class="col-md-4 d-flex justify-content-center">
+                <img src="@Model.ProfilePictureUrl" alt="Profile Picture" class="rounded-circle shadow-sm" style="width: 180px; height: 180px;" />
+            </div>
+            <div class="col-md-8">
+                <h3 class="text-primary">@Model.FirstName @Model.LastName</h3>
+                <hr class="my-3" />
+                <dl class="row">
+                    <dt class="col-sm-4 fw-semibold text-muted">Email:</dt>
+                    <dd class="col-sm-8">@Model.Email</dd>
 
-        <dt class="col-sm-2">Certification</dt>
-        <dd class="col-sm-10">@Model.Certification</dd>
+                    <dt class="col-sm-4 fw-semibold text-muted">Phone:</dt>
+                    <dd class="col-sm-8">@Model.PhoneNumber</dd>
 
-        <dt class="col-sm-2">Hire Date</dt>
-        <dd class="col-sm-10">@Model.HireDate.ToShortDateString()</dd>
+                    <dt class="col-sm-4 fw-semibold text-muted">Certification:</dt>
+                    <dd class="col-sm-8">@Model.Certification?.ToString()</dd>
 
-        <dt class="col-sm-2">Status</dt>
-        <dd class="col-sm-10">@Model.Status</dd>
+                    <dt class="col-sm-4 fw-semibold text-muted">Status:</dt>
+                    <dd class="col-sm-8">@Model.Status</dd>
 
-        <dt class="col-sm-2">Email</dt>
-        <dd class="col-sm-10">@Model.Email</dd>
+                    <dt class="col-sm-4 fw-semibold text-muted">Hire Date:</dt>
+                    <dd class="col-sm-8">@Model.HireDate?.ToString("d")</dd>
+                </dl>
+            </div>
+        </div>
 
-        <dt class="col-sm-2">Profile Picture</dt>
-        <dd class="col-sm-10">
-            <img src="@Model.ProfilePictureUrl" alt="Profile Picture" style="width: 100px; height: auto;" />
-        </dd>
-    </dl>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <div class="mb-4">
+            <h4 class="text-secondary">Specialties</h4>
+            <hr />
+            @if (Model.Specialties.Any())
+            {
+                <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3">
+                    @foreach (var specialty in Model.Specialties)
+                    {
+                        <div class="col">
+                            <div class="card h-100 specialty-card shadow-sm border-0">
+                                <div class="card-img-wrapper d-flex align-items-center justify-content-center" style="height: 140px; background-color: #f7f7f7;">
+                                    <img src="@specialty.ImageUrl" class="card-img-top" alt="@specialty.Text" style="max-height: 100%; width: auto; object-fit: contain;" />
+                                </div>
+                                <div class="card-body text-center">
+                                    <p class="card-title text-muted mb-0">@specialty.Text</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">No specialties assigned</p>
+            }
+        </div>
+
+        <div class="d-flex justify-content-end mt-3">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Edit</a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger me-2">Delete</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
 </div>
+
+
+<style>
+    .specialty-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 8px;
+    }
+
+        .specialty-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+    .card-img-wrapper {
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .card-body {
+        padding: 0.8rem;
+    }
+</style>

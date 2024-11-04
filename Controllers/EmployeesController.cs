@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using PulseFit.Management.Web.Data.Entities;
 using PulseFit.Management.Web.Helpers;
 using PulseFit.Management.Web.Models;
 using PulseFit.Management.Web.Data.Repositories;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace PulseFit.Management.Web.Controllers
 {
@@ -16,6 +18,7 @@ namespace PulseFit.Management.Web.Controllers
         private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
         private readonly IUserHelper _userHelper;
+        private readonly IMailHelper _mailHelper;
         private readonly ILogger<EmployeesController> _logger;
 
         public EmployeesController(
@@ -23,12 +26,14 @@ namespace PulseFit.Management.Web.Controllers
             IBlobHelper blobHelper,
             IConverterHelper converterHelper,
             IUserHelper userHelper,
+            IMailHelper mailHelper,
             ILogger<EmployeesController> logger)
         {
             _employeeRepository = employeeRepository;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
             _userHelper = userHelper;
+            _mailHelper = mailHelper;
             _logger = logger;
         }
 
@@ -40,13 +45,12 @@ namespace PulseFit.Management.Web.Controllers
             return View(employeeViewModels);
         }
 
-
         // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return new NotFoundViewResult("EmployeeNotFound");
 
-            var employee = await _employeeRepository.GetByIdAsync(id.Value);
+            var employee = await _employeeRepository.GetByIdWithUserAsync(id.Value);
             if (employee == null) return new NotFoundViewResult("EmployeeNotFound");
 
             var model = _converterHelper.ToEmployeeViewModel(employee);
@@ -66,8 +70,16 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Verifica se o utilizador com o mesmo email já existe
+                // Verificar tamanho da imagem
+                if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 2 * 1024 * 1024) // Limite de 2 MB
+                {
+                    ModelState.AddModelError("ProfilePictureFile", "The file size should not exceed 2 MB.");
+                    return View(model);
+                }
+
+                // Verificar se o usuário com o email já existe
                 var existingUser = await _userHelper.GetUserByEmailAsync(model.Email);
+
                 if (existingUser != null)
                 {
                     ModelState.AddModelError(string.Empty, "A user with this email already exists.");
@@ -76,7 +88,7 @@ namespace PulseFit.Management.Web.Controllers
 
                 try
                 {
-                    // Cria o utilizador associado ao Employee com uma senha gerada automaticamente
+                    // Criação do novo User
                     var user = new User
                     {
                         FirstName = model.FirstName,
@@ -87,33 +99,66 @@ namespace PulseFit.Management.Web.Controllers
                         DateCreated = DateTime.UtcNow
                     };
 
-                    // Gera uma senha aleatória para o utilizador
-                    var randomPassword = "Temp@123";  // Aqui podes usar uma senha mais segura ou aleatória
+                    // Upload da imagem de perfil se uma imagem for enviada
+                    if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 0)
+                    {
+                        user.ProfilePictureId = await _blobHelper.UploadBlobAsync(model.ProfilePictureFile, "employees-pics");
+                    }
 
-                    // Adiciona o utilizador ao sistema com a senha gerada
-                    var result = await _userHelper.AddUserAsync(user, randomPassword);
-                    if (result != IdentityResult.Success)
+                    // Gerar senha temporária
+                    string temporaryPassword = GenerateRandomPassword();
+                    var createUserResult = await _userHelper.AddUserAsync(user, temporaryPassword);
+
+                    if (!createUserResult.Succeeded)
                     {
                         ModelState.AddModelError(string.Empty, "The user could not be created.");
                         return View(model);
                     }
 
-                    // Atribui o role "Employee" ao utilizador
                     await _userHelper.AddUserToRoleAsync(user, "Employee");
 
-                    // Upload da imagem de perfil (opcional)
-                    Guid imageId = Guid.Empty;
-                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    // Gera e envia o e-mail de boas-vindas
+                    string token = await _userHelper.GeneratePasswordResetTokenAsync(user);
+                    string resetLink = Url.Action("ChangeFirstPassword", "Account", new { email = user.Email, token = token }, protocol: HttpContext.Request.Scheme);
+
+                    var placeholders = new Dictionary<string, string>
+            {
+                { "FirstName", user.FirstName },
+                { "TemporaryPassword", temporaryPassword },
+                { "ResetLink", resetLink }
+            };
+
+                    string emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Views/Emails/WelcomeEmailTemplate.html");
+                    string emailBody = _mailHelper.LoadAndProcessEmailTemplate(emailTemplatePath, placeholders);
+
+                    var emailResponse = _mailHelper.SendEmail(user.Email, "Welcome to PulseFit", emailBody);
+                    if (!emailResponse.IsSuccess)
                     {
-                        imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "employees-pics");
+                        ModelState.AddModelError(string.Empty, "Error sending email. Please check email settings.");
                     }
 
-                    // Converte o ViewModel em Employee
-                    var employee = await _converterHelper.ToEmployeeAsync(model, imageId, true);
-                    employee.UserId = user.Id;
+                    // Verificar se o usuário foi salvo antes de associá-lo ao Employee
+                    var userFromDb = await _userHelper.GetUserByEmailAsync(user.Email);
+                    if (userFromDb == null)
+                    {
+                        ModelState.AddModelError("", "User could not be found after creation.");
+                        return View(model);
+                    }
+
+                    // Criação do Employee e associação ao User já salvo
+                    var employee = new Employee
+                    {
+                        EmployeeType = model.EmployeeType,
+                        HireDate = model.HireDate,
+                        Status = model.Status,
+                        Shift = model.Shift,
+                        UserId = userFromDb.Id,
+                        User = userFromDb
+                    };
 
                     await _employeeRepository.CreateAsync(employee);
 
+                    TempData["SuccessMessage"] = "Employee created successfully and email sent with login instructions.";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -127,12 +172,13 @@ namespace PulseFit.Management.Web.Controllers
         }
 
 
+
         // GET: Employees/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return new NotFoundViewResult("EmployeeNotFound");
 
-            var employee = await _employeeRepository.GetByIdAsync(id.Value);
+            var employee = await _employeeRepository.GetByIdWithUserAsync(id.Value);
             if (employee == null) return new NotFoundViewResult("EmployeeNotFound");
 
             var model = _converterHelper.ToEmployeeViewModel(employee);
@@ -150,33 +196,40 @@ namespace PulseFit.Management.Web.Controllers
             {
                 try
                 {
-                    Guid imageId = model.ImageId;
-
-                    // Atualiza a imagem se disponível
-                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    // Verificar tamanho da imagem
+                    if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 2 * 1024 * 1024) // Limite de 2 MB
                     {
-                        imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "employees-pics");
-                    }
-
-                    // Atualiza o Employee
-                    var employee = await _converterHelper.ToEmployeeAsync(model, imageId, false);
-                    await _employeeRepository.UpdateAsync(employee);
-
-                    // Atualiza os dados do User associados
-                    var user = await _userHelper.GetUserByIdAsync(model.UserId);
-                    if (user != null)
-                    {
-                        user.FirstName = model.FirstName;
-                        user.LastName = model.LastName;
-                        user.PhoneNumber = model.PhoneNumber;
-                        await _userHelper.UpdateUserAsync(user);
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, "Associated user not found.");
+                        ModelState.AddModelError("ProfilePictureFile", "The file size should not exceed 2 MB.");
                         return View(model);
                     }
 
+                    var employee = await _employeeRepository.GetByIdWithUserAsync(id);
+                    if (employee == null || employee.User == null)
+                    {
+                        _logger.LogWarning("Employee or associated User not found for ID: {0}", id);
+                        return new NotFoundViewResult("EmployeeNotFound");
+                    }
+
+                    // Atualizar dados do User (exceto Email e UserName)
+                    employee.User.FirstName = model.FirstName;
+                    employee.User.LastName = model.LastName;
+                    employee.User.PhoneNumber = model.PhoneNumber;
+
+                    // Atualizar a imagem do perfil se uma nova imagem for enviada
+                    if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 0)
+                    {
+                        employee.User.ProfilePictureId = await _blobHelper.UploadBlobAsync(model.ProfilePictureFile, "employees-pics");
+                    }
+
+                    // Atualiza o Employee específico com enum Shift e HireDate opcional
+                    employee.EmployeeType = model.EmployeeType;
+                    employee.HireDate = model.HireDate;  // Aceita nulo
+                    employee.Shift = model.Shift;        // Enum ShiftType
+                    employee.Status = model.Status;
+
+                    await _employeeRepository.UpdateAsync(employee);
+
+                    TempData["SuccessMessage"] = "Employee updated successfully.";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -185,17 +238,15 @@ namespace PulseFit.Management.Web.Controllers
                     ModelState.AddModelError("", "An unexpected error occurred. Please try again.");
                 }
             }
-
             return View(model);
         }
-
 
         // GET: Employees/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return new NotFoundViewResult("EmployeeNotFound");
 
-            var employee = await _employeeRepository.GetByIdAsync(id.Value);
+            var employee = await _employeeRepository.GetByIdWithUserAsync(id.Value);
             if (employee == null) return new NotFoundViewResult("EmployeeNotFound");
 
             var model = _converterHelper.ToEmployeeViewModel(employee);
@@ -207,15 +258,25 @@ namespace PulseFit.Management.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var employee = await _employeeRepository.GetByIdAsync(id);
+            var employee = await _employeeRepository.GetByIdWithUserAsync(id);
             if (employee == null) return new NotFoundViewResult("EmployeeNotFound");
 
             try
             {
+   
+
+                // Remover o Employee
                 await _employeeRepository.DeleteAsync(employee);
+
+                // Apagar o usuário associado ao Employee
+                if (employee.User != null)
+                {
+                    await _userHelper.DeleteUserAsync(employee.User);
+                }
+
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
                 if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
                 {
@@ -231,6 +292,11 @@ namespace PulseFit.Management.Web.Controllers
             }
         }
 
+
+
+
+
+
         private async Task<bool> EmployeeExists(int id)
         {
             return await _employeeRepository.ExistAsync(id);
@@ -239,6 +305,14 @@ namespace PulseFit.Management.Web.Controllers
         public IActionResult EmployeeNotFound()
         {
             return View();
+        }
+
+        private string GenerateRandomPassword(int length = 8)
+        {
+            const string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()?_-";
+            Random random = new Random();
+            return new string(Enumerable.Repeat(validChars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

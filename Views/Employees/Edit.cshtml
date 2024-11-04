@@ -4,62 +4,7 @@
     ViewData["Title"] = "Edit Employee";
 }
 
-<h1>Edit Employee</h1>
-
-<form asp-action="Edit" enctype="multipart/form-data">
-    <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="UserId" /> 
-    <div class="form-group">
-        <label asp-for="FirstName"></label>
-        <input asp-for="FirstName" class="form-control" />
-        <span asp-validation-for="FirstName" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="LastName"></label>
-        <input asp-for="LastName" class="form-control" />
-        <span asp-validation-for="LastName" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="PhoneNumber"></label>
-        <input asp-for="PhoneNumber" class="form-control" />
-        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="EmployeeType"></label>
-        <select asp-for="EmployeeType" class="form-control" asp-items="Html.GetEnumSelectList<PulseFit.Management.Web.Data.Entities.EmployeeType>()"></select>
-        <span asp-validation-for="EmployeeType" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="HireDate"></label>
-        <input asp-for="HireDate" class="form-control" type="date" />
-        <span asp-validation-for="HireDate" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Shift"></label>
-        <input asp-for="Shift" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="ImageFile"></label>
-        <input asp-for="ImageFile" type="file" class="form-control" />
-        <span asp-validation-for="ImageFile" class="text-danger"></span>
-    </div>
-    <div>
-        <img src="@Model.ProfilePictureUrl" alt="Profile Picture" style="width: 100px; height: auto;" />
-    </div>
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+<h2>Edit Employee</h2>
 
 @if (!ViewData.ModelState.IsValid)
 {
@@ -71,4 +16,106 @@
             }
         </ul>
     </div>
+}
+
+<form id="editEmployeeForm" asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="FirstName" class="form-label">First Name <span class="text-danger">*</span></label>
+            <input asp-for="FirstName" class="form-control" required />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="LastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+            <input asp-for="LastName" class="form-control" required />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="Email" class="form-label">Email <span class="text-danger">*</span></label>
+            <input asp-for="Email" class="form-control" readonly />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+            <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="EmployeeType" class="form-label">Employee Type <span class="text-danger">*</span></label>
+            <select asp-for="EmployeeType" class="form-select">
+                <option value="">Select Employee Type</option>
+                @foreach (var type in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.EmployeeType)))
+                {
+                    <option value="@type">@type</option>
+                }
+            </select>
+            <span asp-validation-for="EmployeeType" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Shift" class="form-label">Shift Type <span class="text-danger">*</span></label>
+            <select asp-for="Shift" class="form-select">
+                <option value="">Select Shift</option>
+                @foreach (var shiftType in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.ShiftType)))
+                {
+                    <option value="@shiftType">@shiftType</option>
+                }
+            </select>
+            <span asp-validation-for="Shift" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="Status" class="form-label">Status <span class="text-danger">*</span></label>
+            <select asp-for="Status" class="form-select">
+                <option value="">Select Status</option>
+                @foreach (var status in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.Status)))
+                {
+                    <option value="@status">@status</option>
+                }
+            </select>
+            <span asp-validation-for="Status" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="HireDate" class="form-label">Hire Date</label>
+            <input asp-for="HireDate" type="date" class="form-control" />
+            <span asp-validation-for="HireDate" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ProfilePictureFile" class="form-label">Profile Picture</label>
+        <div class="d-flex align-items-center">
+            <div id="imageContainer">
+                <img id="currentImage" src="@Model.ProfilePictureUrl" alt="Current Profile Picture" class="rounded-circle shadow-sm" style="width: 150px; height: 150px;" />
+                <img id="newImagePreview" class="rounded-circle shadow-sm" style="width: 150px; height: 150px; display: none;" alt="New Image Preview" />
+            </div>
+            <input asp-for="ProfilePictureFile" type="file" class="form-control ms-3" id="newImageFile" />
+        </div>
+        <small class="form-text text-muted">Maximum file size: 2 MB</small> <!-- Indicação do tamanho máximo -->
+        <span asp-validation-for="ProfilePictureFile" class="text-danger"></span>
+    </div>
+
+
+    <div class="d-flex justify-content-between">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/formHelpers.js"></script>
+    <script>
+        setupNewImagePreview("newImageFile", "newImagePreview", "currentImage");
+        setupSweetAlertOnSubmit("editEmployeeForm", "Employee updated successfully.", "Please correct the errors in the form.");
+    </script>
 }

@@ -7,5 +7,7 @@ namespace PulseFit.Management.Web.Data.Repositories
     public interface IPersonalTrainerRepository : IGenericRepository<PersonalTrainer>
     {
         Task<List<PersonalTrainer>> GetAllWithUsersAsync();
+        Task<PersonalTrainer> GetByIdWithUserAndSpecialtiesAsync(int id);
+
     }
 }

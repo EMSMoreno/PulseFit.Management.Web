@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using PulseFit.Management.Web.Data.Entities;
-using System;
+﻿using PulseFit.Management.Web.Data.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace PulseFit.Management.Web.Models
@@ -11,14 +9,16 @@ namespace PulseFit.Management.Web.Models
 
         [Required]
         [Display(Name = "Employee Type")]
-        public EmployeeType EmployeeType { get; set; } // Usa o enum no ViewModel
+        public EmployeeType EmployeeType { get; set; }
+
+        public DateTime? HireDate { get; set; } // Data de contratação opcional
 
         [Required]
-        public DateTime HireDate { get; set; }
-
         public Status Status { get; set; }
 
-        public string Shift { get; set; }
+        [Required]
+        [Display(Name = "Shift Type")]
+        public ShiftType Shift { get; set; }
 
         // Propriedades do User
         public string? UserId { get; set; }
@@ -38,10 +38,10 @@ namespace PulseFit.Management.Web.Models
         public Guid ImageId { get; set; }
 
         [Display(Name = "Profile Picture")]
-        public IFormFile ImageFile { get; set; }
+        public IFormFile? ProfilePictureFile { get; set; }
 
         public string ProfilePictureUrl => ImageId == Guid.Empty
-            ? "/images/default-profile.png"
-            : $"https://myblobstorage.blob.core.windows.net/employees-pics/{ImageId}";
+            ? "/images/noimage.png"
+            : $"/uploads/employees-pics/{ImageId}.jpg";
     }
 }
