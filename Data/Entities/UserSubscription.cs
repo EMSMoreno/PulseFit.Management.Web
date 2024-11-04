@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PulseFit.Management.Web.Data.Entities
 {
@@ -7,8 +6,7 @@ namespace PulseFit.Management.Web.Data.Entities
     {
         public int Id { get; set; }
 
-        // Relação com User
-        public string UserId { get; set; }
+        public string UserId { get; set; } 
 
         public User User { get; set; }
 
