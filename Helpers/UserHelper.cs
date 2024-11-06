@@ -76,11 +76,17 @@ namespace PulseFit.Management.Web.Helpers
             (await _userManager.GetUsersInRoleAsync(roleName)).ToList();
 
         public async Task<IdentityResult> DeleteUserAsync(User user) =>
-    await _userManager.DeleteAsync(user);
+            await _userManager.DeleteAsync(user);
 
-        public Task<int> GetUserIdByEmailAsync(string email)
+        public async Task<string> GetUserIdByEmailAsync(string email)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                throw new Exception("User Not Found!");
+            }
+
+            return user.Id;
         }
 
 

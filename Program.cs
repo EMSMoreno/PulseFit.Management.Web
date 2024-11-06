@@ -58,12 +58,15 @@ builder.Services.AddScoped<INutritionistRepository, NutritionistRepository>();
 builder.Services.AddScoped<ISpecializationRepository, SpecializationRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
+builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IGymRepository, GymRepository>();
 builder.Services.AddScoped<SeedDb>(); // Registro do SeedDb
 
 // Configuração de cookies para o Identity
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/Account/NotAuthorized";
+    options.LoginPath = "/Account/Login";
     options.AccessDeniedPath = "/Account/NotAuthorized";
 });
 

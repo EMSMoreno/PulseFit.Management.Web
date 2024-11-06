@@ -94,8 +94,6 @@ namespace PulseFit.Management.Web.Helpers
         //Task NotifySecretaryPendingUserAsync(User user);
 
 
-        Task<int> GetUserIdByEmailAsync(string email);
+        Task<string> GetUserIdByEmailAsync(string email);
     }
-
 }
-

@@ -32,12 +32,7 @@ namespace PulseFit.Management.Web.Data.Repositories
 
         public async Task CreateBookingAsync(Booking booking)
         {
-            var workout = await _context.Workouts.FindAsync(booking.WorkoutId);
-            if (workout.MaxCapacity <= workout.Bookings)
-            {
-                throw new Exception("Maximum Capacity Reached");
-            }
-
+            
             booking.ReservationDate = DateTime.Now;
             booking.Status = Booking.BookingStatus.Reserved;
 
@@ -52,12 +47,25 @@ namespace PulseFit.Management.Web.Data.Repositories
             return workout.MaxCapacity - reservedSlots;
         }
 
-        public async Task<IEnumerable<Booking>> GetBookingsByUserAsync(int userId)
+        public async Task<IEnumerable<Booking>> GetBookingsByUserAsync(string userId)
         {
             return await _context.Bookings
                 .Where(b => b.UserId == userId)
                 .OrderBy(b => b.TrainingDate)
                 .ToListAsync();
+        }
+
+        public async Task<bool> WorkoutMaximumCapacityReachedAsync(int workoutId)
+        {
+            var workout = await _context.Workouts
+                .FirstOrDefaultAsync(w => w.Id == workoutId);
+            
+            if (workout.MaxCapacity <= workout.Bookings)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

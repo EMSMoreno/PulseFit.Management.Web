@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PulseFit.Management.Web.Data;
 
@@ -11,9 +12,11 @@ using PulseFit.Management.Web.Data;
 namespace PulseFit.Management.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241105140719_ModifyGymsAndWorkouts")]
+    partial class ModifyGymsAndWorkouts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -251,9 +254,6 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("GymId")
                         .HasColumnType("int");
 
-                    b.Property<string>("GymName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("ReservationDate")
                         .HasColumnType("datetime2");
 
@@ -265,15 +265,18 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("WorkoutId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GymId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("WorkoutId");
 
                     b.ToTable("Bookings");
                 });
@@ -488,8 +491,9 @@ namespace PulseFit.Management.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("GymImageId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("GymImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -996,14 +1000,8 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("GymId")
                         .HasColumnType("int");
 
-                    b.Property<string>("GymName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("InstructorId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InstructorName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MaxCapacity")
@@ -1119,6 +1117,33 @@ namespace PulseFit.Management.Web.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Booking", b =>
+                {
+                    b.HasOne("PulseFit.Management.Web.Data.Entities.Gym", "Gym")
+                        .WithMany()
+                        .HasForeignKey("GymId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PulseFit.Management.Web.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PulseFit.Management.Web.Data.Entities.Workout", "Workout")
+                        .WithMany()
+                        .HasForeignKey("WorkoutId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Gym");
+
+                    b.Navigation("User");
+
+                    b.Navigation("Workout");
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Client", b =>

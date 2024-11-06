@@ -17,16 +17,14 @@
 
         public int WorkoutId { get; set; }
 
-        public Workout Workout { get; set; }
+        public string? UserName { get; set; }
 
         public string UserId { get; set; } 
 
-        public User User { get; set; }
-
         public DateTime TrainingDate { get; set; }
 
-        public int GymId { get; set; }
+        public string? GymName { get; set; }
 
-        public Gym Gym { get; set; }
+        public int GymId { get; set; }
     }
 }
