@@ -292,5 +292,42 @@ namespace PulseFit.Management.Web.Helpers
                 Status = userSubscription.Status
             };
         }
+
+        public async Task<Gym> ToGym(GymViewModel model, Guid imageId, bool isNew)
+        {
+            return new Gym
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                Location = model.Location,
+                Capacity = model.Capacity,
+                OpeningTime = model.OpeningTime,
+                ClosingTime = model.ClosingTime,
+                CreationDate = model.CreationDate,
+                Status = model.Status,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                DayOff = model.DayOff,
+                GymImageId = imageId,
+            };
+        }
+
+        public GymViewModel ToGymViewModel(Gym gym)
+        {
+            return new GymViewModel
+            {
+                Id = gym.Id,
+                Name = gym.Name,
+                Location = gym.Location,
+                Capacity = gym.Capacity,
+                OpeningTime = gym.OpeningTime,
+                ClosingTime = gym.ClosingTime,
+                CreationDate = gym.CreationDate,
+                Status = gym.Status,
+                Email = gym.Email,
+                PhoneNumber = gym.PhoneNumber,
+                DayOff = gym.DayOff,
+            };
+        }
     }
 }

@@ -44,14 +44,12 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\uploads\employees-pics\" />
+    <Folder Include="wwwroot\uploads\gyms-pics\" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="wwwroot\js\formHelpers.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="wwwroot\uploads\employees-pics\9e83c348-5d91-4f69-9b85-6cbb17e1591c" />
   </ItemGroup>
 
 </Project>

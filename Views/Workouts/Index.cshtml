@@ -78,8 +78,8 @@
             <th>@Html.DisplayNameFor(model => model.EndDate)</th>
             <th>@Html.DisplayNameFor(model => model.MaxCapacity)</th>
             <th>@Html.DisplayNameFor(model => model.Status)</th>
-            <th>@Html.DisplayNameFor(model => model.Instructor)</th>
-            <th>@Html.DisplayNameFor(model => model.Gym)</th>
+            <th>@Html.DisplayNameFor(model => model.InstructorName)</th>
+            <th>@Html.DisplayNameFor(model => model.GymName)</th>
             <th>Ações</th>
         </tr>
     </thead>
@@ -97,8 +97,8 @@
                 <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
                 <td>@Html.DisplayFor(modelItem => item.MaxCapacity)</td>
                 <td>@Html.DisplayFor(modelItem => item.Status)</td>
-                <td>@Html.DisplayFor(modelItem => item.Instructor.FullName)</td>
-                <td>@Html.DisplayFor(modelItem => item.Gym.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.InstructorName)</td>
+                <td>@Html.DisplayFor(modelItem => item.GymName)</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

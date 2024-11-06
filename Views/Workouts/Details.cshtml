@@ -70,21 +70,18 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Status)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Instructor)
-        </dt>
+        
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Instructor.Id)
+            @Html.DisplayFor(model => model.InstructorId)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Gym)
-        </dt>
+       
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Gym.Id)
+            @Html.DisplayFor(model => model.GymId)
         </dd>
     </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="CreateBooking" asp-route-Id="@Model?.Id">Reserve</a> |
     <a asp-action="Index">Back to List</a>
 </div>

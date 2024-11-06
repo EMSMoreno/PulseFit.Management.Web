@@ -1,4 +1,4 @@
-﻿@model PulseFit.Management.Web.Data.Entities.Gym
+﻿@model PulseFit.Management.Web.Models.GymViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -44,7 +44,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
+                <select asp-for="Status" class="form-control" asp-items="ViewBag.Status"></select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -59,13 +59,14 @@
             </div>
             <div class="form-group">
                 <label asp-for="DayOff" class="control-label"></label>
-                <input asp-for="DayOff" class="form-control" />
+                <select asp-for="DayOff" class="form-control" asp-items="ViewBag.DayOff"></select>
                 <span asp-validation-for="DayOff" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="GymImagePath" class="control-label"></label>
-                <input asp-for="GymImagePath" class="form-control" />
-                <span asp-validation-for="GymImagePath" class="text-danger"></span>
+            <div class="col-md-6">
+                <label asp-for="GymImageFile" class="form-label">Profile Picture</label>
+                <input asp-for="GymImageFile" type="file" class="form-control" id="trainerPictureUpload" />
+                <small class="form-text text-muted">Maximum file size: 2 MB</small> <!-- Indicação do tamanho máximo -->
+                <span asp-validation-for="GymImageFile" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

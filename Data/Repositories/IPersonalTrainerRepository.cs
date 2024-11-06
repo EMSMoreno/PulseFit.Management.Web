@@ -9,5 +9,6 @@ namespace PulseFit.Management.Web.Data.Repositories
         Task<List<PersonalTrainer>> GetAllWithUsersAsync();
         Task<PersonalTrainer> GetByIdWithUserAndSpecialtiesAsync(int id);
 
+        Task<string> GetPtNameByIdAsync(string id);
     }
 }

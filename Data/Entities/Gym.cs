@@ -44,6 +44,11 @@ namespace PulseFit.Management.Web.Data.Entities
             Saturday,
         }
 
-        public string GymImagePath { get; set; } //TODO : Change to blobHelper when implemented
+        [Display(Name="Gym Image")]
+        public Guid GymImageId { get; set; }
+
+        public string GymImageUrl => GymImageId == Guid.Empty
+            ? "/images/noimage.png"
+            : $"/uploads/gyms-pics/{GymImageId}.png";
     }
 }

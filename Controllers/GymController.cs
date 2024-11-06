@@ -1,25 +1,34 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PulseFit.Management.Web.Data;
 using PulseFit.Management.Web.Data.Entities;
+using PulseFit.Management.Web.Data.Repositories;
+using PulseFit.Management.Web.Helpers;
+using PulseFit.Management.Web.Models;
 
 namespace PulseFit.Management.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class GymsController : Controller
     {
+        private readonly IGymRepository _gymRepository;
         private readonly DataContext _context;
+        private readonly IBlobHelper _blobHelper;
+        private readonly IConverterHelper _converterHelper;
 
-        public GymsController(DataContext context)
+        public GymsController(IGymRepository gymRepository, DataContext context, IBlobHelper blobHelper, IConverterHelper converterHelper)
         {
+            _gymRepository = gymRepository;
             _context = context;
+            _blobHelper = blobHelper;
+            _converterHelper = converterHelper;
         }
 
         // GET: Gyms
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Gyms.ToListAsync());
+            return View(_gymRepository.GetAll());
         }
 
         // GET: Gyms/Details/5
@@ -30,8 +39,7 @@ namespace PulseFit.Management.Web.Controllers
                 return NotFound();
             }
 
-            var gym = await _context.Gyms
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var gym = await _gymRepository.GetByIdAsync(id.Value);
             if (gym == null)
             {
                 return NotFound();
@@ -43,23 +51,37 @@ namespace PulseFit.Management.Web.Controllers
         // GET: Gyms/Create
         public IActionResult Create()
         {
+            ViewBag.Status = new SelectList(Enum.GetValues(typeof(Gym.GymStatus)).Cast<Gym.GymStatus>());
+            ViewBag.DayOff = new SelectList(Enum.GetValues(typeof(Gym.GymDayOff)).Cast<Gym.GymDayOff>());
+
             return View();
         }
+
 
         // POST: Gyms/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Location,Capacity,OpeningTime,ClosingTime,CreationDate,Status,Email,PhoneNumber,DayOff,GymImagePath")] Gym gym)
+        public async Task<IActionResult> Create(GymViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(gym);
-                await _context.SaveChangesAsync();
+                var imageId = model.GymImageFile != null
+                    ? await _blobHelper.UploadBlobAsync(model.GymImageFile, "gyms-pics")
+                    : Guid.Empty;
+
+                var gym = await _converterHelper.ToGym(model, imageId, isNew : true);
+
+                await _gymRepository.CreateAsync(gym);
+                
                 return RedirectToAction(nameof(Index));
             }
-            return View(gym);
+
+            ViewBag.Status = new SelectList(Enum.GetValues(typeof(Gym.GymStatus)).Cast<Gym.GymStatus>());
+            ViewBag.DayOff = new SelectList(Enum.GetValues(typeof(Gym.GymDayOff)).Cast<Gym.GymDayOff>());
+
+            return View(model);
         }
 
         // GET: Gyms/Edit/5
@@ -70,11 +92,15 @@ namespace PulseFit.Management.Web.Controllers
                 return NotFound();
             }
 
-            var gym = await _context.Gyms.FindAsync(id);
+            var gym = await _gymRepository.GetByIdAsync(id.Value);
             if (gym == null)
             {
                 return NotFound();
             }
+
+            ViewBag.Status = new SelectList(Enum.GetValues(typeof(Gym.GymStatus)).Cast<Gym.GymStatus>());
+            ViewBag.DayOff = new SelectList(Enum.GetValues(typeof(Gym.GymDayOff)).Cast<Gym.GymDayOff>());
+
             return View(gym);
         }
 
@@ -83,23 +109,18 @@ namespace PulseFit.Management.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Location,Capacity,OpeningTime,ClosingTime,CreationDate,Status,Email,PhoneNumber,DayOff,GymImagePath")] Gym gym)
+        public async Task<IActionResult> Edit(int id, Gym gym)
         {
-            if (id != gym.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(gym);
-                    await _context.SaveChangesAsync();
+                    await _gymRepository.UpdateAsync(gym);
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GymExists(gym.Id))
+                    if (!await _gymRepository.ExistAsync(gym.Id))
                     {
                         return NotFound();
                     }
@@ -110,6 +131,10 @@ namespace PulseFit.Management.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Status = new SelectList(Enum.GetValues(typeof(Gym.GymStatus)).Cast<Gym.GymStatus>());
+            ViewBag.DayOff = new SelectList(Enum.GetValues(typeof(Gym.GymDayOff)).Cast<Gym.GymDayOff>());
+
             return View(gym);
         }
 
@@ -136,19 +161,11 @@ namespace PulseFit.Management.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var gym = await _context.Gyms.FindAsync(id);
-            if (gym != null)
-            {
-                _context.Gyms.Remove(gym);
-            }
+            var gym = await _gymRepository.GetByIdAsync(id);
+            
+            await _gymRepository.DeleteAsync(gym);
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool GymExists(int id)
-        {
-            return _context.Gyms.Any(e => e.Id == id);
         }
     }
 }

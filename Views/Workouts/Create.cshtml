@@ -29,7 +29,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Type" class="control-label"></label>
-                <input asp-for="Type" class="form-control" />
+                <select asp-for="Type" class="form-control" asp-items="ViewBag.Type"></select>
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -39,7 +39,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="DifficultyLevel" class="control-label"></label>
-                <input asp-for="DifficultyLevel" class="form-control" />
+                <select asp-for="DifficultyLevel" class="form-control" asp-items="ViewBag.Difficulty"></select>
                 <span asp-validation-for="DifficultyLevel" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -59,16 +59,18 @@
             </div>
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
+                <select asp-for="Status" class="form-control" asp-items="ViewBag.Status"></select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="InstructorId" class="control-label"></label>
-                <select asp-for="InstructorId" class ="form-control" asp-items="ViewBag.InstructorId"></select>
+                <label asp-for="InstructorId" class="control-label">Instructors</label>
+                <select asp-for="InstructorId" class="form-control" asp-items="ViewBag.Instructors">Select a Instructor...</select>
+                <span asp-validation-for="InstructorId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GymId" class="control-label"></label>
-                <select asp-for="GymId" class ="form-control" asp-items="ViewBag.GymId"></select>
+                <label asp-for="GymId" class="control-label">Gyms</label>
+                <select asp-for="GymId" class="form-control" asp-items="ViewBag.GymId">Select a Gym...</select>
+                <span asp-validation-for="GymId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

@@ -1,9 +1,10 @@
-﻿namespace PulseFit.Management.Web.Data.Repositories
+﻿using PulseFit.Management.Web.Data.Entities;
+
+namespace PulseFit.Management.Web.Data.Repositories
 {
-    public interface IGymRepository
+    public interface IGymRepository : IGenericRepository<Gym>
     {
-        //Interface para o repositório de ginásios.
-        //Métodos específicos para ginásios, como 
         //GetGymsByLocation(), GetGymById(int id)
+        Task<string> GetGymNameByIdAsync(int id);
     }
 }
