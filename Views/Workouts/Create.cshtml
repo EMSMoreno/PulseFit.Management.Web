@@ -29,8 +29,28 @@
             </div>
             <div class="form-group">
                 <label asp-for="Type" class="control-label"></label>
-                <select asp-for="Type" class="form-control" asp-items="ViewBag.Type"></select>
+                <select asp-for="Type" class="form-control" asp-items="ViewBag.Type" id="TypeSelect">
+                    <option value="">Select Type ...</option>
+                </select>
                 <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <!-- Individual Type - initially hidden -->
+            <div class="form-group" id="IndividualTypeGroup" style="display:none;">
+                <label asp-for="IndividualType" class="control-label"></label>
+                <select asp-for="IndividualType" class="form-control" asp-items="ViewBag.IndividualType">
+                    <option value="">Select Individual Type ...</option>
+                </select>
+                <span asp-validation-for="IndividualType" class="text-danger"></span>
+            </div>
+
+            <!-- Group Type - initially hidden -->
+            <div class="form-group" id="GroupTypeGroup" style="display:none;">
+                <label asp-for="GroupType" class="control-label"></label>
+                <select asp-for="GroupType" class="form-control" asp-items="ViewBag.GroupType">
+                    <option value="">Select Group Type ...</option>
+                </select>
+                <span asp-validation-for="GroupType" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Popularity" class="control-label"></label>
@@ -64,12 +84,16 @@
             </div>
             <div class="form-group">
                 <label asp-for="InstructorId" class="control-label">Instructors</label>
-                <select asp-for="InstructorId" class="form-control" asp-items="ViewBag.Instructors">Select a Instructor...</select>
+                <select asp-for="InstructorId" class="form-control" asp-items="ViewBag.Instructors">
+                    <option value="">Select Instructor ...</option>
+                </select>
                 <span asp-validation-for="InstructorId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="GymId" class="control-label">Gyms</label>
-                <select asp-for="GymId" class="form-control" asp-items="ViewBag.GymId">Select a Gym...</select>
+                <select asp-for="GymId" class="form-control" asp-items="ViewBag.GymId">
+                    <option value="">Select Gym ...</option>
+                </select>
                 <span asp-validation-for="GymId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -85,4 +109,30 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var typeSelect = document.getElementById("TypeSelect");
+            var individualTypeGroup = document.getElementById("IndividualTypeGroup");
+            var groupTypeGroup = document.getElementById("GroupTypeGroup");
+
+            function toggleTypeOptions() {
+                var selectedValue = typeSelect.value;
+
+                if (selectedValue === "Group") {
+                    groupTypeGroup.style.display = "block";
+                    individualTypeGroup.style.display = "none";
+                } else if (selectedValue === "Individual") {
+                    groupTypeGroup.style.display = "none";
+                    individualTypeGroup.style.display = "block";
+                } else {
+                    groupTypeGroup.style.display = "none";
+                    individualTypeGroup.style.display = "none";
+                }
+            }
+
+            typeSelect.addEventListener("change", toggleTypeOptions);
+            toggleTypeOptions(); 
+        });
+    </script>
 }

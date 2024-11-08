@@ -4,107 +4,99 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Workouts</h1>
 
-<!-- Search Formulary -->
-<form asp-action="Index" method="get" class="mb-4">
-    <div class="row">
-        <div class="col-md-3">
-            <label for="searchTerm">Simple Search</label>
-            <input type="text" name="searchTerm" class="form-control" placeholder="Name or Description">
+<h2>Available Workouts</h2>
+
+<div>
+    <a asp-action="Create" class="btn btn-primary mb-3">Create New Workout</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No workouts found.</div>
+
+}
+else
+{
+    <!-- Search Formulary -->
+    <form asp-action="Index" method="get" class="mb-4">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="searchTerm">Simple Search</label>
+                <input type="text" name="searchTerm" class="form-control" placeholder="Name or Description">
+            </div>
+            <div class="col-md-3">
+                <label for="type">Tipo</label>
+                <select name="type" class="form-control">
+                    <option value="">Select...</option>
+                    <option value="Cardio">Cardio</option>
+                    <option value="Strenght">Strenght</option>
+                    <option value="Yoga">Yoga</option>
+                    <option value="Cycling">Cycling</option>
+                    <option value="Bumbum">Bumbum</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="difficulty">Workout Difficulty</label>
+                <select name="difficulty" class="form-control">
+                    <option value="">Select...</option>
+                    <option value="Easy">Easy</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Hard">Hard</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="status">Status</label>
+                <select name="status" class="form-control">
+                    <option value="">Select...</option>
+                    <option value="Ongoing">Ongoing</option>
+                    <option value="Cancelled">Cancelled</option>
+                    <option value="Finished">Finished</option>
+                </select>
+            </div>
         </div>
-        <div class="col-md-3">
-            <label for="type">Tipo</label>
-            <select name="type" class="form-control">
-                <option value="">Select...</option>
-                <option value="Cardio">Cardio</option>
-                <option value="Strenght">Strenght</option>
-                <option value="Yoga">Yoga</option>
-                <option value="Cycling">Cycling</option>
-                <option value="Bumbum">Bumbum</option>
-            </select>
+        <div class="row mt-3">
+            <div class="col-md-3">
+                <label for="instructorName">Instructor</label>
+                <input type="text" name="instructorName" class="form-control" placeholder="Instructor Name">
+            </div>
+            <div class="col-md-3">
+                <label for="gymName">Gym</label>
+                <input type="text" name="gymName" class="form-control" placeholder="Gym Name">
+            </div>
+            <div class="col-md-3 align-self-end">
+                <button type="submit" class="btn btn-primary">Search</button>
+                <a asp-action="Index" class="btn btn-secondary">Clear</a>
+            </div>
         </div>
-        <div class="col-md-3">
-            <label for="difficulty">Workout Difficulty</label>
-            <select name="difficulty" class="form-control">
-                <option value="">Select...</option>
-                <option value="Easy">Easy</option>
-                <option value="Medium">Medium</option>
-                <option value="Hard">Hard</option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <label for="status">Status</label>
-            <select name="status" class="form-control">
-                <option value="">Select...</option>
-                <option value="Ongoing">Ongoing</option>
-                <option value="Cancelled">Cancelled</option>
-                <option value="Finished">Finished</option>
-            </select>
+    </form>
+
+
+
+    <!--Workouts Table -->
+
+    <div class="container">
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-3 mb-4">
+                    <a asp-action="Details" asp-route-id="@item.Id" style="text-decoration: none; color: inherit;">
+                        <div class="card h-100 shadow-sm">
+                            <div style="width:100%; height: 200px; overflow:hidden;">
+                                <img src="@Url.Content(item.WorkoutImageUrl)" alt="Workout Image" style="width:100%; height: 100%; object-fit: cover;" />
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Name @item.Popularity</h5>
+                                <p class="card-text">
+                                    @item.Description <br />
+                                    @item.DifficultyLevel <br />
+                                    @item.StartDate.ToString("dd/MM HH:mm") (@item.Duration Min.)
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
         </div>
     </div>
-    <div class="row mt-3">
-        <div class="col-md-3">
-            <label for="instructorName">Instructor</label>
-            <input type="text" name="instructorName" class="form-control" placeholder="Instructor Name">
-        </div>
-        <div class="col-md-3">
-            <label for="gymName">Gym</label>
-            <input type="text" name="gymName" class="form-control" placeholder="Gym Name">
-        </div>
-        <div class="col-md-3 align-self-end">
-            <button type="submit" class="btn btn-primary">Search</button>
-            <a asp-action="Index" class="btn btn-secondary">Clear</a>
-        </div>
-    </div>
-</form>
-
-
-<p>
-    <a asp-action="Create" class="btn btn-success">Create New</a>
-</p>
-
-<!--Workouts Table -->
-<table class="table">
-    <thead>
-        <tr>
-            <th><a asp-action="Index" asp-route-sortOrder="name">@Html.DisplayNameFor(model => model.Name)</a></th>
-            <th>@Html.DisplayNameFor(model => model.Description)</th>
-            <th><a asp-action="Index" asp-route-sortOrder="@ViewData["DurationSortParam"]">Duration</a></th>
-            <th><a asp-action="Index" asp-route-sortOrder="@ViewData["TypeSortParam"]">Type</a></th>
-            <th>@Html.DisplayNameFor(model => model.Popularity)</th>
-            <th>@Html.DisplayNameFor(model => model.DifficultyLevel)</th>
-            <th>@Html.DisplayNameFor(model => model.StartDate)</th>
-            <th>@Html.DisplayNameFor(model => model.EndDate)</th>
-            <th>@Html.DisplayNameFor(model => model.MaxCapacity)</th>
-            <th>@Html.DisplayNameFor(model => model.Status)</th>
-            <th>@Html.DisplayNameFor(model => model.InstructorName)</th>
-            <th>@Html.DisplayNameFor(model => model.GymName)</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                <td>@Html.DisplayFor(modelItem => item.Description)</td>
-                <td>@Html.DisplayFor(modelItem => item.Duration)</td>
-                <td>@Html.DisplayFor(modelItem => item.Type)</td>
-                <td>@Html.DisplayFor(modelItem => item.Popularity)</td>
-                <td>@Html.DisplayFor(modelItem => item.DifficultyLevel)</td>
-                <td>@Html.DisplayFor(modelItem => item.StartDate)</td>
-                <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
-                <td>@Html.DisplayFor(modelItem => item.MaxCapacity)</td>
-                <td>@Html.DisplayFor(modelItem => item.Status)</td>
-                <td>@Html.DisplayFor(modelItem => item.InstructorName)</td>
-                <td>@Html.DisplayFor(modelItem => item.GymName)</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+}

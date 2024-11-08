@@ -32,5 +32,9 @@ namespace PulseFit.Management.Web.Helpers
 
         Task<Gym> ToGym(GymViewModel model,  Guid imageId, bool isNew);
         GymViewModel ToGymViewModel(Gym gym);
+
+
+        Task<Workout> ToWorkoutAsync(WorkoutViewModel model, Guid imageId, bool isNew);
+        WorkoutViewModel ToWorkoutViewModel(Workout workout);
     }
 }

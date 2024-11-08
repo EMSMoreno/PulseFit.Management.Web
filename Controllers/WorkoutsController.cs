@@ -5,6 +5,7 @@ using PulseFit.Management.Web.Data;
 using PulseFit.Management.Web.Data.Entities;
 using PulseFit.Management.Web.Data.Repositories;
 using PulseFit.Management.Web.Helpers;
+using PulseFit.Management.Web.Models;
 
 namespace PulseFit.Management.Web.Controllers
 {
@@ -16,6 +17,8 @@ namespace PulseFit.Management.Web.Controllers
         private readonly IGymRepository _gymRepository;
         private readonly IPersonalTrainerRepository _personalTrainerRepository;
         private readonly IUserHelper _userHelper;
+        private readonly IBlobHelper _blobHelper;
+        private readonly IConverterHelper _converterHelper;
 
         public WorkoutsController(
             DataContext context,
@@ -23,7 +26,9 @@ namespace PulseFit.Management.Web.Controllers
             IBookingRepository bookingRepository,
             IGymRepository gymRepository,
             IPersonalTrainerRepository personalTrainerRepository,
-            IUserHelper userHelper
+            IUserHelper userHelper,
+            IBlobHelper blobHelper,
+            IConverterHelper converterHelper
             )
         {
             _context = context;
@@ -32,6 +37,8 @@ namespace PulseFit.Management.Web.Controllers
             _gymRepository = gymRepository;
             _personalTrainerRepository = personalTrainerRepository;
             _userHelper = userHelper;
+            _blobHelper = blobHelper;
+            _converterHelper = converterHelper;
         }
 
         // GET: Workouts
@@ -40,6 +47,7 @@ namespace PulseFit.Management.Web.Controllers
                                        string sortOrder)
         {
             var workouts = _workoutRepository.GetAll()
+                .Where(w => w.Status == Workout.WorkoutStatus.Scheduled || w.Status == Workout.WorkoutStatus.Cancelled || w.Status == Workout.WorkoutStatus.Ongoing)
                 //.Include(w => w.Gym)
                 //.Include(w => w.InstructorId)
                 .AsQueryable();
@@ -95,8 +103,6 @@ namespace PulseFit.Management.Web.Controllers
             return View(workoutsList);
         }
 
-
-
         // GET: Workouts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -119,22 +125,8 @@ namespace PulseFit.Management.Web.Controllers
         // GET: Workouts/Create
         public async Task<IActionResult> Create()
         {
-            ViewBag.GymId = new SelectList(_gymRepository.GetAll().Where(g => g.Status == Gym.GymStatus.Active), "Id", "Name");
 
-            var instructors = (await _userHelper.GetAllUsersInRoleAsync("PersonalTrainer"))
-                .Select(u => new SelectListItem
-                {
-                    Value = u.Id,
-                    Text = u.FullName
-                })
-                .ToList();
-
-            ViewBag.Instructors = instructors;
-
-
-            ViewBag.Type = new SelectList(Enum.GetValues(typeof(Workout.WorkoutType)).Cast<Workout.WorkoutType>());
-            ViewBag.Difficulty = new SelectList(Enum.GetValues(typeof(Workout.WorkoutDifficulty)).Cast<Workout.WorkoutDifficulty>());
-            ViewBag.Status = new SelectList(Enum.GetValues(typeof(Workout.WorkoutStatus)).Cast<Workout.WorkoutStatus>());
+            await LoadViewBags();
 
             return View();
         }
@@ -144,34 +136,37 @@ namespace PulseFit.Management.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Workout workout)
+        public async Task<IActionResult> Create(WorkoutViewModel model)
         {
             if (ModelState.IsValid)
             {
-                workout.Bookings = 0;
+                var imageId = model.WorkoutImageFile != null
+                    ?await _blobHelper.UploadBlobAsync(model.WorkoutImageFile, "workouts-pics")
+                    : Guid.Empty;
+
+                if(model.IndividualType == null && model.GroupType == null)
+                {
+                    ModelState.AddModelError(string.Empty, "You must select the Workout Type!");
+
+                    await LoadViewBags();
+
+                    return View(model);
+                }
+
+                model.Bookings = 0;
+                model.GymName = await _gymRepository.GetGymNameByIdAsync(model.GymId);
+                model.InstructorName = await _personalTrainerRepository.GetPtNameByIdAsync(model.InstructorId);
+
+                var workout = await _converterHelper.ToWorkoutAsync(model, imageId, isNew: true);
 
                 await _workoutRepository.CreateAsync(workout);
 
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.GymId = new SelectList(_gymRepository.GetAll(), "Id", "Name");
+            await LoadViewBags();
 
-            var instructors = (await _userHelper.GetAllUsersInRoleAsync("PersonalTrainer"))
-                            .Select(u => new SelectListItem
-                            {
-                                Value = u.Id,
-                                Text = u.FullName
-                            })
-                            .ToList();
-
-            ViewBag.Instructors = instructors;
-
-            ViewBag.Type = new SelectList(Enum.GetValues(typeof(Workout.WorkoutType)).Cast<Workout.WorkoutType>());
-            ViewBag.Difficulty = new SelectList(Enum.GetValues(typeof(Workout.WorkoutDifficulty)).Cast<Workout.WorkoutDifficulty>());
-            ViewBag.Status = new SelectList(Enum.GetValues(typeof(Workout.WorkoutStatus)).Cast<Workout.WorkoutStatus>());
-
-            return View(workout);
+            return View(model);
         }
 
         // GET: Workouts/Edit/5
@@ -353,6 +348,28 @@ namespace PulseFit.Management.Web.Controllers
                 TempData["ErrorMessage"] = ex.Message;
             }
             return RedirectToAction("MyBookings");
+        }
+
+
+        public async Task LoadViewBags()
+        {
+            ViewBag.GymId = new SelectList(_gymRepository.GetAll().Where(g => g.Status == Gym.GymStatus.Active), "Id", "Name");
+
+            var instructors = (await _userHelper.GetAllUsersInRoleAsync("PersonalTrainer"))
+                            .Select(u => new SelectListItem
+                            {
+                                Value = u.Id,
+                                Text = u.FullName
+                            })
+                            .ToList();
+
+            ViewBag.Instructors = instructors;
+
+            ViewBag.Type = new SelectList(Enum.GetValues(typeof(Workout.WorkoutType)).Cast<Workout.WorkoutType>());
+            ViewBag.GroupType = new SelectList(Enum.GetValues(typeof(Workout.GroupWorkoutType)).Cast<Workout.GroupWorkoutType>());
+            ViewBag.IndividualType = new SelectList(Enum.GetValues(typeof(Workout.IndividualWorkoutType)).Cast<Workout.IndividualWorkoutType>());
+            ViewBag.Difficulty = new SelectList(Enum.GetValues(typeof(Workout.WorkoutDifficulty)).Cast<Workout.WorkoutDifficulty>());
+            ViewBag.Status = new SelectList(Enum.GetValues(typeof(Workout.WorkoutStatus)).Cast<Workout.WorkoutStatus>());
         }
     }
 }

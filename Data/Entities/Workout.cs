@@ -21,11 +21,31 @@ namespace PulseFit.Management.Web.Data.Entities
 
         public enum WorkoutType
         {
-            Cardio,
+            Individual,
+            Group
+        }
+
+        public IndividualWorkoutType? IndividualType { get; set; }
+
+        public enum IndividualWorkoutType
+        {
             Strenght,
-            Yoga,
+            Hypertrophy,
+            Functional,
+            Calorie_Burning
+        }
+
+        public GroupWorkoutType? GroupType { get; set; }
+
+        public enum GroupWorkoutType
+        {
             Cycling,
-            Bumbum
+            HIIT,
+            Zumba,
+            Yoga,
+            Pilates,
+            Stretching,
+            Body_Pump
         }
 
         [Required]
@@ -73,5 +93,12 @@ namespace PulseFit.Management.Web.Data.Entities
 
         [Required]
         public int Bookings { get; set; }
+
+
+        public Guid WorkoutImageId { get; set; }
+
+        public string WorkoutImageUrl => WorkoutImageId == Guid.Empty
+            ? "/images/noimage.png"
+            : $"/uploads/workout-pics/{WorkoutImageId}.png";
     }
 }

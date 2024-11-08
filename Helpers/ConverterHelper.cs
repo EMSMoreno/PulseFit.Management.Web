@@ -329,5 +329,56 @@ namespace PulseFit.Management.Web.Helpers
                 DayOff = gym.DayOff,
             };
         }
+
+        public async Task<Workout> ToWorkoutAsync(WorkoutViewModel model, Guid imageId, bool isNew)
+        {
+            return new Workout
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                Description = model.Description,
+                Duration = model.Duration,
+                Type = model.Type,
+                IndividualType = model.IndividualType,
+                GroupType = model.GroupType,
+                Popularity = model.Popularity,
+                DifficultyLevel = model.DifficultyLevel,
+                StartDate = model.StartDate,
+                EndDate = model.EndDate,
+                MaxCapacity = model.MaxCapacity,
+                Status = model.Status,
+                InstructorId = model.InstructorId,
+                InstructorName = model.InstructorName,
+                GymId = model.GymId,
+                GymName = model.GymName,
+                Bookings = model.Bookings,
+                WorkoutImageId = imageId,
+            };
+        }
+
+        public WorkoutViewModel ToWorkoutViewModel(Workout workout)
+        {
+            return new WorkoutViewModel
+            {
+                Id = workout.Id,
+                Name = workout.Name,
+                Description = workout.Description,
+                Duration = workout.Duration,
+                Type = workout.Type,
+                IndividualType = workout.IndividualType,
+                GroupType = workout.GroupType,
+                Popularity = workout.Popularity,
+                DifficultyLevel = workout.DifficultyLevel,
+                StartDate = workout.StartDate,
+                EndDate = workout.EndDate,
+                MaxCapacity = workout.MaxCapacity,
+                Status = workout.Status,
+                InstructorId = workout.InstructorId,
+                InstructorName = workout.InstructorName,
+                GymId = workout.GymId,
+                GymName = workout.GymName,
+                Bookings = workout.Bookings
+            };
+        }
     }
 }
