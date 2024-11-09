@@ -36,5 +36,9 @@ namespace PulseFit.Management.Web.Helpers
 
         Task<Workout> ToWorkoutAsync(WorkoutViewModel model, Guid imageId, bool isNew);
         WorkoutViewModel ToWorkoutViewModel(Workout workout);
+
+
+        Task<Booking> ToBookingAsync(BookingViewModel model, Guid imageId, bool isNew);
+        BookingViewModel ToBookingViewModel(Booking booking);
     }
 }

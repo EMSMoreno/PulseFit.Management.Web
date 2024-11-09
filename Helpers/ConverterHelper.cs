@@ -380,5 +380,37 @@ namespace PulseFit.Management.Web.Helpers
                 Bookings = workout.Bookings
             };
         }
+
+        public async Task<Booking> ToBookingAsync(BookingViewModel model, Guid imageId, bool isNew)
+        {
+            return new Booking
+            {
+                Id = isNew ? 0 : model.Id,
+                ReservationDate = model.ReservationDate,
+                Status = model.Status,
+                WorkoutId = model.WorkoutId,
+                UserName = model.UserName,
+                UserId = model.UserId,
+                TrainingDate = model.TrainingDate,
+                GymId = model.GymId,
+                GymName = model.GymName,
+            };
+        }
+
+        public BookingViewModel ToBookingViewModel(Booking booking)
+        {
+            return new BookingViewModel
+            {
+                Id = booking.Id,
+                ReservationDate = booking.ReservationDate,
+                Status = booking.Status,
+                WorkoutId = booking.WorkoutId,
+                UserName = booking.UserName,
+                UserId = booking.UserId,
+                TrainingDate = booking.TrainingDate,
+                GymId = booking.GymId,
+                GymName = booking.GymName,
+            };
+        }
     }
 }

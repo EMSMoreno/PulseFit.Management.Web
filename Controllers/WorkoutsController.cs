@@ -268,9 +268,10 @@ namespace PulseFit.Management.Web.Controllers
             {
                 string userId = await _userHelper.GetUserIdByEmailAsync(userLoged);
 
-                var bookings = await _bookingRepository.GetBookingsByUserAsync(userId);
+                var bookings = _bookingRepository.GetAll();
+                var bookingViewModels = bookings.Select(b => _converterHelper.ToBookingViewModel(b)).ToList();
 
-                return View(bookings);
+                return View(bookingViewModels);
             }
 
             return RedirectToAction("Login", "Account");
@@ -311,6 +312,7 @@ namespace PulseFit.Management.Web.Controllers
                         var booking = new Booking
                         {
                             WorkoutId = id.Value,
+                            WorkoutName = workout.Name,
                             UserId = userId,
                             TrainingDate = workout.StartDate,
                             GymId = workout.GymId
