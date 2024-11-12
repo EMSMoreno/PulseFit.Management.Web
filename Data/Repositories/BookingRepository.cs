@@ -27,15 +27,16 @@ namespace PulseFit.Management.Web.Data.Repositories
             }
 
             booking.Status = Booking.BookingStatus.Canceled;
+
+            _context.Bookings.Update(booking);
             await _context.SaveChangesAsync();
         }
 
         public async Task CreateBookingAsync(Booking booking)
         {
-            
             booking.ReservationDate = DateTime.Now;
             booking.Status = Booking.BookingStatus.Reserved;
-
+            
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
         }

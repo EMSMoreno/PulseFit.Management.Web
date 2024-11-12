@@ -32,6 +32,20 @@ else
         $(document).ready(function () {
             var serializedData = @Html.Raw(serializedData);
 
+            serializedData.forEach(function (booking) {
+                switch (booking.Status) {
+                    case 0:
+                        booking.StatusText = "Reserved";
+                        break;
+                    case 1:
+                        booking.StatusText = "Confirmed";
+                        break;
+                    case 2:
+                        booking.StatusText = "Canceled";
+                        break;
+                }
+            });
+
             // Configuração do Grid
             var grid = new ej.grids.Grid({
                 dataSource: serializedData,
@@ -41,10 +55,11 @@ else
                 pageSettings: { pageSize: 10 },
                 toolbar: ['Search'],
                 columns: [
-                    { field: "TrainingDate", headerText: "Workout Date", width: 120 },
+                    { field: "TrainingDate", headerText: "Training Date", type: "date", format: 'yMd', width: 130 },
+                    { field: "ReservationDate", headerText: "Reservation Date", type: "date", format: 'yMd', width: 130 },
                     { field: "WorkoutName", headerText: "Workout", width: 120 },
                     { field: "GymName", headerText: "Gym", width: 150 },
-                    { field: "Status", headerText: "Status", width: 100 },
+                    { field: "StatusText", headerText: "Status", width: 100 },
                     { headerText: "Actions", width: 180, template: "#actionTemplate" }
                 ]
             });

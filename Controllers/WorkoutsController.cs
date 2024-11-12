@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using PulseFit.Management.Web.Data;
 using PulseFit.Management.Web.Data.Entities;
@@ -42,65 +43,11 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Workouts
-        public async Task<IActionResult> Index(string searchTerm, Workout.WorkoutType? type, string instructorName, string gymName,
-                                       Workout.WorkoutDifficulty? difficulty, Workout.WorkoutStatus? status,
-                                       string sortOrder)
+        public async Task<IActionResult> Index()
         {
-            var workouts = _workoutRepository.GetAll()
-                .Where(w => w.Status == Workout.WorkoutStatus.Scheduled || w.Status == Workout.WorkoutStatus.Cancelled || w.Status == Workout.WorkoutStatus.Ongoing)
-                //.Include(w => w.Gym)
-                //.Include(w => w.InstructorId)
-                .AsQueryable();
-
-            // Filtro de pesquisa simples
-            if (!string.IsNullOrEmpty(searchTerm))
-            {
-                workouts = workouts.Where(w => w.Name.Contains(searchTerm) || w.Description.Contains(searchTerm));
-            }
-
-            if (type.HasValue)
-            {
-                workouts = workouts.Where(w => w.Type == type.Value);
-            }
-
-            //if (!string.IsNullOrEmpty(instructorName))
-            //{
-            //    workouts = workouts.Where(w => w.Instructor.FullName.Contains(instructorName));
-            //}
-
-            //if (!string.IsNullOrEmpty(gymName))
-            //{
-            //    workouts = workouts.Where(w => w.Gym.Name.Contains(gymName));
-            //}
-
-            if (difficulty.HasValue)
-            {
-                workouts = workouts.Where(w => w.DifficultyLevel == difficulty.Value);
-            }
-
-            if (status.HasValue)
-            {
-                workouts = workouts.Where(w => w.Status == status.Value);
-            }
-
-
-            workouts = sortOrder switch
-            {
-                "type_desc" => workouts.OrderByDescending(w => w.Type),
-                "type_asc" or "type" => workouts.OrderBy(w => w.Type),
-                "duration_desc" => workouts.OrderByDescending(w => w.Duration),
-                "duration_asc" or "duration" => workouts.OrderBy(w => w.Duration),
-                _ => workouts.OrderBy(w => w.Name),
-            };
-
-            var workoutsList = await workouts.ToListAsync();
-
-            foreach(var workout in workoutsList)
-            {
-                workout.GymName = await _gymRepository.GetGymNameByIdAsync(workout.GymId);
-                workout.InstructorName = await _personalTrainerRepository.GetPtNameByIdAsync(workout.InstructorId);
-            }
-            return View(workoutsList);
+            var workouts = _workoutRepository.GetAll();
+                            
+            return View(workouts);
         }
 
         // GET: Workouts/Details/5
@@ -113,11 +60,15 @@ namespace PulseFit.Management.Web.Controllers
 
             var workout = await _workoutRepository.GetByIdAsync(id.Value);
 
-            //TODO : verificar se passa o gym e o instrutor
             if (workout == null)
             {
                 return NotFound();
             }
+
+            ViewBag.Spots = workout.MaxCapacity - workout.Bookings;
+            ViewBag.GymImage = await _gymRepository.GetGymImageAsync(workout.GymId);
+            ViewBag.PtProfilePic = await _personalTrainerRepository.GetPtProfilePicAsync(workout.InstructorId);
+
 
             return View(workout);
         }
@@ -156,8 +107,9 @@ namespace PulseFit.Management.Web.Controllers
                 model.Bookings = 0;
                 model.GymName = await _gymRepository.GetGymNameByIdAsync(model.GymId);
                 model.InstructorName = await _personalTrainerRepository.GetPtNameByIdAsync(model.InstructorId);
+                model.EndDate = model.StartDate.AddMinutes(model.Duration);
 
-                var workout = await _converterHelper.ToWorkoutAsync(model, imageId, isNew: true);
+                var workout = _converterHelper.ToWorkout(model, imageId, isNew: true);
 
                 await _workoutRepository.CreateAsync(workout);
 
@@ -183,14 +135,10 @@ namespace PulseFit.Management.Web.Controllers
                 return NotFound();
             }
 
-            ViewData["GymId"] = new SelectList(_context.Gyms, "Id", "Id", workout.GymId);
-            ViewData["InstructorId"] = new SelectList(_context.Users, "Id", "Id", workout.InstructorId);
-
-            ViewBag.Type = new SelectList(Enum.GetValues(typeof(Workout.WorkoutType)).Cast<Workout.WorkoutType>());
-            ViewBag.Difficulty = new SelectList(Enum.GetValues(typeof(Workout.WorkoutDifficulty)).Cast<Workout.WorkoutDifficulty>());
-            ViewBag.Status = new SelectList(Enum.GetValues(typeof(Workout.WorkoutStatus)).Cast<Workout.WorkoutStatus>());
-
-            return View(workout);
+            var model = _converterHelper.ToWorkoutViewModel(workout);
+            await LoadViewBags();
+            
+            return View(model);
         }
 
         // POST: Workouts/Edit/5
@@ -198,17 +146,23 @@ namespace PulseFit.Management.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Workout workout)
+        public async Task<IActionResult> Edit(WorkoutViewModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var imageId = model.WorkoutImageFile != null
+                    ? await _blobHelper.UploadBlobAsync(model.WorkoutImageFile, "workouts-pics")
+                    : Guid.Empty;
+
+                    var workout = _converterHelper.ToWorkout(model, imageId, false);
+
                     await _workoutRepository.UpdateAsync(workout);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await _workoutRepository.ExistAsync(workout.Id))
+                    if (!await _workoutRepository.ExistAsync(model.Id))
                     {
                         return NotFound();
                     }
@@ -220,14 +174,9 @@ namespace PulseFit.Management.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["GymId"] = new SelectList(_context.Gyms, "Id", "Id", workout.GymId);
-            ViewData["InstructorId"] = new SelectList(_context.Users, "Id", "Id", workout.InstructorId);
+            await LoadViewBags();
 
-            ViewBag.Type = new SelectList(Enum.GetValues(typeof(Workout.WorkoutType)).Cast<Workout.WorkoutType>());
-            ViewBag.Difficulty = new SelectList(Enum.GetValues(typeof(Workout.WorkoutDifficulty)).Cast<Workout.WorkoutDifficulty>());
-            ViewBag.Status = new SelectList(Enum.GetValues(typeof(Workout.WorkoutStatus)).Cast<Workout.WorkoutStatus>());
-
-            return View(workout);
+            return View(model);
         }
 
         // GET: Workouts/Delete/5
@@ -238,10 +187,7 @@ namespace PulseFit.Management.Web.Controllers
                 return NotFound();
             }
 
-            var workout = await _context.Workouts
-                //.Include(w => w.Gym)
-                //.Include(w => w.Instructor)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var workout = await _workoutRepository.GetByIdAsync(id.Value);
             if (workout == null)
             {
                 return NotFound();
@@ -288,67 +234,56 @@ namespace PulseFit.Management.Web.Controllers
             if (userLoged != null)
             {
                 string userId = await _userHelper.GetUserIdByEmailAsync(userLoged);
-
-                //var maximumCapacity = await _bookingRepository.WorkoutMaximumCapacityReachedAsync(workoutId);
-
                 var workout = await _workoutRepository.GetByIdAsync(id.Value);
 
-                bool maximumCapacityReached = true;
 
-                if (workout.MaxCapacity == workout.Bookings)
+                var maximumCapacityReached = await _bookingRepository.WorkoutMaximumCapacityReachedAsync(workout.Id);
+                if (maximumCapacityReached)
                 {
-                    maximumCapacityReached = true;
-                }
-                else
-                {
-                    maximumCapacityReached = false;
+                    ModelState.AddModelError(string.Empty, "Workout Maximum Capacity Reached!");
+                    return RedirectToAction("Details", new { id = workout.Id });
                 }
 
-
-                if (maximumCapacityReached == false)
+                try
                 {
-                    try
+                    var booking = new Booking
                     {
-                        var booking = new Booking
-                        {
-                            WorkoutId = id.Value,
-                            WorkoutName = workout.Name,
-                            UserId = userId,
-                            TrainingDate = workout.StartDate,
-                            GymId = workout.GymId
-                        };
+                        WorkoutId = id.Value,
+                        WorkoutName = workout.Name,
+                        UserId = userId,
+                        TrainingDate = workout.StartDate,
+                        GymId = workout.GymId,
+                        GymName = workout.GymName,
+                    };
 
-                        await _bookingRepository.CreateBookingAsync(booking);
+                    await _bookingRepository.CreateBookingAsync(booking);
 
-                        workout.Bookings += 1;
-                        await _workoutRepository.UpdateAsync(workout);
-                        TempData["SuccessMessage"] = "Booking Confirmed.";
-                    }
-                    catch (Exception ex)
-                    {
-                        TempData["ErrorMessage"] = ex.Message;
-                    }
-                    return RedirectToAction("MyBookings");
+                    await _workoutRepository.IncrementBookingsAsync(workout.Id);
+
+                    TempData["SuccessMessage"] = "Booking Confirmed.";
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
                 }
 
-                ModelState.AddModelError(string.Empty, "Workout Maximum Capacity Reached!");
-
+                return RedirectToAction("MyBookings");
             }
 
             return RedirectToAction("Login", "Account");
         }
 
-        public async Task<IActionResult> CancelBooking(int bookingId)
+
+        public async Task<IActionResult> CancelBooking(int id)
         {
-            try
-            {
-                await _bookingRepository.CancelBookingAsync(bookingId);
-                TempData["SuccessMessage"] = "Booking Cancelled Successfully.";
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMessage"] = ex.Message;
-            }
+            var booking = await _bookingRepository.GetByIdAsync(id);
+            await _bookingRepository.CancelBookingAsync(booking.Id);
+
+            var workoutId = booking.WorkoutId;
+            var workout = await _workoutRepository.GetByIdAsync(workoutId);
+
+            workout.Bookings -= 1;
+            await _workoutRepository.UpdateAsync(workout);
             return RedirectToAction("MyBookings");
         }
 

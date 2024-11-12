@@ -206,7 +206,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AdminLogs");
+                    b.ToTable("AdminLogs", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Alert", b =>
@@ -237,7 +237,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("Alerts");
+                    b.ToTable("Alerts", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Booking", b =>
@@ -278,7 +278,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Client", b =>
@@ -324,7 +324,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Clients");
+                    b.ToTable("Clients", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.ClientPreference", b =>
@@ -363,7 +363,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasIndex("NutritionistId");
 
-                    b.ToTable("ClientPreferences");
+                    b.ToTable("ClientPreferences", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Employee", b =>
@@ -394,7 +394,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Equipment", b =>
@@ -425,7 +425,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasIndex("GymId");
 
-                    b.ToTable("Equipments");
+                    b.ToTable("Equipments", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Feedback", b =>
@@ -464,7 +464,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasIndex("WorkoutId");
 
-                    b.ToTable("Feedbacks");
+                    b.ToTable("Feedbacks", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Gym", b =>
@@ -514,7 +514,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Gyms");
+                    b.ToTable("Gyms", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Membership", b =>
@@ -544,7 +544,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("Memberships");
+                    b.ToTable("Memberships", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.NutritionPlan", b =>
@@ -590,7 +590,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("NutritionPlans");
+                    b.ToTable("NutritionPlans", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Nutritionist", b =>
@@ -615,7 +615,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Nutritionists");
+                    b.ToTable("Nutritionists", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.OnlineClass", b =>
@@ -656,7 +656,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasIndex("InstructorId");
 
-                    b.ToTable("OnlineClasses");
+                    b.ToTable("OnlineClasses", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Payment", b =>
@@ -691,7 +691,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.PersonalTrainer", b =>
@@ -719,7 +719,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PersonalTrainers");
+                    b.ToTable("PersonalTrainers", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Report", b =>
@@ -753,7 +753,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reports");
+                    b.ToTable("Reports", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Specialization", b =>
@@ -779,7 +779,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Specializations");
+                    b.ToTable("Specializations", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Specialty", b =>
@@ -805,7 +805,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Specialties");
+                    b.ToTable("Specialties", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Subscription", b =>
@@ -843,7 +843,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subscriptions");
+                    b.ToTable("Subscriptions", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.User", b =>
@@ -969,7 +969,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserSubscriptions");
+                    b.ToTable("UserSubscriptions", (string)null);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Workout", b =>
@@ -1039,7 +1039,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Workouts");
+                    b.ToTable("Workouts", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

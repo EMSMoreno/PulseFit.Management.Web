@@ -10,5 +10,7 @@ namespace PulseFit.Management.Web.Data.Repositories
         Task<PersonalTrainer> GetByIdWithUserAndSpecialtiesAsync(int id);
 
         Task<string> GetPtNameByIdAsync(string id);
+
+        Task<string> GetPtProfilePicAsync (string id);
     }
 }

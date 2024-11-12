@@ -1,87 +1,68 @@
 ﻿@model PulseFit.Management.Web.Data.Entities.Workout
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Workout Details";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <h2>Workout Details</h2>
 
-<div>
-    <h4>Workout</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Duration)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Duration)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Type)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Type)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Popularity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Popularity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DifficultyLevel)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DifficultyLevel)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EndDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EndDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaxCapacity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaxCapacity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.InstructorId)
-        </dd>
-       
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.GymId)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="CreateBooking" asp-route-Id="@Model?.Id">Reserve</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="card shadow-lg p-4">
+        <div class="row align-items-center mb-4">
+            <div class="col-md-4 d-flex justify-content-center">
+                <img src="@Model.WorkoutImageUrl" alt="Workout Image" class="rounded-circle shadow-sm" style="width: 180px; height: 180px;" />
+            </div>
+            <div class="col-md-8">
+                <h3 class="text-primary">@Model.Name | @Model.Popularity</h3>
+                <hr class="my-3" />
+                <dl class="row">
+                    <dt class="col-sm-4 fw-semibold text-muted">Description:</dt>
+                    <dd class="col-sm-8">@Model.Description</dd>
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Difficulty:</dt>
+                    <dd class="col-sm-8">@Model.DifficultyLevel</dd>
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Start:</dt>
+                    <dd class="col-sm-8">@Model.StartDate.ToString("dd/MM HH:mm") (@Model.Duration Min.)</dd>
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Bookings:</dt>
+                    <dd class="col-sm-8">@Model.Bookings</dd>
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Available Spots:</dt>
+                    <dd class="col-sm-8">@ViewBag.Spots</dd>
+
+                    
+                </dl>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <!-- Card do Ginásio -->
+            <div class="col-md-6">
+                <div class="card shadow-sm mb-3" style="max-width: 200px; margin: 0 auto;">
+                    <img src="@ViewBag.GymImage" alt="Gym Image" class="card-img-top" style="height: 150px; object-fit: cover;" />
+                    <div class="card-body p-2">
+                        <h6 class="card-title text-center">@Model.GymName</h6>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card do Personal Trainer -->
+            <div class="col-md-6">
+                <div class="card shadow-sm mb-3" style="max-width: 200px; margin: 0 auto;">
+                    <img src="@ViewBag.PtProfilePic" alt="Instructor Image" class="card-img-top" style="height: 150px; object-fit: cover;" />
+                    <div class="card-body p-2">
+                        <h6 class="card-title text-center">@Model.InstructorName</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end mt-3">
+            <a asp-action="CreateBooking" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Reserve</a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Edit</a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger me-2">Delete</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
 </div>

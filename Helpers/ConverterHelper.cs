@@ -330,9 +330,9 @@ namespace PulseFit.Management.Web.Helpers
             };
         }
 
-        public async Task<Workout> ToWorkoutAsync(WorkoutViewModel model, Guid imageId, bool isNew)
+        public Workout ToWorkout(WorkoutViewModel model, Guid imageId, bool isNew)
         {
-            return new Workout
+            var workout = new Workout
             {
                 Id = isNew ? 0 : model.Id,
                 Name = model.Name,
@@ -344,7 +344,6 @@ namespace PulseFit.Management.Web.Helpers
                 Popularity = model.Popularity,
                 DifficultyLevel = model.DifficultyLevel,
                 StartDate = model.StartDate,
-                EndDate = model.EndDate,
                 MaxCapacity = model.MaxCapacity,
                 Status = model.Status,
                 InstructorId = model.InstructorId,
@@ -354,6 +353,10 @@ namespace PulseFit.Management.Web.Helpers
                 Bookings = model.Bookings,
                 WorkoutImageId = imageId,
             };
+
+            workout.EndDate = workout.StartDate.AddMinutes(workout.Duration);
+
+            return workout;
         }
 
         public WorkoutViewModel ToWorkoutViewModel(Workout workout)
@@ -377,7 +380,8 @@ namespace PulseFit.Management.Web.Helpers
                 InstructorName = workout.InstructorName,
                 GymId = workout.GymId,
                 GymName = workout.GymName,
-                Bookings = workout.Bookings
+                Bookings = workout.Bookings,
+                WorkoutImageId = workout.WorkoutImageId,
             };
         }
 
@@ -389,6 +393,7 @@ namespace PulseFit.Management.Web.Helpers
                 ReservationDate = model.ReservationDate,
                 Status = model.Status,
                 WorkoutId = model.WorkoutId,
+                WorkoutName = model.WorkoutName,
                 UserName = model.UserName,
                 UserId = model.UserId,
                 TrainingDate = model.TrainingDate,
@@ -405,6 +410,7 @@ namespace PulseFit.Management.Web.Helpers
                 ReservationDate = booking.ReservationDate,
                 Status = booking.Status,
                 WorkoutId = booking.WorkoutId,
+                WorkoutName= booking.WorkoutName,
                 UserName = booking.UserName,
                 UserId = booking.UserId,
                 TrainingDate = booking.TrainingDate,

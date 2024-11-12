@@ -13,5 +13,6 @@ namespace PulseFit.Management.Web.Data.Repositories
         Task CancelBookingAsync(int bookingId);
 
         Task<bool> WorkoutMaximumCapacityReachedAsync(int workoutId);
+
     }
 }

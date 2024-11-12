@@ -31,21 +31,33 @@ namespace PulseFit.Management.Web.Data.Entities
         {
             Strenght,
             Hypertrophy,
+            Calisthenics,
             Functional,
-            Calorie_Burning
+            Cardio,
+            Crossfit,
+            Rehabilitation,
+            Prenatal,
+            Postnatal,
+            Senior,
+            
         }
 
         public GroupWorkoutType? GroupType { get; set; }
 
         public enum GroupWorkoutType
         {
-            Cycling,
-            HIIT,
-            Zumba,
             Yoga,
             Pilates,
-            Stretching,
-            Body_Pump
+            HIIT,
+            Martial_Arts,
+            Dance,
+            Swimming,
+            Boxing,
+            KickBoxing,
+            Mobility,
+            Meditation,
+            Cycling,
+            Aqua_Aerobics
         }
 
         [Required]
@@ -63,7 +75,7 @@ namespace PulseFit.Management.Web.Data.Entities
 
         [Required]
         public DateTime StartDate { get; set; }
-        
+
         [Required]
         public DateTime EndDate { get; set; }
         
