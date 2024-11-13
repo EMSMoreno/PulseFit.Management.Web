@@ -1,0 +1,105 @@
+﻿@model PulseFit.Management.Web.Models.PaymentViewModel
+
+@{
+    ViewData["Title"] = "Select Payment Method";
+}
+
+<div class="container my-5">
+    <h2 class="text-center mb-4">Choose Your Payment Method</h2>
+
+    <div class="card shadow-lg p-4">
+        <h4 class="mb-3">@Model.SubscriptionName</h4>
+        <p><strong>Amount:</strong> @Model.Amount.ToString("C2")</p>
+
+        <form asp-action="ProcessPayment" method="post" class="needs-validation" novalidate>
+            <input type="hidden" asp-for="SubscriptionId" />
+            <input type="hidden" asp-for="Amount" />
+            <input type="hidden" asp-for="UserId" />
+
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                @foreach (var method in Model.PaymentMethodOptions)
+                {
+                    var style = Model.PaymentMethodStyles[method.Text];
+                    <div class="col">
+                        <input type="radio" asp-for="SelectedMethod" id="@method.Value" value="@method.Value" class="payment-radio d-none">
+                        <label for="@method.Value" class="payment-card-label">
+                            <div class="payment-card" style="background-color: @style.Color;">
+                                <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                    <img src="~/images/payment-methods/@style.Icon" alt="@method.Text Logo" class="payment-icon" />
+                                    <h5 class="card-title mt-3">@method.Text</h5>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                }
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 btn-lg mt-4">Proceed with Payment</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const radios = document.querySelectorAll('.payment-radio');
+        const labels = document.querySelectorAll('.payment-card-label');
+
+        radios.forEach((radio, index) => {
+            radio.addEventListener('change', function () {
+                labels.forEach(label => {
+                    label.classList.remove("selected");
+                });
+
+                if (radio.checked) {
+                    labels[index].classList.add("selected");
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+    .payment-card-label {
+        display: block;
+        cursor: pointer;
+        transition: transform 0.3s, background-color 0.3s;
+        border-radius: 15px;
+    }
+
+    .payment-card {
+        width: 100%;
+        height: 200px;
+        border-radius: 15px;
+        transition: transform 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Ícone do método de pagamento */
+    .payment-icon {
+        max-width: 60%;
+        max-height: 60%;
+        margin-top: 10px;
+    }
+
+    /* Estilo para o card selecionado */
+    .payment-card-label.selected .payment-card {
+        background-color: #4CAF50 !important; 
+        color: white;
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Efeito de hover nos cards */
+    .payment-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-primary {
+        font-weight: bold;
+        font-size: 1.1rem;
+        padding: 0.8rem;
+    }
+</style>

@@ -1,37 +1,135 @@
-﻿@model IEnumerable<PulseFit.Management.Web.Models.UserSubscriptionViewModel>
+﻿@model IEnumerable<UserSubscriptionViewModel>
+@using PulseFit.Management.Web.Data.Entities
 
 @{
-    ViewData["Title"] = "Client Subscriptions";
+    ViewData["Title"] = "Client Subscription Details";
 }
 
-<h2>Client Subscriptions</h2>
+<div class="container my-5">
+    <h2 class="text-center text-primary mb-4 fw-bold">Subscription Details</h2>
 
-@if (!Model.Any())
-{
-    <p>No subscriptions found for this client.</p>
-}
-else
-{
-    <div class="row">
-        @foreach (var subscription in Model)
-        {
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
-                    <img src="@subscription.Subscription.ImageUrl" class="card-img-top" alt="@subscription.Subscription.Name" style="max-height: 200px; object-fit: cover;" />
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">This client has no subscriptions.</div>
+    }
+    else
+    {
+        <div class="subscription-list">
+            @foreach (var subscription in Model)
+            {
+                <div class="card mb-4 shadow animate-fade">
+                    <div class="card-header text-center">
+                        <h3>@subscription.Subscription.Name</h3>
+                        <span class="badge @((subscription.Status == SubscriptionStatus.Active) ? "badge-success" : "badge-danger")">
+                            @subscription.Status
+                        </span>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title">@subscription.Subscription.Name</h5>
-                        <p class="card-text">@subscription.Subscription.Description</p>
                         <p><strong>Start Date:</strong> @subscription.StartDate.ToShortDateString()</p>
                         <p><strong>End Date:</strong> @subscription.EndDate.ToShortDateString()</p>
-                        <p><strong>Status:</strong> @subscription.Status</p>
+                        <p><strong>Amount Paid:</strong> €@subscription.AmountPaid</p>
+                        <p><strong>Transaction ID:</strong> @subscription.TransactionId</p>
                     </div>
-                    <div class="card-footer d-flex justify-content-between">
-                        <a asp-action="Delete" asp-route-id="@subscription.Id" class="btn btn-danger btn-sm">Delete</a>
+
+                    <!-- Payment History for each subscription -->
+                    <div class="card-footer">
+                        <h5 class="text-center mt-3">Payment History</h5>
+                        <table class="table table-bordered mt-3">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Transaction ID</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (subscription.Payments != null && subscription.Payments.Any())
+                                {
+                                    @foreach (var payment in subscription.Payments)
+                                    {
+                                        <tr>
+                                            <td>@payment.PaymentDate.ToShortDateString()</td>
+                                            <td>@payment.Amount.ToString("C2")</td>
+                                            <td>@payment.TransactionId</td>
+                                            <td>
+                                                <a href="@Url.Action("GenerateInvoicePdf", "UserSubscription", new { paymentId = payment.Id })" class="btn btn-secondary btn-sm">Generate PDF</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">No payments found.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-}
+            }
+        </div>
+    }
 
-<a asp-action="Create" asp-route-clientId="@Model.FirstOrDefault()?.ClientId" class="btn btn-primary mt-4">Add New Subscription</a>
+    <div class="text-center mt-4">
+        <a asp-action="SelectSubscriptionForClient" asp-route-clientId="@Model.FirstOrDefault()?.ClientId"
+           class="btn btn-primary animate-fade">Add New Subscription</a>
+    </div>
+</div>
+
+<style>
+    .card-header {
+        background-color: #e9ecef;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .badge-danger {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    .card {
+        border-radius: 8px;
+    }
+
+    .btn-primary {
+        font-weight: 600;
+        padding: 0.8rem 1.5rem;
+    }
+
+    .animate-fade {
+        transition: all 0.4s ease;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0 auto;
+    }
+
+        .table th, .table td {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+    .btn-secondary {
+        color: #fff;
+        background-color: #6c757d;
+        padding: 0.4em 0.8em;
+        font-size: 0.85rem;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: scale(1.05);
+        }
+</style>

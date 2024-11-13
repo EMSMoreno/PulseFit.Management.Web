@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PulseFit.Management.Web.Data.Entities;
+using PulseFit.Management.Web.Data.Repositories;
 using PulseFit.Management.Web.Helpers;
 using PulseFit.Management.Web.Models;
 
@@ -12,20 +13,25 @@ namespace PulseFit.Management.Web.Controllers
         private readonly IMailHelper _mailHelper;
         private readonly IBlobHelper _blobHelper;
         private readonly IConfiguration _configuration;
-        private readonly ILogger<AccountController> _logger; // Adicione este campo
-
+        private readonly IClientRepository _clientRepository;
+        private readonly IConverterHelper _converterHelper;
+        private readonly ILogger<AccountController> _logger;
 
         public AccountController(
             IUserHelper userHelper,
             IMailHelper mailHelper,
             IBlobHelper blobHelper,
             IConfiguration configuration,
+            IClientRepository clientRepository,
+            IConverterHelper converterHelper,
             ILogger<AccountController> logger)
         {
             _userHelper = userHelper;
             _mailHelper = mailHelper;
             _blobHelper = blobHelper;
             _configuration = configuration;
+            _clientRepository = clientRepository;
+            _converterHelper = converterHelper;
             _logger = logger;
         }
 
@@ -95,69 +101,92 @@ namespace PulseFit.Management.Web.Controllers
 
         // Processes the registration for clients
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterNewUserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = await _userHelper.GetUserByEmailAsync(model.Username);
-
-                if (user == null)
+                var existingUser = await _userHelper.GetUserByEmailAsync(model.Username);
+                if (existingUser != null)
                 {
-                    user = new User
+                    ModelState.AddModelError(string.Empty, "This email is already registered.");
+                    return View(model);
+                }
+
+                try
+                {
+                    // Criação do novo User
+                    var user = new User
                     {
                         FirstName = model.FirstName,
                         LastName = model.LastName,
                         Email = model.Username,
                         UserName = model.Username,
-                        Address = model.Address,
                         PhoneNumber = model.PhoneNumber,
-                        DateCreated = DateTime.UtcNow
+                        DateCreated = DateTime.UtcNow,
+                        Address = model.Address
                     };
 
-                    // Verificar se foi enviada uma imagem de perfil
                     if (model.ProfilePicture != null)
                     {
-                        // Fazer o upload da imagem e obter o ID do blob armazenado
-                        var profilePictureId = await _blobHelper.UploadBlobAsync(model.ProfilePicture, "profile-pics");
-                        user.ProfilePictureId = profilePictureId;
+                        user.ProfilePictureId = await _blobHelper.UploadBlobAsync(model.ProfilePicture, "clients-pics");
                     }
 
-                    var result = await _userHelper.AddUserAsync(user, model.Password);
-                    if (result != IdentityResult.Success)
+                    // Adiciona o usuário
+                    var createUserResult = await _userHelper.AddUserAsync(user, model.Password);
+                    if (!createUserResult.Succeeded)
                     {
                         ModelState.AddModelError(string.Empty, "The user could not be created.");
                         return View(model);
                     }
 
-                    // Atribuir diretamente o role "Client" ao utilizador
-                    await _userHelper.AddUserToRoleAsync(user, "Admin");
+                    // Atribui o papel de "Client" e atualiza o estado do e-mail como confirmado
+                    await _userHelper.AddUserToRoleAsync(user, "Client");
+                    await _userHelper.UpdateUserAsync(user);
 
-                    // Lógica de confirmação de email (opcional)
+                    // Gera e envia o link de confirmação de email com token
                     string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                    string tokenLink = Url.Action("ConfirmEmail", "Account", new { userid = user.Id, token = myToken }, protocol: HttpContext.Request.Scheme);
+                    string tokenLink = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, token = myToken }, protocol: HttpContext.Request.Scheme);
 
-                    Helpers.Response response = _mailHelper.SendEmail(model.Username, "Email Confirmation",
+                    var response = _mailHelper.SendEmail(
+                        user.Email,
+                        "Email Confirmation",
                         $"<h1>Email Confirmation</h1>To confirm your email, click this link: <a href=\"{tokenLink}\">Confirm Email</a>");
 
-                    if (response.IsSuccess)
+                    if (!response.IsSuccess)
                     {
-                        ViewBag.Message = "Instructions to confirm your user have been sent to your email.";
+                        ModelState.AddModelError("", "Error sending confirmation email.");
                         return View(model);
                     }
 
-                    ModelState.AddModelError(string.Empty, "Error sending confirmation email.");
+                    // Cria a entidade Client associada
+                    var client = new Client
+                    {
+                        Birthdate = model.Birthdate,
+                        Address = model.Address,
+                        Gender = model.Gender,
+                        UserId = user.Id,
+                        Status = Status.Active,
+                        RegistrationDate = DateTime.UtcNow
+                    };
+                    await _clientRepository.CreateAsync(client);
+
+                    TempData["SuccessMessage"] = "Account created successfully! Check your email for further instructions.";
+                    return RedirectToAction("Login");
                 }
-                else
+                catch (Exception ex)
                 {
-                    ModelState.AddModelError(string.Empty, "This email is already registered.");
+                    _logger.LogError(ex, "Error creating client");
+                    ModelState.AddModelError("", "An unexpected error occurred. Please try again.");
                 }
             }
 
             return View(model);
         }
 
-        // Displays the change user details page
-        public async Task<IActionResult> ChangeUser()
+
+    // Displays the change user details page
+    public async Task<IActionResult> ChangeUser()
         {
             var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
 

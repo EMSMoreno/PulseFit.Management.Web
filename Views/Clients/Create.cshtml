@@ -70,17 +70,6 @@
 
     <div class="row mb-3">
         <div class="col-md-6">
-            <label asp-for="SubscriptionPlanId" class="form-label">Subscription Plan <span class="text-danger">*</span></label>
-            <select asp-for="SubscriptionPlanId" class="form-select" required>
-                <option value="">Select a Subscription Plan</option>
-                @foreach (var plan in Model.SubscriptionPlans)
-                {
-                    <option value="@plan.Value">@plan.Text</option>
-                }
-            </select>
-            <span asp-validation-for="SubscriptionPlanId" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
             <label asp-for="Status" class="form-label">Status <span class="text-danger">*</span></label>
             <select asp-for="Status" class="form-select" required>
                 @foreach (var status in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.Status)))

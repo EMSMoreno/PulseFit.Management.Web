@@ -1,0 +1,137 @@
+﻿@model PulseFit.Management.Web.Models.ConfirmationViewModel
+
+@{
+    ViewData["Title"] = "Payment Confirmation";
+}
+
+<div class="container my-5">
+    <div class="card shadow-lg p-5 text-center rounded-4">
+        <div class="icon-check">
+            <i class="bi bi-check-circle-fill text-success"></i>
+        </div>
+
+        <h2 class="text-success mb-3 fw-bold">Payment Successful!</h2>
+        <p class="lead">Thank you for your payment. Your subscription is now active.</p>
+
+        <div class="confirmation-details mt-4">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="detail-item">
+                        <span class="label">Transaction ID:</span>
+                        <span class="value">@Model.TransactionId</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Payment Date:</span>
+                        <span class="value">@Model.PaymentDate.ToString("f")</span> <!-- Data e hora completas -->
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Subscription:</span>
+                        <span class="value">@Model.SubscriptionName</span> <!-- Nome da subscrição -->
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Amount Paid:</span>
+                        <span class="value">@Model.Amount.ToString("C2")</span> <!-- Valor pago -->
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Expiration Date:</span>
+                        <span class="value">@Model.ExpirationDate.ToShortDateString()</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Status:</span>
+                        <span class="badge bg-success">@Model.Status</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p class="mt-4">You will receive an email with the subscription details shortly.</p>
+        <div class="mt-4">
+            @if (User.IsInRole("Client"))
+            {
+                <a href="@Url.Action("ClientSubscriptions", "UserSubscription")" class="btn btn-outline-primary btn-lg me-2">View My Subscriptions</a>
+            }
+            <button onclick="window.print()" class="btn btn-secondary btn-lg">Print Receipt</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Container and card styling */
+    .card {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 2rem;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Icon styling */
+    .icon-check {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Text and typography */
+    h2 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #28a745;
+    }
+
+    .lead {
+        font-size: 1.1rem;
+        color: #555;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Details section styling */
+    .confirmation-details {
+        background: #ffffff;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .detail-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.8rem 1rem;
+        border-bottom: 1px solid #e9ecef;
+        font-size: 1.05rem;
+    }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+    .label {
+        font-weight: 600;
+        color: #555;
+    }
+
+    .value {
+        font-weight: 500;
+        color: #333;
+    }
+
+    /* Badge styling for status */
+    .badge {
+        font-size: 1rem;
+        padding: 0.4em 0.8em;
+        font-weight: 500;
+    }
+
+    /* Button styling */
+    .btn-outline-primary {
+        font-weight: 600;
+        font-size: 1.1rem;
+        padding: 0.6rem 1.5rem;
+    }
+
+    .btn-secondary {
+        font-weight: 600;
+        font-size: 1.1rem;
+        padding: 0.6rem 1.5rem;
+    }
+</style>

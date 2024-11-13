@@ -11,14 +11,38 @@ namespace PulseFit.Management.Web.Helpers
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IAlertRepository _alertRepository;
+        private readonly IPaymentRepository _paymentRepository;
+        private readonly ILogger<UserHelper> _logger;
 
         public UserHelper(UserManager<User> userManager, SignInManager<User> signInManager,
-            RoleManager<IdentityRole> roleManager, IAlertRepository alertRepository)
+            RoleManager<IdentityRole> roleManager, IAlertRepository alertRepository, IPaymentRepository paymentRepository,
+            ILogger<UserHelper> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _alertRepository = alertRepository;
+            _paymentRepository = paymentRepository;
+            _logger = logger;
+        }
+
+        public async Task<string> GetUserEmailByPaymentIdAsync(int paymentId)
+        {
+            var payment = await _paymentRepository.GetByIdAsync(paymentId);
+            if (payment == null)
+            {
+                _logger.LogWarning("Payment not found for Payment ID: {PaymentId}", paymentId);
+                return null;
+            }
+
+            var user = await _userManager.FindByIdAsync(payment.UserId);
+            if (user == null)
+            {
+                _logger.LogWarning("User not found for User ID: {UserId}", payment.UserId);
+                return null;
+            }
+
+            return user.Email;
         }
 
         public async Task<IdentityResult> AddUserAsync(User user, string password) =>

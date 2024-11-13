@@ -35,7 +35,7 @@
                     <dd class="col-sm-8">@Model.Gender</dd>
 
                     <dt class="col-sm-4 fw-semibold text-muted">Birth Date:</dt>
-                    <dd class="col-sm-8">@Model.Birthdate.ToString("d")</dd>
+                    <dd class="col-sm-8">@Model.Birthdate?.ToString("d")</dd>
 
                     <dt class="col-sm-4 fw-semibold text-muted">Registration Date:</dt>
                     <dd class="col-sm-8">@Model.RegistrationDate.ToString("d")</dd>

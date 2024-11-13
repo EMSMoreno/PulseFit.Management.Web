@@ -1,4 +1,9 @@
-﻿using PulseFit.Management.Web.Data.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PulseFit.Management.Web.Data.Entities;
 
 namespace PulseFit.Management.Web.Data.Repositories
 {
@@ -11,33 +16,26 @@ namespace PulseFit.Management.Web.Data.Repositories
             _context = context;
         }
 
-        public IEnumerable<Payment> GetPaymentsByUserId(int userId)
+        public async Task<IEnumerable<Payment>> GetPaymentsByUserIdAsync(string userId)
         {
-            return _context.Payments
-            .Where(p => p.UserId == userId.ToString())
-            .ToList();
+            return await _context.Payments
+                .Where(p => p.UserId == userId)
+                .OrderByDescending(p => p.PaymentDate)
+                .ToListAsync();
         }
 
-        public PaymentResult ProcessPayment(Payment payment)
+        public async Task<PaymentResult> ProcessPaymentAsync(Payment payment)
         {
-            if (payment.Amount <= 0)
-            {
-                return new PaymentResult
-                {
-                    IsSuccess = false,
-                    Message = "Payment amount must be greater than zero."
-                };
-            }
-
             try
             {
-                _context.Payments.Add(payment);
-                _context.SaveChanges();
+                await _context.Payments.AddAsync(payment);
+                await _context.SaveChangesAsync();
 
                 return new PaymentResult
                 {
                     IsSuccess = true,
-                    Message = "Payment processed successfully."
+                    Message = "Payment processed successfully.",
+                    TransactionId = payment.TransactionId
                 };
             }
             catch (Exception ex)
@@ -49,5 +47,28 @@ namespace PulseFit.Management.Web.Data.Repositories
                 };
             }
         }
+
+        public async Task<Payment> GetByIdAsync(int paymentId)
+        {
+            return await _context.Payments.FirstOrDefaultAsync(p => p.Id == paymentId);
+        }
+
+        public async Task<Payment> GetLatestPaymentForSubscriptionAsync(int subscriptionId)
+        {
+            // Obtém o pagamento mais recente para a subscrição fornecida
+            return await _context.Payments
+                .Where(p => p.SubscriptionId == subscriptionId)
+                .OrderByDescending(p => p.PaymentDate)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Payment>> GetPaymentsBySubscriptionIdAsync(int subscriptionId)
+        {
+            return await _context.Payments
+                .Where(p => p.SubscriptionId == subscriptionId)
+                .OrderByDescending(p => p.PaymentDate)
+                .ToListAsync();
+        }
+
     }
 }

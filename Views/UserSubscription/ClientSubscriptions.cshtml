@@ -1,0 +1,172 @@
+﻿@model List<ClientSubscriptionDetailsViewModel>
+@using PulseFit.Management.Web.Data.Entities
+
+<h2 class="text-center mb-4">My Subscriptions</h2>
+
+<div class="container my-5">
+    <div class="subscriptions-container row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card subscription-card shadow border-0">
+                    <img src="@item.Subscription.Subscription.ImageUrl" class="card-img-top rounded-top" alt="Subscription Image">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Subscription.SubscriptionName</h5>
+                        <p class="card-text">@item.Subscription.Subscription.Description</p>
+
+                        @* Exibe preço com ou sem desconto *@
+                        @if (item.Subscription.Subscription.DiscountPercentage > 0)
+                        {
+                            <p class="price h5 text-primary">
+                                <span class="original-price text-muted text-decoration-line-through">
+                                    @item.Subscription.Subscription.Price.ToString("C2")
+                                </span>
+                                <span class="discounted-price">@item.Subscription.Subscription.CalculatedPrice.ToString("C2")</span>
+                            </p>
+                            <p class="discount text-success">Discount: @item.Subscription.Subscription.DiscountPercentage%</p>
+                        }
+                        else
+                        {
+                            <p class="price h5 text-primary">@item.Subscription.Subscription.Price.ToString("C2")</p>
+                        }
+
+                        <p>Status: <span class="badge badge-@((item.Subscription.Status == SubscriptionStatus.Active) ? "success" : "danger")">@item.Subscription.Status</span></p>
+                        <p>Start Date: @item.Subscription.StartDate.ToShortDateString()</p>
+                        <p>End Date: @item.Subscription.EndDate.ToShortDateString()</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <h3 class="section-title text-center mt-5">Payment History</h3>
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Subscription</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Transaction ID</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    foreach (var payment in item.Payments)
+                    {
+                        <tr>
+                            <td>@item.Subscription.SubscriptionName</td>
+                            <td>@payment.PaymentDate.ToShortDateString()</td>
+                            <td>@payment.Amount.ToString("C2")</td>
+                            <td>@payment.TransactionId</td>
+                            <td>
+                                <a href="@Url.Action("GenerateInvoicePdf", "UserSubscription", new { paymentId = payment.Id })" class="btn btn-secondary">Generate PDF</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .subscriptions-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        justify-content: center;
+    }
+
+    .subscription-card {
+        background-color: #ffffff;
+        padding: 1.5rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        width: 100%;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .subscription-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+    .price {
+        font-size: 1.2rem;
+        color: #007bff;
+    }
+
+    .original-price {
+        font-size: 1rem;
+        color: #888;
+        margin-right: 0.5rem;
+    }
+
+    .discounted-price {
+        font-weight: bold;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+        color: #fff;
+        padding: 0.4em 0.75em;
+        border-radius: 4px;
+        font-size: 0.9rem;
+    }
+
+    .badge-danger {
+        background-color: #dc3545;
+        color: #fff;
+        padding: 0.4em 0.75em;
+        border-radius: 4px;
+        font-size: 0.9rem;
+    }
+
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0 auto;
+        max-width: 900px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        .table th, .table td {
+            padding: 1rem;
+            border: 1px solid #ddd;
+            text-align: center;
+            color: #444;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+    .btn-secondary {
+        color: #fff;
+        background-color: #6c757d;
+        border: none;
+        padding: 0.5em 1em;
+        font-size: 0.9rem;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: scale(1.05);
+        }
+</style>

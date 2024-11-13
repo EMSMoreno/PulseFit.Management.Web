@@ -1,57 +1,65 @@
-﻿@model PulseFit.Management.Web.Models.UserSubscriptionViewModel
+﻿@* @model PulseFit.Management.Web.Models.UserSubscriptionViewModel
 
 @{
-    ViewData["Title"] = "Add Subscription";
+    ViewData["Title"] = "Create Subscription";
 }
 
-<h2>Add Subscription for Client</h2>
+<<div class="container my-5">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-primary text-center fw-bold mb-4">Create Subscription for @Model.Client.FirstName</h2>
+        <form asp-action="Create" method="post" class="needs-validation" novalidate>
+            <input type="hidden" asp-for="ClientId" />
 
-<form asp-action="Create" method="post">
-    <input type="hidden" asp-for="ClientId" />
+            <!-- Seleção de tipo de subscrição -->
+            <div class="mb-3">
+                <label asp-for="SubscriptionId" class="form-label">Subscription Type</label>
+                <select asp-for="SubscriptionId" asp-items="Model.SubscriptionOptions" class="form-select" required>
+                    <option value="">-- Select Subscription --</option>
+                </select>
+                <span asp-validation-for="SubscriptionId" class="text-danger"></span>
+            </div>
 
-    <div class="mb-3">
-        <label asp-for="SubscriptionId" class="form-label">Select Subscription Plan</label>
-        <select asp-for="SubscriptionId" class="form-select" required>
-            <option value="">Choose a subscription plan...</option>
-            @foreach (var option in Model.SubscriptionOptions)
-            {
-                <option value="@option.Value">@option.Text</option>
-            }
-        </select>
-        <span asp-validation-for="SubscriptionId" class="text-danger"></span>
+            <!-- Data de início -->
+            <div class="mb-3">
+                <label asp-for="StartDate" class="form-label">Start Date</label>
+                <input asp-for="StartDate" class="form-control" type="date" required />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+
+            <!-- Pagamento -->
+            <div class="form-check form-switch mb-3">
+                <input asp-for="IsPaid" class="form-check-input" type="checkbox" />
+                <label asp-for="IsPaid" class="form-check-label">Mark as Paid</label>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="AmountPaid" class="form-label">Amount Paid (€)</label>
+                <input asp-for="AmountPaid" class="form-control" type="number" min="0" step="0.01" required />
+                <span asp-validation-for="AmountPaid" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">Create Subscription</button>
+            <a asp-action="Index" class="btn btn-link d-block text-center mt-3">Back to List</a>
+        </form>
     </div>
+</div>
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label asp-for="StartDate" class="form-label">Start Date <span class="text-danger">*</span></label>
-            <input asp-for="StartDate" type="date" class="form-control" required />
-            <span asp-validation-for="StartDate" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label asp-for="EndDate" class="form-label">End Date <span class="text-danger">*</span></label>
-            <input asp-for="EndDate" type="date" class="form-control" required />
-            <span asp-validation-for="EndDate" class="text-danger"></span>
-        </div>
-    </div>
 
-    <div class="mb-3">
-        <label asp-for="Status" class="form-label">Status</label>
-        <select asp-for="Status" class="form-select" required>
-            <option value="">Select status...</option>
-            @foreach (var status in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.SubscriptionStatus)))
-            {
-                <option value="@status">@status</option>
-            }
-        </select>
-        <span asp-validation-for="Status" class="text-danger"></span>
-    </div>
+<style>
+    h2 {
+        font-size: 2rem;
+    }
 
-    <div class="d-flex justify-content-between mt-4">
-        <button type="submit" class="btn btn-success">Save Subscription</button>
-        <a asp-action="Details" asp-route-clientId="@Model.ClientId" class="btn btn-secondary">Cancel</a>
-    </div>
-</form>
+    .form-label {
+        font-weight: 600;
+    }
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+    .btn-primary {
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+</style>
+ *@

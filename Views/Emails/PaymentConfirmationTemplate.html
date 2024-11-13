@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Confirmation</title>
+    <style>
+        /* Reset and basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f4f4f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .email-container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+        }
+
+        /* Header */
+        .email-header {
+            background-color: #0d6efd;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+            .email-header h1 {
+                margin: 0;
+                font-size: 24px;
+            }
+
+        /* Content */
+        .email-content {
+            padding: 30px 20px;
+            color: #555;
+        }
+
+            .email-content h2 {
+                color: #0d6efd;
+                font-size: 22px;
+                margin: 0 0 20px;
+            }
+
+            .email-content p {
+                margin: 10px 0;
+                line-height: 1.6;
+            }
+
+        .details-table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+
+            .details-table th,
+            .details-table td {
+                padding: 10px;
+                border-bottom: 1px solid #eee;
+                text-align: left;
+            }
+
+            .details-table th {
+                background-color: #f4f4f7;
+                color: #333;
+            }
+
+            .details-table td {
+                font-weight: 500;
+            }
+
+        /* Footer */
+        .email-footer {
+            background-color: #f4f4f7;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #777;
+        }
+
+            .email-footer p {
+                margin: 5px 0;
+            }
+
+            .email-footer a {
+                color: #0d6efd;
+                text-decoration: none;
+            }
+
+        /* Button Styling */
+        .btn-primary {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 20px 0;
+            background-color: #0d6efd;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <h1>Payment Confirmation</h1>
+        </div>
+
+        <!-- Content -->
+        <div class="email-content">
+            <h2>Hello,</h2>
+            <p>We’re happy to inform you that your payment was successful, and your subscription has been activated. Below are the details of your payment and subscription:</p>
+
+            <!-- Details Table -->
+            <table class="details-table">
+                <tr>
+                    <th>Subscription Name</th>
+                    <td>{{SubscriptionName}}</td>
+                </tr>
+                <tr>
+                    <th>Transaction ID</th>
+                    <td>{{TransactionId}}</td>
+                </tr>
+                <tr>
+                    <th>Amount Paid</th>
+                    <td>{{Amount}}</td>
+                </tr>
+                <tr>
+                    <th>Payment Date</th>
+                    <td>{{PaymentDate}}</td>
+                </tr>
+                <tr>
+                    <th>Expiration Date</th>
+                    <td>{{ExpirationDate}}</td>
+                </tr>
+            </table>
+
+            <p>If you have any questions about your subscription, please feel free to <a href="mailto:support@example.com">contact our support team</a>.</p>
+            <a href="https://yourwebsite.com" class="btn-primary">Visit Your Account</a>
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+            <p>Thank you for choosing our service!</p>
+            <p><a href="https://yourwebsite.com">Our Website</a> | <a href="mailto:support@example.com">Contact Support</a></p>
+            <p>&copy; 2024 Your Company. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+﻿@* @model PulseFit.Management.Web.Models.UserSubscriptionViewModel
+
+@{
+    ViewData["Title"] = "Edit Subscription";
+}
+
+<div class="container my-5">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-warning text-center fw-bold mb-4">Edit Subscription</h2>
+        <form asp-action="Edit" method="post" class="needs-validation" novalidate>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ClientId" />
+
+            <div class="mb-3">
+                <label asp-for="SubscriptionId" class="form-label">Subscription Type</label>
+                <select asp-for="SubscriptionId" asp-items="Model.SubscriptionOptions" class="form-select" required>
+                    <option value="">-- Select Subscription --</option>
+                </select>
+                <span asp-validation-for="SubscriptionId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="StartDate" class="form-label">Start Date</label>
+                <input asp-for="StartDate" class="form-control" type="date" required />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="EndDate" class="form-label">End Date</label>
+                <input asp-for="EndDate" class="form-control" type="date" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-check form-switch mb-3">
+                <input asp-for="IsPaid" class="form-check-input" type="checkbox" />
+                <label asp-for="IsPaid" class="form-check-label">Mark as Paid</label>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="AmountPaid" class="form-label">Amount Paid (€)</label>
+                <input asp-for="AmountPaid" class="form-control" type="number" min="0" step="0.01" />
+                <span asp-validation-for="AmountPaid" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-warning btn-lg w-100 mt-3">Save Changes</button>
+            <a asp-action="Details" asp-route-clientId="@Model.ClientId" class="btn btn-link d-block text-center mt-3">Cancel</a>
+        </form>
+    </div>
+</div>
+
+<style>
+    h2 {
+        font-size: 2rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+    }
+
+    .btn-warning {
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-warning:hover {
+            background-color: #ffc107;
+        }
+</style>
+ *@

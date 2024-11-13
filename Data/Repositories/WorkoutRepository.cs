@@ -1,4 +1,8 @@
-﻿using PulseFit.Management.Web.Data.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PulseFit.Management.Web.Data;
+using PulseFit.Management.Web.Data.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PulseFit.Management.Web.Data.Repositories
 {
