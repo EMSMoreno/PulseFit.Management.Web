@@ -1,0 +1,126 @@
+﻿@model PulseFit.Management.Web.Models.SubscriptionViewModel
+@{
+    ViewData["Title"] = "Subscription Details";
+}
+
+<div class="container my-5">
+    <!-- Back Button -->
+    <div class="mb-4">
+        <a href="@Url.Action("Index", "Subscription")" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
+    </div>
+
+    <div class="card shadow-lg p-4">
+        <div class="row">
+            <div class="col-md-5 d-flex align-items-center">
+                <img src="@Model.ImageUrl" class="img-fluid rounded" alt="Subscription Image" style="width:100%;">
+            </div>
+            <div class="col-md-7">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="mb-1">@Model.Name</h2>
+                    @if (Model.DiscountPercentage > 0)
+                    {
+                        <span class="badge bg-success px-3 py-2">Discount: @Model.DiscountPercentage%</span>
+                    }
+                </div>
+
+                <p class="text-muted">@Model.Description</p>
+
+                <!-- Pricing Section with Original and Discounted Price -->
+                <div class="my-3">
+                    @if (Model.DiscountPercentage > 0)
+                    {
+                        <h3 class="text-muted text-decoration-line-through">$@Model.Price.ToString("C2")</h3>
+                        <h3 class="price text-danger">$@Model.CalculatedPrice.ToString("C2") <small class="text-success">with discount</small></h3>
+                    }
+                    else
+                    {
+                        <h3 class="price">$@Model.Price.ToString("C2")</h3>
+                    }
+                </div>
+
+                <p class="text-secondary">Duration: <strong>@Model.DurationValue @Model.DurationType</strong></p>
+
+                <h4 class="mt-4">Key Benefits:</h4>
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Access to All Gyms:
+                        <strong class="ms-auto">@((Model.IsAllGymsAccessible ? "Yes" : "No"))</strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        24/7 Access:
+                        <strong class="ms-auto">@((Model.Has24HourAccess ? "Yes" : "No"))</strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>
+                            VIP Access:
+                            <i class="bi bi-info-circle ms-1" data-bs-toggle="tooltip" title="Includes access to sauna, swimming pool, relaxation lounge, massage chairs, and VIP lounge."></i>
+                        </span>
+                        <strong class="ms-auto">@((Model.HasVIPAccess ? "Yes" : "No"))</strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Max Personal Trainer Sessions:
+                        <strong class="ms-auto">@Model.MaxPersonalTrainerSessions</strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Performance Report Frequency:
+                        <strong class="ms-auto">@Model.PerformanceReportFrequencyInMonths month(s)</strong>
+                    </li>
+                </ul>
+
+                <h4 class="mt-4">Included Plans & Services:</h4>
+                <ul class="list-group list-group-flush">
+                    @if (Model.SelectedGymIds?.Count > 0)
+                    {
+                        <li class="list-group-item">Included Gyms: @string.Join(", ", Model.SelectedGymIds)</li>
+                    }
+                    @if (Model.SelectedWorkoutIds?.Count > 0)
+                    {
+                        <li class="list-group-item">Included Workouts: @string.Join(", ", Model.SelectedWorkoutIds)</li>
+                    }
+                    @if (Model.SelectedNutritionPlanIds?.Count > 0)
+                    {
+                        <li class="list-group-item">Nutrition Plans: @string.Join(", ", Model.SelectedNutritionPlanIds)</li>
+                    }
+                    @if (Model.SelectedOnlineClassIds?.Count > 0)
+                    {
+                        <li class="list-group-item">Online Classes: @string.Join(", ", Model.SelectedOnlineClassIds)</li>
+                    }
+                </ul>
+
+                <div class="d-grid mt-4">
+                    <a href="@Url.Action("SelectPaymentMethod", "Payment", new { subscriptionId = Model.Id })" class="btn btn-success btn-lg">
+                        Subscribe Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .price {
+        font-size: 2rem;
+        color: #28a745;
+        font-weight: 600;
+    }
+
+    .list-group-item {
+        font-size: 1rem;
+        padding: 0.75rem 1.25rem;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .badge.bg-success {
+        font-size: 0.9rem;
+    }
+</style>
+
+<script>
+    // Initialize Bootstrap tooltip
+    $(function () {
+        $('[data-bs-toggle="tooltip"]').tooltip();
+    });
+</script>

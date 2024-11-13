@@ -1,0 +1,84 @@
+﻿@model IEnumerable<PulseFit.Management.Web.Models.SubscriptionViewModel>
+@{
+    ViewData["Title"] = "Select Subscription";
+}
+
+<div class="container my-5">
+    <h2 class="text-center text-primary mb-4">Choose Your Subscription</h2>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var subscription in Model)
+        {
+            <div class="col">
+                <div class="card subscription-card shadow border-0">
+                    <img src="@subscription.ImageUrl" class="card-img-top rounded-top" alt="Subscription Image">
+                    <div class="card-body">
+                        <h5 class="card-title">@subscription.Name</h5>
+                        <p class="card-text">@subscription.Description</p>
+
+                        @if (subscription.DiscountPercentage > 0)
+                        {
+                            <p class="price h5 text-primary">
+                                <span class="original-price">€@subscription.Price.ToString("F2")</span>
+                                <span class="discounted-price">€@subscription.CalculatedPrice.ToString("F2")</span>
+                            </p>
+                            <p class="discount text-success">Discount: @subscription.DiscountPercentage%</p>
+                        }
+                        else
+                        {
+                            <p class="price h5 text-primary">€@subscription.Price.ToString("F2")</p>
+                        }
+
+                        <a asp-action="ProceedToPayment" asp-route-subscriptionId="@subscription.Id"
+                           class="btn btn-primary w-100 mt-3 animate-fade">Select Subscription</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .subscription-card {
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .subscription-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+    .price {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .original-price {
+        text-decoration: line-through;
+        color: #888;
+        margin-right: 0.5rem;
+    }
+
+    .discounted-price {
+        color: #e74c3c;
+        font-weight: bold;
+    }
+
+    .discount {
+        color: #27ae60;
+        font-size: 0.9em;
+    }
+
+    .btn-primary {
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+        }
+
+    .animate-fade {
+        transition: all 0.4s ease;
+    }
+</style>

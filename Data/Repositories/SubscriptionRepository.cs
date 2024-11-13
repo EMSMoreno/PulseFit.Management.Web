@@ -34,5 +34,22 @@ namespace PulseFit.Management.Web.Data.Repositories
         {
             return await _context.Subscriptions.AnyAsync(s => s.Name == name);
         }
+
+        public async Task<IEnumerable<Subscription>> GetSubscriptionsByGymAsync(int gymId)
+        {
+            return await _context.Subscriptions
+                .Include(s => s.IncludedGyms)
+                .Where(s => s.IsAllGymsAccessible || s.IncludedGyms.Any(g => g.Id == gymId))
+                .ToListAsync();
+        }
+
+        public async Task<bool> ExistsExclusiveSubscriptionAsync(SubscriptionType subscriptionType)
+        {
+            // Verifica se existe uma subscrição ativa do tipo exclusivo
+            return await _context.Subscriptions
+                .AnyAsync(s => s.SubscriptionType == subscriptionType
+                               && s.IsExclusive
+                               && s.Status == SubscriptionStatus.Active);
+        }
     }
 }

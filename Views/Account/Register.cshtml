@@ -1,73 +1,215 @@
 ﻿@model PulseFit.Management.Web.Models.RegisterNewUserViewModel
-
 @{
     ViewData["Title"] = "Register";
 }
 
-<h2>Register</h2>
+<div class="container my-5">
+    <h2 class="text-center mb-4">Register as a New Client</h2>
 
-<div class="row">
-    <div class="col-md-4 offset-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly"></div>
+    <form asp-action="Register" method="post" enctype="multipart/form-data" class="needs-validation p-4 border rounded shadow-lg bg-white" novalidate>
 
-            <div class="form-group">
-                <label asp-for="FirstName">First Name</label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-warning"></span>
+        <!-- Validation Summary -->
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="row">
+            <!-- Personal Information -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="FirstName" class="form-label">First Name</label>
+                    <input asp-for="FirstName" class="form-control" required>
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="LastName" class="form-label">Last Name</label>
+                    <input asp-for="LastName" class="form-control" required>
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Username" class="form-label">Email</label>
+                    <input asp-for="Username" type="email" class="form-control" required>
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                    <input asp-for="PhoneNumber" type="tel" class="form-control">
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label">Password</label>
+                    <input asp-for="Password" type="password" class="form-control" required>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label asp-for="LastName">Last Name</label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-warning"></span>
-            </div>
+            <!-- Additional Client Information -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Address" class="form-label">Address</label>
+                    <input asp-for="Address" class="form-control" required>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Username">Username</label>
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-warning"></span>
-            </div>
+                <div class="mb-3">
+                    <label asp-for="Birthdate" class="form-label">Birthdate</label>
+                    <input asp-for="Birthdate" type="date" class="form-control" required>
+                    <span asp-validation-for="Birthdate" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Address">Address</label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-warning"></span>
-            </div>
+                <div class="mb-3">
+                    <label asp-for="Gender" class="form-label">Gender</label>
+                    <select asp-for="Gender" class="form-select" required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="PhoneNumber">Phone Number</label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-warning"></span>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="ProfilePicture" class="form-label">Profile Picture</label>
+                        <input asp-for="ProfilePicture" type="file" class="form-control" id="profilePictureUpload">
+                        <small class="form-text text-muted">Maximum file size: 2 MB</small>
+                        <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Image Preview</label>
+                        <img id="imagePreview" src="#" alt="Image Preview" style="max-width: 150px; max-height: 150px; border-radius: 10px; display: none;" />
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label asp-for="Password">Password</label>
-                <input asp-for="Password" type="password" class="form-control" />
-                <span asp-validation-for="Password" class="text-warning"></span>
-            </div>
+        <!-- Terms and Conditions Checkbox -->
+        <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" id="termsCheckbox" required>
+            <label class="form-check-label" for="termsCheckbox">
+                I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms of Service</a> and <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a>.
+            </label>
+        </div>
 
-            <div class="form-group">
-                <label asp-for="Confirm">Confirm</label>
-                <input asp-for="Confirm" type="password" class="form-control" />
-                <span asp-validation-for="Confirm" class="text-warning"></span>
-            </div>
+        <!-- Submit Button -->
+        <button type="submit" id="registerButton" class="btn btn-primary btn-lg w-100 mt-4" disabled>Register</button>
+    </form>
+</div>
 
-            <div class="form-group">
-                <label asp-for="ProfilePicture"></label>
-                <input asp-for="ProfilePicture" type="file" class="form-control" />
-                <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+<!-- Modal for Terms of Service -->
+<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="termsModalLabel">Terms of Service</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body">
+                <h6>1. Introduction</h6>
+                <p>Welcome to PulseFit! By using our facilities, mobile app, or website, you agree to comply with our Terms of Service. Please read these terms carefully before becoming a member or using our services.</p>
 
-            <div class="form-group">
-                <input type="submit" value="Register New User" class="btn btn-primary" />
+                <h6>2. Account Registration and Security</h6>
+                <p>Members are responsible for maintaining the security of their accounts and keeping passwords confidential. Sharing account information is strictly prohibited. If you notice any suspicious activity, please contact us immediately.</p>
+
+                <h6>3. Membership and Use of Facilities</h6>
+                <p>PulseFit memberships are personal and non-transferable. All members are expected to respect our facilities, follow the posted rules, and ensure they are medically fit to participate in fitness activities.</p>
+
+                <h6>4. Payments, Cancellations, and Refunds</h6>
+                <p>Membership fees are billed based on the selected plan. By signing up, you authorize us to charge your provided payment method. To cancel, follow the instructions in your account settings or contact customer support. Refunds are only processed in specific cases as outlined in our Refund Policy.</p>
+
+                <h6>5. Health and Safety Waiver</h6>
+                <p>PulseFit recommends members consult a physician before engaging in fitness programs. Members assume the risks associated with physical activities, and PulseFit is not liable for any injuries incurred during training.</p>
+
+                <h6>6. Use of Personal Data</h6>
+                <p>By using PulseFit services, you agree to our data collection and usage as described in our <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a>.</p>
+
+                <h6>7. Modifications to Terms and Services</h6>
+                <p>PulseFit reserves the right to modify these Terms and our services at any time. Changes will be posted on our website, and continued use implies acceptance of the updated Terms.</p>
+
+                <h6>8. Limitation of Liability</h6>
+                <p>To the extent permitted by law, PulseFit is not liable for indirect or incidental damages arising from the use of our services. For disputes, please contact customer support.</p>
             </div>
-        </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="text-success">
-    <p>
-        @ViewBag.Message
-    </p>
+
+<!-- Modal for Privacy Policy -->
+<div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="privacyModalLabel">Privacy Policy</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>1. Introduction</h6>
+                <p>Your privacy is a priority for PulseFit. This Privacy Policy outlines how we collect, use, and protect your information. By using our services, you agree to this policy.</p>
+
+                <h6>2. Information We Collect</h6>
+                <p>We collect information to personalize your fitness experience and improve our services. This includes:</p>
+                <ul>
+                    <li><strong>Personal Information:</strong> Name, contact details, and payment information.</li>
+                    <li><strong>Health Information:</strong> Limited data for safe fitness recommendations, with your explicit consent.</li>
+                    <li><strong>Usage Data:</strong> App and website usage, such as pages visited and interactions.</li>
+                </ul>
+
+                <h6>3. How We Use Your Information</h6>
+                <p>Your information is used to manage your membership, provide customer support, and personalize fitness programs. We may also send promotions or updates with an option to unsubscribe at any time.</p>
+
+                <h6>4. Sharing Your Information</h6>
+                <p>We do not sell or share your data with third parties, except as necessary to provide services (e.g., payment processing) or comply with legal obligations.</p>
+
+                <h6>5. Data Security</h6>
+                <p>PulseFit employs secure data storage and access protocols to protect your information. Despite these measures, no system is 100% secure, and we encourage users to keep passwords confidential.</p>
+
+                <h6>6. Your Rights</h6>
+                <p>You have the right to access, correct, or request deletion of your data. Please contact us if you have any concerns or requests regarding your information.</p>
+
+                <h6>7. Changes to this Policy</h6>
+                <p>We may update our Privacy Policy periodically. Changes will be effective upon posting on our website, and we encourage you to review it regularly.</p>
+
+                <h6>8. Contact Us</h6>
+                <p>If you have questions about this Privacy Policy or data practices, please reach out to our support team at <a href="mailto:privacy@pulsefit.com">privacy@pulsefit.com</a>.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Image Preview
+        document.getElementById("profilePictureUpload").addEventListener("change", function (event) {
+            const [file] = event.target.files;
+            const preview = document.getElementById("imagePreview");
+
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = "block";
+            } else {
+                preview.style.display = "none";
+            }
+        });
+
+        // Toggle Register Button based on Terms Checkbox
+        document.getElementById("termsCheckbox").addEventListener("change", function () {
+            document.getElementById("registerButton").disabled = !this.checked;
+        });
+    </script>
+}
+
+<style>
+    .form-label {
+        font-weight: 600;
+    }
+</style>

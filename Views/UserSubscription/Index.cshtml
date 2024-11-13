@@ -1,0 +1,87 @@
+﻿@model IEnumerable<UserSubscriptionViewModel>
+@using PulseFit.Management.Web.Data.Entities
+
+@{
+    ViewData["Title"] = "Client Subscriptions";
+}
+
+<div class="container my-5">
+    <h2 class="text-center text-primary mb-4 fw-bold">Client Subscriptions</h2>
+
+    <div class="table-responsive">
+        <table class="table table-hover shadow-lg">
+            <thead class="table-header">
+                <tr>
+                    <th>Client</th>
+                    <th>Subscription</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var clientGroup in Model.GroupBy(m => m.ClientId))
+                {
+                    var client = clientGroup.FirstOrDefault()?.Client;
+                    var hasSubscriptions = clientGroup.Any(sub => sub.Subscription.Name != "No Subscription");
+
+                    <tr>
+                        <td>@client.FirstName @client.LastName</td>
+                        <td>@(hasSubscriptions ? "With Subscriptions" : "No Subscription")</td>
+                        <td>
+                            <span class="badge @((clientGroup.Any(sub => sub.Status == SubscriptionStatus.Active)) ? "badge-success" : "badge-danger")">
+                                @(clientGroup.Any(sub => sub.Status == SubscriptionStatus.Active) ? "Active" : "Inactive")
+                            </span>
+                        </td>
+                        <td>
+                            @if (!hasSubscriptions)
+                            {
+                                <a asp-action="SelectSubscriptionForClient" asp-route-clientId="@clientGroup.Key"
+                                   class="btn btn-outline-primary btn-sm animate-fade">Add Subscription</a>
+                            }
+                            else
+                            {
+                                <a asp-action="Details" asp-route-clientId="@clientGroup.Key"
+                                   class="btn btn-outline-secondary btn-sm animate-fade">View Details</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    h2 {
+        font-size: 2.5rem;
+        color: #0d6efd;
+        font-weight: 700;
+    }
+
+    .table-header {
+        background-color: #f7f9fc;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .badge-danger {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    .btn-outline-primary {
+        transition: 0.3s ease;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+
+    .animate-fade {
+        transition: all 0.4s ease;
+    }
+</style>

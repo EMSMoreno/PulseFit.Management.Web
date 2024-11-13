@@ -29,5 +29,8 @@ namespace PulseFit.Management.Web.Helpers
         // Converte UserSubscription para UserSubscriptionViewModel
         UserSubscriptionViewModel ToUserSubscriptionViewModel(UserSubscription userSubscription);
 
+        Task<Payment> ToPaymentAsync(PaymentViewModel model, string userId, Guid transactionId, Payment.PaymentStatus status);
+        PaymentViewModel ToPaymentViewModel(Payment payment);
+
     }
 }

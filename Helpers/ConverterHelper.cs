@@ -199,7 +199,6 @@ namespace PulseFit.Management.Web.Helpers
                 Birthdate = model.Birthdate,
                 Address = model.Address,
                 RegistrationDate = model.RegistrationDate,
-                SubscriptionPlanId = model.SubscriptionPlanId,
                 Status = model.Status,
                 Gender = model.Gender,
                 UserId = user.Id,
@@ -219,32 +218,57 @@ namespace PulseFit.Management.Web.Helpers
                 Birthdate = client.Birthdate,
                 Address = client.Address,
                 RegistrationDate = client.RegistrationDate,
-                SubscriptionPlanId = client.SubscriptionPlanId,
                 Status = client.Status,
                 Gender = client.Gender,
                 ImageId = client.User.ProfilePictureId ?? Guid.Empty,
             };
         }
 
-        // Converte SubscriptionViewModel para Subscription
+
+
         public async Task<Subscription> ToSubscriptionAsync(SubscriptionViewModel model, Guid imageId, bool isNew)
         {
-            var subscription = new Subscription
+            var gyms = await _context.Gyms.Where(g => model.SelectedGymIds.Contains(g.Id)).ToListAsync();
+            var workouts = await _context.Workouts.Where(w => model.SelectedWorkoutIds.Contains(w.Id)).ToListAsync();
+            var nutritionPlans = await _context.NutritionPlans.Where(np => model.SelectedNutritionPlanIds.Contains(np.Id)).ToListAsync();
+            var onlineClasses = await _context.OnlineClasses.Where(oc => model.SelectedOnlineClassIds.Contains(oc.Id)).ToListAsync();
+
+            // Recupera a subscrição existente, se não for uma nova
+            var subscription = isNew
+                ? new Subscription()
+                : await _context.Subscriptions.SingleOrDefaultAsync(s => s.Id == model.Id);
+
+            // Atualiza as propriedades
+            subscription.Name = model.Name;
+            subscription.Description = model.Description;
+            subscription.Price = model.Price;
+            subscription.MaxWorkouts = model.MaxWorkouts;
+            subscription.DurationValue = model.DurationValue;
+            subscription.DurationType = model.DurationType;
+            subscription.Status = model.Status;
+            subscription.SubscriptionType = model.SubscriptionType;
+            subscription.IsExclusive = model.IsExclusive;
+            subscription.IsAllGymsAccessible = model.IsAllGymsAccessible;
+            subscription.IncludedGyms = gyms;
+            subscription.IncludedWorkouts = workouts;
+            subscription.IncludedNutritionPlans = nutritionPlans;
+            subscription.IncludedOnlineClasses = onlineClasses;
+            subscription.MaxPersonalTrainerSessions = model.MaxPersonalTrainerSessions;
+            subscription.Has24HourAccess = model.Has24HourAccess;
+            subscription.HasVIPAccess = model.HasVIPAccess;
+            subscription.PerformanceReportFrequencyInMonths = model.PerformanceReportFrequencyInMonths;
+            subscription.DiscountPercentage = model.DiscountPercentage;
+
+            // Define o `ImageId` somente se uma nova imagem foi carregada
+            if (imageId != Guid.Empty)
             {
-                Id = isNew ? 0 : model.Id,
-                Name = model.Name,
-                Description = model.Description,
-                Price = model.Price,
-                MaxWorkouts = model.MaxWorkouts,
-                DurationMonths = model.DurationMonths,
-                Status = model.Status,
-                ImageId = imageId != Guid.Empty ? imageId : model.ImageId
-            };
+                subscription.ImageId = imageId;
+            }
 
             return subscription;
         }
 
-        // Converte Subscription para SubscriptionViewModel
+
         public SubscriptionViewModel ToSubscriptionViewModel(Subscription subscription)
         {
             return new SubscriptionViewModel
@@ -254,16 +278,54 @@ namespace PulseFit.Management.Web.Helpers
                 Description = subscription.Description,
                 Price = subscription.Price,
                 MaxWorkouts = subscription.MaxWorkouts,
-                DurationMonths = subscription.DurationMonths,
+                DurationValue = subscription.DurationValue,
+                DurationType = subscription.DurationType,
                 Status = subscription.Status,
+                SubscriptionType = subscription.SubscriptionType,
+                IsExclusive = subscription.IsExclusive,
+                IsAllGymsAccessible = subscription.IsAllGymsAccessible,
+                SelectedGymIds = subscription.IncludedGyms.Select(g => g.Id).ToList(),
+                SelectedWorkoutIds = subscription.IncludedWorkouts.Select(w => w.Id).ToList(),
+                SelectedNutritionPlanIds = subscription.IncludedNutritionPlans.Select(np => np.Id).ToList(),
+                SelectedOnlineClassIds = subscription.IncludedOnlineClasses.Select(oc => oc.Id).ToList(),
+                MaxPersonalTrainerSessions = subscription.MaxPersonalTrainerSessions,
+                Has24HourAccess = subscription.Has24HourAccess,
+                HasVIPAccess = subscription.HasVIPAccess,
+                PerformanceReportFrequencyInMonths = subscription.PerformanceReportFrequencyInMonths,
+                DiscountPercentage = subscription.DiscountPercentage, // Alteração aqui
                 ImageId = subscription.ImageId
             };
         }
+
+
+
 
         public async Task<UserSubscription> ToUserSubscriptionAsync(UserSubscriptionViewModel model, bool isNew)
         {
             var subscription = await _context.Subscriptions.FindAsync(model.SubscriptionId);
             var client = await _context.Clients.FindAsync(model.ClientId);
+
+            // Calcula a data de término com base na duração da subscrição
+            DateTime endDate = model.StartDate;
+            if (subscription != null)
+            {
+                endDate = model.StartDate;
+                switch (subscription.DurationType)
+                {
+                    case DurationType.Days:
+                        endDate = endDate.AddDays(subscription.DurationValue);
+                        break;
+                    case DurationType.Weeks:
+                        endDate = endDate.AddDays(subscription.DurationValue * 7);
+                        break;
+                    case DurationType.Months:
+                        endDate = endDate.AddMonths(subscription.DurationValue);
+                        break;
+                    case DurationType.Years:
+                        endDate = endDate.AddYears(subscription.DurationValue);
+                        break;
+                }
+            }
 
             return new UserSubscription
             {
@@ -273,13 +335,15 @@ namespace PulseFit.Management.Web.Helpers
                 Client = client,
                 ClientId = model.ClientId,
                 StartDate = model.StartDate,
-                EndDate = model.EndDate,
-                Status = model.Status
+                EndDate = endDate,
+                Status = model.Status,
+                IsPaid = model.IsPaid,
+                TransactionId = model.TransactionId ?? "MANUAL_" + Guid.NewGuid().ToString(), // Defina um ID de transação padrão se o admin não fornecer
+                AmountPaid = model.AmountPaid
             };
         }
 
 
-        // Converte UserSubscription para UserSubscriptionViewModel
         public UserSubscriptionViewModel ToUserSubscriptionViewModel(UserSubscription userSubscription)
         {
             return new UserSubscriptionViewModel
@@ -289,8 +353,49 @@ namespace PulseFit.Management.Web.Helpers
                 Subscription = ToSubscriptionViewModel(userSubscription.Subscription),
                 StartDate = userSubscription.StartDate,
                 EndDate = userSubscription.EndDate,
-                Status = userSubscription.Status
+                Status = userSubscription.Status,
+                ClientId = userSubscription.ClientId,
+                IsPaid = userSubscription.IsPaid,
+                TransactionId = userSubscription.TransactionId,
+                AmountPaid = userSubscription.AmountPaid
             };
         }
+
+
+
+        public async Task<Payment> ToPaymentAsync(PaymentViewModel model, string userId, Guid transactionId, Payment.PaymentStatus status)
+        {
+            var subscription = await _context.Subscriptions.FindAsync(model.SubscriptionId);
+
+            return new Payment
+            {
+                Amount = model.Amount,
+                PaymentDate = DateTime.UtcNow,
+                UserId = userId,
+                Subscription = subscription,
+                SubscriptionId = model.SubscriptionId,
+                Method = model.SelectedMethod,
+                Status = status,
+                TransactionId = transactionId.ToString(),
+                Description = model.Description
+            };
+        }
+
+        // Converte Payment para PaymentViewModel
+        public PaymentViewModel ToPaymentViewModel(Payment payment)
+        {
+            return new PaymentViewModel
+            {
+                Id = payment.Id,
+                SubscriptionId = payment.SubscriptionId,
+                Amount = payment.Amount,
+                UserId = payment.UserId,
+                SelectedMethod = payment.Method,
+                Description = payment.Description,
+                PaymentDate = payment.PaymentDate,
+                TransactionId = payment.TransactionId
+            };
+        }
+
     }
 }

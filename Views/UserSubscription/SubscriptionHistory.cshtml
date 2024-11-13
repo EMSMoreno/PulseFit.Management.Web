@@ -1,0 +1,44 @@
+﻿@* @model IEnumerable<PulseFit.Management.Web.Models.UserSubscriptionViewModel>
+
+@{
+    ViewData["Title"] = "Subscription History";
+}
+
+<div class="container my-5">
+    <h2 class="text-center mb-4">Subscription History</h2>
+
+    <table class="table table-hover shadow-sm">
+        <thead class="table-light">
+            <tr>
+                <th>Subscription</th>
+                <th>Status</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Amount Paid</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var subscription in Model)
+            {
+                <tr>
+                    <td>@subscription.Subscription.Name</td>
+                    <td>
+                        <span class="badge @(subscription.Status == PulseFit.Management.Web.Data.Entities.SubscriptionStatus.Active ? "bg-success" : "bg-secondary")">
+                            @subscription.Status
+                        </span>
+                    </td>
+                    <td>@subscription.StartDate.ToString("d MMM yyyy")</td>
+                    <td>@subscription.EndDate.ToString("d MMM yyyy")</td>
+                    <td>@subscription.AmountPaid.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .badge {
+        font-size: 1rem;
+    }
+</style>
+ *@

@@ -95,6 +95,9 @@ namespace PulseFit.Management.Web.Helpers
 
 
         Task<int> GetUserIdByEmailAsync(string email);
+
+        Task<string> GetUserEmailByPaymentIdAsync(int paymentId);
+
     }
 
 }

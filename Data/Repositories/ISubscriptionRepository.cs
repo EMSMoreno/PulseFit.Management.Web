@@ -10,5 +10,10 @@ namespace PulseFit.Management.Web.Data.Repositories
         Task<IEnumerable<Subscription>> GetAllActiveSubscriptionsAsync();
         Task<Subscription> GetByIdWithDetailsAsync(int id);
         Task<bool> ExistsByNameAsync(string name);
+        Task<IEnumerable<Subscription>> GetSubscriptionsByGymAsync(int gymId);
+
+        Task<bool> ExistsExclusiveSubscriptionAsync(SubscriptionType subscriptionType);
+
+
     }
 }

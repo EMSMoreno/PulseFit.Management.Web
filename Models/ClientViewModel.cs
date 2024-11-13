@@ -29,7 +29,7 @@ namespace PulseFit.Management.Web.Models
         [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Birth Date")]
-        public DateTime Birthdate { get; set; }
+        public DateTime? Birthdate { get; set; }
 
         [Required]
         public Gender Gender { get; set; }
@@ -41,22 +41,17 @@ namespace PulseFit.Management.Web.Models
         public DateTime RegistrationDate { get; set; } = DateTime.UtcNow;
 
         [Required]
-        [Display(Name = "Subscription Plan")]
-        public int SubscriptionPlanId { get; set; }
-
-        public List<SelectListItem> SubscriptionPlans { get; set; } = new List<SelectListItem>();
-
-        [Required]
         public Status Status { get; set; } = Status.Active;
 
         // Propriedades de Imagem
         public Guid ImageId { get; set; }
 
         [Display(Name = "Profile Picture")]
-        public IFormFile ProfilePictureFile { get; set; }
+        public IFormFile? ProfilePictureFile { get; set; }
 
         public string ProfilePictureUrl => ImageId == Guid.Empty
             ? "/images/noimage.png"
             : $"/uploads/clients-pics/{ImageId}.jpg";
     }
+
 }
