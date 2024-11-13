@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PulseFit.Management.Web.Data;
 using PulseFit.Management.Web.Data.Entities;
 using PulseFit.Management.Web.Data.Repositories;
@@ -236,11 +237,17 @@ namespace PulseFit.Management.Web.Controllers
                 string userId = await _userHelper.GetUserIdByEmailAsync(userLoged);
                 var workout = await _workoutRepository.GetByIdAsync(id.Value);
 
+                var existingBooking = await _bookingRepository.GetBookingByUserAndWorkoutAsync(userId, workout.Id);
+                if (existingBooking != null)
+                {
+                    ViewBag.ErrorMessage = "You have already booked this workout.";
+                    return RedirectToAction("Details", new { id = workout.Id });
+                }
 
                 var maximumCapacityReached = await _bookingRepository.WorkoutMaximumCapacityReachedAsync(workout.Id);
                 if (maximumCapacityReached)
                 {
-                    ModelState.AddModelError(string.Empty, "Workout Maximum Capacity Reached!");
+                    ViewBag.ErrorMessage = "Workout Maximum Capacity Reached!";
                     return RedirectToAction("Details", new { id = workout.Id });
                 }
 
@@ -257,14 +264,13 @@ namespace PulseFit.Management.Web.Controllers
                     };
 
                     await _bookingRepository.CreateBookingAsync(booking);
-
                     await _workoutRepository.IncrementBookingsAsync(workout.Id);
 
-                    TempData["SuccessMessage"] = "Booking Confirmed.";
+                    TempData["SuccessMessage"] = "Booking Confirmed!";
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError(string.Empty, ex.Message);
+                    TempData["ErrorMessage"] = ex.Message;
                 }
 
                 return RedirectToAction("MyBookings");

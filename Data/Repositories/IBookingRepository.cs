@@ -14,5 +14,6 @@ namespace PulseFit.Management.Web.Data.Repositories
 
         Task<bool> WorkoutMaximumCapacityReachedAsync(int workoutId);
 
+        Task<Booking> GetBookingByUserAndWorkoutAsync(string userId, int workoutId);
     }
 }

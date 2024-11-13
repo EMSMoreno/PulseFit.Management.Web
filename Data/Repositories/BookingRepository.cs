@@ -48,6 +48,13 @@ namespace PulseFit.Management.Web.Data.Repositories
             return workout.MaxCapacity - reservedSlots;
         }
 
+        public async Task<Booking> GetBookingByUserAndWorkoutAsync(string userId, int workoutId)
+        {
+            return await _context.Bookings
+                .FirstOrDefaultAsync(b => b.UserId == userId && b.WorkoutId == workoutId);
+        }
+
+
         public async Task<IEnumerable<Booking>> GetBookingsByUserAsync(string userId)
         {
             return await _context.Bookings

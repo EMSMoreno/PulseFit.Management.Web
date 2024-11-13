@@ -59,7 +59,7 @@
         </div>
 
         <div class="d-flex justify-content-end mt-3">
-            <a asp-action="CreateBooking" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Reserve</a>
+            <a asp-action="CreateBooking" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2" id="bookingButton">Reserve</a>
             <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Edit</a>
             <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger me-2">Delete</a>
             <a asp-action="Index" class="btn btn-secondary">Back to List</a>

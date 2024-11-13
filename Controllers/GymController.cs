@@ -51,9 +51,6 @@ namespace PulseFit.Management.Web.Controllers
         // GET: Gyms/Create
         public IActionResult Create()
         {
-            ViewBag.Status = new SelectList(Enum.GetValues(typeof(Gym.GymStatus)).Cast<Gym.GymStatus>());
-            ViewBag.DayOff = new SelectList(Enum.GetValues(typeof(Gym.GymDayOff)).Cast<Gym.GymDayOff>());
-
             return View();
         }
 
@@ -71,6 +68,8 @@ namespace PulseFit.Management.Web.Controllers
                     ? await _blobHelper.UploadBlobAsync(model.GymImageFile, "gyms-pics")
                     : Guid.Empty;
 
+                model.CreationDate = DateTime.Now.Date;
+
                 var gym = await _converterHelper.ToGym(model, imageId, isNew : true);
 
                 await _gymRepository.CreateAsync(gym);
@@ -78,8 +77,6 @@ namespace PulseFit.Management.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Status = new SelectList(Enum.GetValues(typeof(Gym.GymStatus)).Cast<Gym.GymStatus>());
-            ViewBag.DayOff = new SelectList(Enum.GetValues(typeof(Gym.GymDayOff)).Cast<Gym.GymDayOff>());
 
             return View(model);
         }
@@ -98,10 +95,9 @@ namespace PulseFit.Management.Web.Controllers
                 return NotFound();
             }
 
-            ViewBag.Status = new SelectList(Enum.GetValues(typeof(Gym.GymStatus)).Cast<Gym.GymStatus>());
-            ViewBag.DayOff = new SelectList(Enum.GetValues(typeof(Gym.GymDayOff)).Cast<Gym.GymDayOff>());
+            var model = _converterHelper.ToGymViewModel(gym);
 
-            return View(gym);
+            return View(model);
         }
 
         // POST: Gyms/Edit/5
@@ -109,18 +105,24 @@ namespace PulseFit.Management.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Gym gym)
+        public async Task<IActionResult> Edit(GymViewModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var imageId = model.GymImageFile != null
+                    ? await _blobHelper.UploadBlobAsync(model.GymImageFile, "gyms-pics")
+                    : Guid.Empty;
+
+                    var gym = await _converterHelper.ToGym(model, imageId, false);
+
                     await _gymRepository.UpdateAsync(gym);
 
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await _gymRepository.ExistAsync(gym.Id))
+                    if (!await _gymRepository.ExistAsync(model.Id))
                     {
                         return NotFound();
                     }
@@ -132,10 +134,8 @@ namespace PulseFit.Management.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Status = new SelectList(Enum.GetValues(typeof(Gym.GymStatus)).Cast<Gym.GymStatus>());
-            ViewBag.DayOff = new SelectList(Enum.GetValues(typeof(Gym.GymDayOff)).Cast<Gym.GymDayOff>());
-
-            return View(gym);
+            
+            return View(model);
         }
 
         // GET: Gyms/Delete/5

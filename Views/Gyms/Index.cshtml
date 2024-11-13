@@ -1,95 +1,76 @@
 ﻿@model IEnumerable<PulseFit.Management.Web.Data.Entities.Gym>
+@using Newtonsoft.Json
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Gyms List";
+
+    var formattedGyms = Model.Select(gym => new
+    {
+        gym.Id,
+        gym.Name,
+        gym.Location,
+        GymImageUrl = gym.GymImageUrl,
+        OpeningTime = gym.OpeningTime.ToString(@"hh\:mm"),
+        ClosingTime = gym.ClosingTime.ToString(@"hh\:mm"), 
+        gym.Status,
+        StatusText = gym.Status == 0 ? "Active" : "Inactive" 
+    });
+
+    var jsonSerializerSettings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                Formatting = Formatting.Indented
+            };
+
+    var serializedData = JsonConvert.SerializeObject(formattedGyms, jsonSerializerSettings);
 }
 
-<h1>Index</h1>
+<div>
+    <a asp-action="Create" class="btn btn-primary mb-3">Create New Gym</a>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Capacity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OpeningTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ClosingTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreationDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DayOff)
-            </th>
-            @* <th>
-                @Html.DisplayNameFor(model => model.GymImagePath)
-            </th> *@
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Capacity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OpeningTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClosingTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DayOff)
-            </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.GymImagePath)
-            </td> *@
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No gyms found.</div>
 }
-    </tbody>
-</table>
+else
+{
+    <div id="Grid"></div>
+}
+
+@section Scripts {
+    <script id="gymPictureTemplate" type="text/x-template">
+        <img src="${GymImageUrl}" alt="Gym Picture" style="width: 50px; height: 50px; border-radius: 50%;" />
+    </script>
+
+    <script id="actionTemplate" type="text/x-template">
+        <a href="/Gyms/Edit/${Id}" class="btn btn-warning me-2">Edit</a>
+        <a href="/Gyms/Delete/${Id}" class="btn btn-danger me-2">Delete</a>
+        <a href="/Gyms/Details/${Id}" class="btn btn-primary">Details</a>
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            var serializedData = @Html.Raw(serializedData);
+
+            var grid = new ej.grids.Grid({
+                dataSource: serializedData,
+                allowPaging: true,
+                allowSorting: true,
+                allowFiltering: true,
+                pageSettings: { pageSize: 10 },
+                toolbar: ['Search'],
+                columns: [
+                    { field: "GymImageUrl", headerText: "Gym", width: 100, template: "#gymPictureTemplate" },
+                    { field: "Name", headerText: "Name", width: 120 },
+                    { field: "Location", headerText: "Location", width: 120 },
+                    { field: "OpeningTime", headerText: "Opening Time", width: 100 },
+                    { field: "ClosingTime", headerText: "Closing Time", width: 100 },
+                    { field: "StatusText", headerText: "Status", width: 100 },
+                    { headerText: "Actions", width: 180, template: "#actionTemplate" }
+                ]
+            });
+            grid.appendTo("#Grid");
+        });
+    </script>
+}
