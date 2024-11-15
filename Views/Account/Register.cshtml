@@ -4,82 +4,97 @@
 }
 
 <div class="container my-5">
-    <h2 class="text-center mb-4">Register as a New Client</h2>
+    <h2 class="title-neon text-center mb-4">Register as a New Client</h2>
 
-    <form asp-action="Register" method="post" enctype="multipart/form-data" class="needs-validation p-4 border rounded shadow-lg bg-white" novalidate>
-
+    <form asp-action="Register" method="post" enctype="multipart/form-data" class="p-4 card-neon" novalidate>
         <!-- Validation Summary -->
-        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <div asp-validation-summary="ModelOnly" class="text-warning mb-3"></div>
 
         <div class="row">
             <!-- Personal Information -->
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label asp-for="FirstName" class="form-label">First Name</label>
-                    <input asp-for="FirstName" class="form-control" required>
-                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                    <label asp-for="FirstName" class="text-neon-pink">First Name</label>
+                    <input asp-for="FirstName" class="form-control input-neon" required>
+                    <span asp-validation-for="FirstName" class="text-warning"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="LastName" class="form-label">Last Name</label>
-                    <input asp-for="LastName" class="form-control" required>
-                    <span asp-validation-for="LastName" class="text-danger"></span>
+                    <label asp-for="LastName" class="text-neon-pink">Last Name</label>
+                    <input asp-for="LastName" class="form-control input-neon" required>
+                    <span asp-validation-for="LastName" class="text-warning"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Username" class="form-label">Email</label>
-                    <input asp-for="Username" type="email" class="form-control" required>
-                    <span asp-validation-for="Username" class="text-danger"></span>
+                    <label asp-for="Username" class="text-neon-pink">Email</label>
+                    <input asp-for="Username" type="email" class="form-control input-neon" required>
+                    <span asp-validation-for="Username" class="text-warning"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
-                    <input asp-for="PhoneNumber" type="tel" class="form-control">
-                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    <label asp-for="PhoneNumber" class="text-neon-pink">Phone Number</label>
+                    <input asp-for="PhoneNumber" type="tel" class="form-control input-neon" maxlength="9" required id="phoneField" pattern="^9[1236]\d{7}$">
+                    <small class="text-muted">Enter a 9-digit Portuguese number starting with 9, followed by 1, 2, 3, or 6.</small>
+                    <span asp-validation-for="PhoneNumber" class="text-warning"></span>
+                </div>
+
+                <!-- Password Field with Real-time Validation -->
+                <div class="mb-3 position-relative">
+                    <label asp-for="Password" class="text-neon-pink">Password</label>
+                    <input asp-for="Password" type="password" class="form-control input-neon" required id="passwordField">
+                    <span asp-validation-for="Password" class="text-warning"></span>
+
+                    <div class="password-requirements mt-2">
+                        <small class="d-block text-muted" id="lengthCheck">At least 8 characters</small>
+                        <small class="d-block text-muted" id="digitCheck">At least 1 digit</small>
+                        <small class="d-block text-muted" id="uppercaseCheck">At least 1 uppercase letter</small>
+                        <small class="d-block text-muted" id="lowercaseCheck">At least 1 lowercase letter</small>
+                        <small class="d-block text-muted" id="specialCheck">At least 1 special character</small>
+                    </div>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Password" class="form-label">Password</label>
-                    <input asp-for="Password" type="password" class="form-control" required>
-                    <span asp-validation-for="Password" class="text-danger"></span>
+                    <label asp-for="ConfirmPassword" class="text-neon-pink">Confirm Password</label>
+                    <input asp-for="ConfirmPassword" type="password" class="form-control input-neon" required>
+                    <span asp-validation-for="ConfirmPassword" class="text-warning"></span>
                 </div>
             </div>
 
             <!-- Additional Client Information -->
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label asp-for="Address" class="form-label">Address</label>
-                    <input asp-for="Address" class="form-control" required>
-                    <span asp-validation-for="Address" class="text-danger"></span>
+                    <label asp-for="Address" class="text-neon-pink">Address</label>
+                    <input asp-for="Address" class="form-control input-neon" required>
+                    <span asp-validation-for="Address" class="text-warning"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Birthdate" class="form-label">Birthdate</label>
-                    <input asp-for="Birthdate" type="date" class="form-control" required>
-                    <span asp-validation-for="Birthdate" class="text-danger"></span>
+                    <label asp-for="Birthdate" class="text-neon-pink">Birthdate</label>
+                    <input asp-for="Birthdate" type="date" class="form-control input-neon" required>
+                    <span asp-validation-for="Birthdate" class="text-warning"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Gender" class="form-label">Gender</label>
-                    <select asp-for="Gender" class="form-select" required>
+                    <label asp-for="Gender" class="text-neon-pink">Gender</label>
+                    <select asp-for="Gender" class="form-select input-neon" required>
                         <option value="">Select Gender</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                         <option value="Other">Other</option>
                     </select>
-                    <span asp-validation-for="Gender" class="text-danger"></span>
+                    <span asp-validation-for="Gender" class="text-warning"></span>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label asp-for="ProfilePicture" class="form-label">Profile Picture</label>
-                        <input asp-for="ProfilePicture" type="file" class="form-control" id="profilePictureUpload">
+                        <label asp-for="ProfilePicture" class="text-neon-pink">Profile Picture</label>
+                        <input asp-for="ProfilePicture" type="file" class="form-control input-neon" id="profilePictureUpload">
                         <small class="form-text text-muted">Maximum file size: 2 MB</small>
-                        <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+                        <span asp-validation-for="ProfilePicture" class="text-warning"></span>
                     </div>
                     <div class="col-md-6">
                         <label>Image Preview</label>
-                        <img id="imagePreview" src="#" alt="Image Preview" style="max-width: 150px; max-height: 150px; border-radius: 10px; display: none;" />
+                        <img id="imagePreview" src="#" alt="Image Preview" class="img-fluid rounded mt-2" style="display: none;" />
                     </div>
                 </div>
             </div>
@@ -88,13 +103,13 @@
         <!-- Terms and Conditions Checkbox -->
         <div class="form-check mb-4">
             <input class="form-check-input" type="checkbox" id="termsCheckbox" required>
-            <label class="form-check-label" for="termsCheckbox">
-                I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms of Service</a> and <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a>.
+            <label class="form-check-label text-neon-green" for="termsCheckbox">
+                I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal" class="neon-hover">Terms of Service</a> and <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal" class="neon-hover">Privacy Policy</a>.
             </label>
         </div>
 
         <!-- Submit Button -->
-        <button type="submit" id="registerButton" class="btn btn-primary btn-lg w-100 mt-4" disabled>Register</button>
+        <button type="submit" id="registerButton" class="btn btn-neon-blue btn-lg w-100 mt-4 neon-hover-shadow" disabled>Register</button>
     </form>
 </div>
 
@@ -187,6 +202,7 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
     <script>
         // Image Preview
         document.getElementById("profilePictureUpload").addEventListener("change", function (event) {
@@ -201,15 +217,46 @@
             }
         });
 
-        // Toggle Register Button based on Terms Checkbox
-        document.getElementById("termsCheckbox").addEventListener("change", function () {
-            document.getElementById("registerButton").disabled = !this.checked;
-        });
+        // Password Validation in Real-time
+        const passwordField = document.getElementById('passwordField');
+        const lengthCheck = document.getElementById('lengthCheck');
+        const digitCheck = document.getElementById('digitCheck');
+        const uppercaseCheck = document.getElementById('uppercaseCheck');
+        const lowercaseCheck = document.getElementById('lowercaseCheck');
+        const specialCheck = document.getElementById('specialCheck');
+        const registerButton = document.getElementById('registerButton');
+        const termsCheckbox = document.getElementById("termsCheckbox");
+
+        passwordField.addEventListener('input', validateForm);
+        termsCheckbox.addEventListener('change', validateForm);
+
+        function validateForm() {
+            const password = passwordField.value;
+            const lengthValid = password.length >= 8;
+            const digitValid = /\d/.test(password);
+            const uppercaseValid = /[A-Z]/.test(password);
+            const lowercaseValid = /[a-z]/.test(password);
+            const specialValid = /[^a-zA-Z0-9]/.test(password);
+
+            updateCheck(lengthCheck, lengthValid);
+            updateCheck(digitCheck, digitValid);
+            updateCheck(uppercaseCheck, uppercaseValid);
+            updateCheck(lowercaseCheck, lowercaseValid);
+            updateCheck(specialCheck, specialValid);
+
+            // Enable register button only if all validations and terms checkbox are met
+            registerButton.disabled = !(lengthValid && digitValid && uppercaseValid && lowercaseValid && specialValid && termsCheckbox.checked);
+        }
+
+        function updateCheck(element, isValid) {
+            element.classList.toggle('text-success-dark', isValid);
+            element.classList.toggle('text-muted', !isValid);
+        }
     </script>
 }
 
 <style>
-    .form-label {
-        font-weight: 600;
+    .text-success-dark {
+        color: #AAFF1F !important;
     }
 </style>

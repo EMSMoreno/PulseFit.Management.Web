@@ -4,104 +4,114 @@
     ViewData["Title"] = "Edit Client";
 }
 
-<h2>Edit Client</h2>
+<div class="container my-5">
+    <h2 class="title-neon text-center mb-4">Edit Client</h2>
 
-@if (!ViewData.ModelState.IsValid)
-{
-    <div class="alert alert-danger">
-        <ul>
-            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-            {
-                <li>@error.ErrorMessage</li>
-            }
-        </ul>
-    </div>
-}
+    <form id="editClientForm" asp-action="Edit" method="post" enctype="multipart/form-data" class="p-4 card-neon" novalidate>
+        <!-- Validation Summary -->
+        <div asp-validation-summary="ModelOnly" class="text-warning mb-3"></div>
 
-<form id="editClientForm" asp-action="Edit" method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Id" />
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label asp-for="FirstName" class="form-label">First Name <span class="text-danger">*</span></label>
-            <input asp-for="FirstName" class="form-control" required />
-            <span asp-validation-for="FirstName" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label asp-for="LastName" class="form-label">Last Name <span class="text-danger">*</span></label>
-            <input asp-for="LastName" class="form-control" required />
-            <span asp-validation-for="LastName" class="text-danger"></span>
-        </div>
-    </div>
+        <div class="row">
+            <!-- First Name -->
+            <div class="col-md-6 mb-3">
+                <label asp-for="FirstName" class="text-neon-pink">First Name</label>
+                <input asp-for="FirstName" class="form-control input-neon" required />
+                <span asp-validation-for="FirstName" class="text-warning"></span>
+            </div>
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label asp-for="Email" class="form-label">Email <span class="text-danger">*</span></label>
-            <input asp-for="Email" class="form-control" readonly />
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
-            <input asp-for="PhoneNumber" class="form-control" />
-            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label asp-for="Birthdate" class="form-label">Birth Date <span class="text-danger">*</span></label>
-            <input asp-for="Birthdate" type="date" class="form-control" required />
-            <span asp-validation-for="Birthdate" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label asp-for="Gender" class="form-label">Gender <span class="text-danger">*</span></label>
-            <select asp-for="Gender" class="form-select" required>
-                @foreach (var gender in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.Gender)))
-                {
-                    <option value="@gender">@gender</option>
-                }
-            </select>
-            <span asp-validation-for="Gender" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Address" class="form-label">Address <span class="text-danger">*</span></label>
-        <input asp-for="Address" class="form-control" required maxlength="100" />
-        <span asp-validation-for="Address" class="text-danger"></span>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label asp-for="Status" class="form-label">Status <span class="text-danger">*</span></label>
-            <select asp-for="Status" class="form-select">
-                <option value="">Select Status</option>
-                @foreach (var status in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.Status)))
-                {
-                    <option value="@status">@status</option>
-                }
-            </select>
-            <span asp-validation-for="Status" class="text-danger"></span>
+            <!-- Last Name -->
+            <div class="col-md-6 mb-3">
+                <label asp-for="LastName" class="text-neon-pink">Last Name</label>
+                <input asp-for="LastName" class="form-control input-neon" required />
+                <span asp-validation-for="LastName" class="text-warning"></span>
+            </div>
         </div>
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label asp-for="ProfilePictureFile" class="form-label">Profile Picture</label>
-            <input asp-for="ProfilePictureFile" type="file" class="form-control" id="clientPictureUpload" />
-            <small class="form-text text-muted">Maximum file size: 2 MB</small>
-            <span asp-validation-for="ProfilePictureFile" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label>Image Preview</label>
-            <img id="imagePreview" src="@Model.ProfilePictureUrl" alt="Image Preview" style="max-width: 150px; max-height: 150px; border-radius: 10px;" />
-        </div>
-    </div>
+        <div class="row">
+            <!-- Email -->
+            <div class="col-md-6 mb-3">
+                <label asp-for="Email" class="text-neon-pink">Email</label>
+                <input asp-for="Email" type="email" class="form-control input-neon" readonly />
+                <span asp-validation-for="Email" class="text-warning"></span>
+            </div>
 
-    <div class="d-flex justify-content-between">
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-    </div>
-</form>
+            <!-- Phone Number -->
+            <div class="col-md-6 mb-3">
+                <label asp-for="PhoneNumber" class="text-neon-pink">Phone Number</label>
+                <input asp-for="PhoneNumber" type="tel" class="form-control input-neon" maxlength="9" required id="phoneField" pattern="^9[1236]\d{7}$" />
+                <small class="text-muted">Enter a 9-digit Portuguese number starting with 9, followed by 1, 2, 3, or 6.</small>
+                <span asp-validation-for="PhoneNumber" class="text-warning"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Birthdate -->
+            <div class="col-md-6 mb-3">
+                <label asp-for="Birthdate" class="text-neon-pink">Birth Date</label>
+                <input asp-for="Birthdate" type="date" class="form-control input-neon" required />
+                <span asp-validation-for="Birthdate" class="text-warning"></span>
+            </div>
+
+            <!-- Gender -->
+            <div class="col-md-6 mb-3">
+                <label asp-for="Gender" class="text-neon-pink">Gender</label>
+                <select asp-for="Gender" class="form-select input-neon" required>
+                    <option value="">Select Gender</option>
+                    @foreach (var gender in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.Gender)))
+                    {
+                        <option value="@gender">@gender</option>
+                    }
+                </select>
+                <span asp-validation-for="Gender" class="text-warning"></span>
+            </div>
+        </div>
+
+        <!-- Address -->
+        <div class="mb-3">
+            <label asp-for="Address" class="text-neon-pink">Address</label>
+            <input asp-for="Address" class="form-control input-neon" required maxlength="100" />
+            <span asp-validation-for="Address" class="text-warning"></span>
+        </div>
+
+        <div class="row">
+            <!-- Status -->
+            <div class="col-md-6 mb-3">
+                <label asp-for="Status" class="text-neon-pink">Status</label>
+                <select asp-for="Status" class="form-select input-neon" required>
+                    @foreach (var status in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.Status)))
+                    {
+                        <option value="@status">@status</option>
+                    }
+                </select>
+                <span asp-validation-for="Status" class="text-warning"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Profile Picture -->
+            <div class="col-md-6 mb-3">
+                <label asp-for="ProfilePictureFile" class="text-neon-pink">Profile Picture</label>
+                <input asp-for="ProfilePictureFile" type="file" class="form-control input-neon" id="clientPictureUpload" />
+                <small class="form-text text-muted">Maximum file size: 2 MB</small>
+                <span asp-validation-for="ProfilePictureFile" class="text-warning"></span>
+            </div>
+
+            <!-- Image Preview -->
+            <div class="col-md-6 mb-3">
+                <label class="text-neon-pink">Image Preview</label>
+                <img id="imagePreview" src="@Model.ProfilePictureUrl" alt="Image Preview" style="max-width: 150px; max-height: 150px; border-radius: 10px;" />
+            </div>
+        </div>
+
+        <!-- Submit and Cancel Buttons -->
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-neon-blue neon-hover-shadow">Save Changes</button>
+            <a asp-action="Index" class="btn btn-neon-secondary neon-hover-shadow">Cancel</a>
+        </div>
+    </form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

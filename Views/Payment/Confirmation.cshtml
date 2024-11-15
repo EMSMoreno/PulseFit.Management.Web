@@ -5,13 +5,13 @@
 }
 
 <div class="container my-5">
-    <div class="card shadow-lg p-5 text-center rounded-4">
+    <div class="card-neon shadow-lg p-5 text-center rounded-4">
         <div class="icon-check">
-            <i class="bi bi-check-circle-fill text-success"></i>
+            <i class="bi bi-check-circle-fill text-neon-green"></i>
         </div>
 
-        <h2 class="text-success mb-3 fw-bold">Payment Successful!</h2>
-        <p class="lead">Thank you for your payment. Your subscription is now active.</p>
+        <h2 class="text-neon-blue mb-3 fw-bold">Payment Successful!</h2>
+        <p class="lead text-light">Thank you for your payment. Your subscription is now active.</p>
 
         <div class="confirmation-details mt-4">
             <div class="row justify-content-center">
@@ -22,15 +22,15 @@
                     </div>
                     <div class="detail-item">
                         <span class="label">Payment Date:</span>
-                        <span class="value">@Model.PaymentDate.ToString("f")</span> <!-- Data e hora completas -->
+                        <span class="value">@Model.PaymentDate.ToString("f")</span>
                     </div>
                     <div class="detail-item">
                         <span class="label">Subscription:</span>
-                        <span class="value">@Model.SubscriptionName</span> <!-- Nome da subscrição -->
+                        <span class="value">@Model.SubscriptionName</span>
                     </div>
                     <div class="detail-item">
                         <span class="label">Amount Paid:</span>
-                        <span class="value">@Model.Amount.ToString("C2")</span> <!-- Valor pago -->
+                        <span class="value">@Model.Amount.ToString("C2")</span>
                     </div>
                     <div class="detail-item">
                         <span class="label">Expiration Date:</span>
@@ -38,26 +38,31 @@
                     </div>
                     <div class="detail-item">
                         <span class="label">Status:</span>
-                        <span class="badge bg-success">@Model.Status</span>
+                        <span class="badge-neon">@Model.Status</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <p class="mt-4">You will receive an email with the subscription details shortly.</p>
+        <p class="mt-4 text-light">You will receive an email with the subscription details shortly.</p>
         <div class="mt-4">
             @if (User.IsInRole("Client"))
             {
-                <a href="@Url.Action("ClientSubscriptions", "UserSubscription")" class="btn btn-outline-primary btn-lg me-2">View My Subscriptions</a>
+                <a href="@Url.Action("ClientSubscriptions", "UserSubscription")" class="btn btn-neon-blue neon-hover-shadow me-2">View My Subscriptions</a>
             }
-            <button onclick="window.print()" class="btn btn-secondary btn-lg">Print Receipt</button>
+            <button onclick="window.print()" class="btn btn-neon-pink neon-hover-shadow">Print Receipt</button>
         </div>
     </div>
 </div>
 
 <style>
-    /* Container and card styling */
-    .card {
+    /* Card Neon */
+    .card-neon {
+        background-color: var(--dark-bg);
+        color: var(--light-text);
+        border-radius: 10px;
+        border: 1px solid var(--neon-pink);
+        box-shadow: 0 6px 20px rgba(233, 53, 113, 0.5);
         max-width: 700px;
         margin: 0 auto;
         padding: 2rem;
@@ -66,17 +71,14 @@
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     }
 
-    /* Icon styling */
+    /* Icon Check Styling */
     .icon-check {
         font-size: 3rem;
         margin-bottom: 1rem;
     }
 
-    /* Text and typography */
-    h2 {
-        font-size: 2.2rem;
-        font-weight: 700;
-        color: #28a745;
+    .bi-check-circle-fill {
+        animation: pulse 1.5s infinite;
     }
 
     .lead {
@@ -85,20 +87,20 @@
         margin-bottom: 1.5rem;
     }
 
-    /* Details section styling */
+    /* Details Section */
     .confirmation-details {
-        background: #ffffff;
+        background: var(--light-bg);
         padding: 1.5rem;
         border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .detail-item {
         display: flex;
         justify-content: space-between;
         padding: 0.8rem 1rem;
-        border-bottom: 1px solid #e9ecef;
-        font-size: 1.05rem;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 1.1rem;
     }
 
         .detail-item:last-child {
@@ -107,31 +109,55 @@
 
     .label {
         font-weight: 600;
-        color: #555;
+        color: var(--neon-blue);
     }
 
     .value {
         font-weight: 500;
-        color: #333;
+        color: var(--neon-pink);
     }
 
-    /* Badge styling for status */
-    .badge {
+    /* Badge Neon */
+    .badge-neon {
+        background-color: var(--neon-green);
+        color: #000;
         font-size: 1rem;
         padding: 0.4em 0.8em;
-        font-weight: 500;
+        font-weight: 600;
+        border-radius: 5px;
     }
 
-    /* Button styling */
-    .btn-outline-primary {
+    /* Typography */
+    .text-neon-blue {
+        color: var(--neon-blue);
+    }
+
+    .text-light {
+        color: var(--light-text);
+    }
+
+    /* Buttons */
+    .btn-neon-blue {
+        background-color: var(--neon-blue);
+        color: var(--btn-text-blue);
+        border: 1px solid var(--neon-blue);
         font-weight: 600;
         font-size: 1.1rem;
         padding: 0.6rem 1.5rem;
     }
 
-    .btn-secondary {
+    .btn-neon-pink {
+        background-color: var(--neon-pink);
+        color: var(--btn-text-pink);
+        border: 1px solid var(--neon-pink);
         font-weight: 600;
         font-size: 1.1rem;
         padding: 0.6rem 1.5rem;
+    }
+
+    .neon-hover-shadow:hover {
+        box-shadow: 0 0 15px rgba(233, 53, 113, 0.8);
+        transform: scale(1.05);
+        transition: 0.3s ease;
     }
 </style>

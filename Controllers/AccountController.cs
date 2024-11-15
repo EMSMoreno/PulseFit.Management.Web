@@ -106,6 +106,12 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (model.ProfilePicture != null && model.ProfilePicture.Length > 2 * 1024 * 1024) 
+                {
+                    ModelState.AddModelError("ProfilePicture", "The file size should not exceed 2 MB.");
+                    return View(model);
+                }
+
                 var existingUser = await _userHelper.GetUserByEmailAsync(model.Username);
                 if (existingUser != null)
                 {

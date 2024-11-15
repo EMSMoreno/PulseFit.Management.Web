@@ -5,11 +5,11 @@
 }
 
 <div class="container my-5">
-    <h2 class="text-center mb-4">Choose Your Payment Method</h2>
+    <h2 class="title-neon text-center mb-4">Choose Your Payment Method</h2>
 
-    <div class="card shadow-lg p-4">
-        <h4 class="mb-3">@Model.SubscriptionName</h4>
-        <p><strong>Amount:</strong> @Model.Amount.ToString("C2")</p>
+    <div class="card-neon shadow-lg p-4">
+        <h4 class="text-gray mb-3">@Model.SubscriptionName</h4>
+        <p class="text-gray"><strong>Amount:</strong> @Model.Amount.ToString("C2")</p>
 
         <form asp-action="ProcessPayment" method="post" class="needs-validation" novalidate>
             <input type="hidden" asp-for="SubscriptionId" />
@@ -26,7 +26,7 @@
                             <div class="payment-card" style="background-color: @style.Color;">
                                 <div class="card-body d-flex flex-column align-items-center justify-content-center">
                                     <img src="~/images/payment-methods/@style.Icon" alt="@method.Text Logo" class="payment-icon" />
-                                    <h5 class="card-title mt-3">@method.Text</h5>
+                                    <h5 class="card-title mt-3 text-neon">@method.Text</h5>
                                 </div>
                             </div>
                         </label>
@@ -34,7 +34,7 @@
                 }
             </div>
 
-            <button type="submit" class="btn btn-primary w-100 btn-lg mt-4">Proceed with Payment</button>
+            <button type="submit" class="btn-neon-pink w-100 btn-lg mt-4">Proceed with Payment</button>
         </form>
     </div>
 </div>
@@ -62,13 +62,14 @@
     .payment-card-label {
         display: block;
         cursor: pointer;
-        transition: transform 0.3s, background-color 0.3s;
+        transition: transform 0.3s, box-shadow 0.3s;
         border-radius: 15px;
     }
 
     .payment-card {
         width: 100%;
         height: 200px;
+        border: 2px solid var(--border-color);
         border-radius: 15px;
         transition: transform 0.3s;
         display: flex;
@@ -81,25 +82,38 @@
         max-width: 60%;
         max-height: 60%;
         margin-top: 10px;
+        filter: drop-shadow(0px 0px 5px var(--neon-blue));
     }
 
     /* Estilo para o card selecionado */
     .payment-card-label.selected .payment-card {
-        background-color: #4CAF50 !important; 
-        color: white;
-        transform: scale(1.05);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        border-color: var(--neon-green);
+        transform: scale(1.1);
+        box-shadow: 0 10px 20px var(--neon-green);
     }
 
     /* Efeito de hover nos cards */
     .payment-card:hover {
-        transform: scale(1.02);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 255, 255, 0.2);
     }
 
-    .btn-primary {
-        font-weight: bold;
-        font-size: 1.1rem;
-        padding: 0.8rem;
+    .text-neon {
+        color: var(--neon-blue);
+        font-family: 'Raleway', sans-serif;
+        text-transform: uppercase;
     }
+
+    .btn-neon-pink {
+        background-color: var(--neon-pink);
+        border-color: var(--neon-pink);
+        color: var(--btn-text-pink);
+        text-transform: uppercase;
+    }
+
+        .btn-neon-pink:hover {
+            background-color: var(--dark-bg);
+            color: var(--neon-pink);
+            box-shadow: 0px 0px 10px var(--neon-pink);
+        }
 </style>

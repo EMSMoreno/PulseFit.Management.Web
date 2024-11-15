@@ -9,7 +9,7 @@ html {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.05rem white, 0 0 0 0.15rem #258cfb; 
 }
 
 html {
@@ -258,5 +258,234 @@ a.more-link {
 
     100% {
         transform: rotate(360deg);
+    }
+}
+
+/* Custom Styles (CSS) */
+
+/* Neon Theme Variables */
+:root {
+    --neon-pink: #E93571;
+    --neon-blue: #8DFAFF;
+    --neon-green: #AAFF1F;
+    --neon-purple: #E200FE;
+    --neon-yellow: #EDE313;
+    --dark-bg: #1c1c1c;
+    --light-bg: #2b2b2b; /* Background color for cards */
+    --light-text: #ECECEC;
+    --border-color: #333;
+    /* Button Text Colors */
+    --btn-text-pink: #FFFFFF;
+    --btn-text-blue: #000000; /* Ajuste para legibilidade */
+    --btn-text-green: #000000; /* Ajuste para legibilidade */
+    --btn-text-purple: #FFFFFF;
+}
+
+/* Base Styles */
+html {
+    font-size: 1px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+body {
+    background-color: var(--dark-bg); /* Dark gray background */
+    color: var(--light-text);
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    margin-bottom: 60px;
+}
+
+/* Typography */
+.text-gray {
+    color: var(--light-text);
+}
+
+h1, h2, h3, .title-neon {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+    color: var(--neon-blue);
+    text-align: center;
+}
+
+h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    color: var(--neon-pink);
+}
+
+
+/* Button Styles */
+.btn-neon-pink {
+    background-color: var(--neon-pink);
+    color: var(--btn-text-pink);
+    border: 1px solid var(--neon-pink);
+    border-radius: 6px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.btn-neon-blue {
+    background-color: var(--neon-blue);
+    color: var(--btn-text-blue); /* Usa a variável para cor do texto */
+    border: 1px solid var(--neon-blue);
+    border-radius: 6px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.btn-neon-green {
+    background-color: var(--neon-green);
+    color: var(--btn-text-green); /* Usa a variável para cor do texto */
+    border: 1px solid var(--neon-green);
+    border-radius: 6px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.btn-neon-secondary {
+    background-color: var(--neon-purple);
+    color: var(--btn-text-purple);
+    border: 1px solid var(--neon-purple);
+    border-radius: 6px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+/* Button Hover Effects */
+.btn-neon-pink:hover {
+    background-color: var(--dark-bg);
+    color: var(--neon-pink);
+    box-shadow: 0px 0px 10px rgba(233, 53, 113, 0.5);
+}
+
+.btn-neon-blue:hover {
+    background-color: var(--dark-bg);
+    color: var(--neon-blue);
+    box-shadow: 0px 0px 10px rgba(141, 250, 255, 0.5);
+}
+
+.btn-neon-green:hover {
+    background-color: var(--dark-bg);
+    color: var(--neon-green);
+    box-shadow: 0px 0px 10px rgba(170, 255, 31, 0.5);
+}
+
+.btn-neon-secondary:hover {
+    background-color: var(--dark-bg);
+    color: var(--neon-purple);
+    box-shadow: 0px 0px 10px rgba(226, 0, 254, 0.5);
+}
+
+
+/* Input Fields and Form Borders */
+.input-neon {
+    background-color: #333; /* More subdued dark background for focus */
+    border: 1px solid var(--border-color);
+    color: var(--light-text);
+    padding: 10px;
+    border-radius: 4px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .input-neon:focus {
+        outline: none;
+        background-color: #444; /* Slightly brighter for focus */
+        border-color: var(--neon-blue);
+        color: var(--light-text); /* Ensures text contrast on focus */
+        box-shadow: 0px 0px 5px rgba(141, 250, 255, 0.1);
+    }
+
+/* Link Hover Effect */
+a.neon-hover {
+    color: var(--neon-pink);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+    a.neon-hover:hover {
+        color: var(--neon-blue);
+        text-decoration: underline;
+    }
+
+/* Alert Styles */
+.alert-neon {
+    background-color: var(--neon-purple);
+    color: #FFFFFF;
+    border: 1px solid var(--neon-purple);
+    border-radius: 4px;
+    padding: 15px;
+    font-weight: bold;
+}
+
+/* Title Styles */
+.title-neon {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--neon-blue);
+}
+
+/* Card Styles */
+.card-neon {
+    background-color: var(--light-bg); /* Differentiated background for cards */
+    color: var(--light-text);
+    border: 1px solid var(--neon-pink);
+    padding: 20px;
+    border-radius: 10px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .card-neon:hover {
+        border-color: var(--neon-blue);
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+/* Base font settings */
+body {
+    background-color: #1c1c1c;
+    color: #0a0000;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.1rem;
+}
+
+/* Font styling for headers */
+h1, h2, h3, .title-neon {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+    color: #8DFAFF;
+}
+
+h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    color: #E93571;
+}
+
+/* Font styling for buttons and inputs */
+.btn {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+
+.input-neon, .btn-neon {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+}
+
+/* Payment Confirmation */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        color: var(--neon-green);
+    }
+
+    50% {
+        transform: scale(1.2);
+        color: var(--neon-blue);
+    }
+
+    100% {
+        transform: scale(1);
+        color: var(--neon-green);
     }
 }

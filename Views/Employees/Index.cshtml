@@ -11,39 +11,41 @@
     var serializedData = JsonConvert.SerializeObject(Model, jsonSerializerSettings);
 }
 
-<h2>Employee List</h2>
+<div class="container my-5">
+    <h2 class="title-neon mb-4">Employee List</h2>
 
-<div>
-    <a asp-action="Create" class="btn btn-primary mb-3">Create New Employee</a>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a asp-action="Create" class="btn btn-neon-pink neon-hover-shadow">Create New Employee</a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert-neon text-center">No employees found.</div>
+    }
+    else
+    {
+        <div id="Grid"></div>
+    }
 </div>
-
-@if (!Model.Any())
-{
-    <div class="alert alert-info">No employees found.</div>
-}
-else
-{
-    <div id="Grid"></div>
-}
 
 @section Scripts {
     <script id="profilePictureTemplate" type="text/x-template">
-        <img src="${ProfilePictureUrl}" alt="Profile Picture" style="width: 50px; height: 50px; border-radius: 50%;" />
+        <img src="${ProfilePictureUrl}" alt="Profile Picture" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--neon-blue);" />
     </script>
 
     <script id="actionTemplate" type="text/x-template">
-        <a href="/Employees/Edit/${Id}" class="btn btn-warning me-2">Edit</a>
-        <a href="/Employees/Delete/${Id}" class="btn btn-danger me-2">Delete</a>
-        <a href="/Employees/Details/${Id}" class="btn btn-primary">Details</a>
+        <a href="/Employees/Edit/${Id}" class="btn btn-neon-blue neon-hover-shadow me-2">Edit</a>
+        <a href="/Employees/Delete/${Id}" class="btn btn-neon-pink neon-hover-shadow me-2">Delete</a>
+        <a href="/Employees/Details/${Id}" class="btn btn-neon-green neon-hover-shadow">Details</a>
     </script>
 
     <script>
         $(document).ready(function () {
             var serializedData = @Html.Raw(serializedData);
 
-            // Mapeamento de Status, EmployeeType e ShiftType
+            // Mapping Status, EmployeeType, and ShiftType
             serializedData.forEach(function (employee) {
-                // Mapeia Status
+                // Map Status
                 switch (employee.Status) {
                     case 0:
                         employee.StatusText = "Pending";
@@ -56,7 +58,7 @@ else
                         break;
                 }
 
-                // Mapeia EmployeeType
+                // Map EmployeeType
                 switch (employee.EmployeeType) {
                     case 0:
                         employee.EmployeeTypeText = "Secretary";
@@ -75,7 +77,7 @@ else
                         break;
                 }
 
-                // Mapeia ShiftType
+                // Map ShiftType
                 switch (employee.Shift) {
                     case 0:
                         employee.ShiftText = "Morning";
@@ -98,7 +100,7 @@ else
                 }
             });
 
-            // Configuração do Grid
+            // Grid Configuration
             var grid = new ej.grids.Grid({
                 dataSource: serializedData,
                 allowPaging: true,
@@ -107,14 +109,19 @@ else
                 pageSettings: { pageSize: 10 },
                 toolbar: ['Search'],
                 columns: [
-                    { field: "ProfilePictureUrl", headerText: "Profile Picture", width: 100, template: "#profilePictureTemplate" },
-                    { field: "FirstName", headerText: "First Name", width: 120 },
-                    { field: "LastName", headerText: "Last Name", width: 120 },
-                    { field: "EmployeeTypeText", headerText: "Employee Type", width: 150 },
-                    { field: "ShiftText", headerText: "Shift Type", width: 120 },
-                    { field: "StatusText", headerText: "Status", width: 100 },
-                    { headerText: "Actions", width: 180, template: "#actionTemplate" }
-                ]
+                    { field: "ProfilePictureUrl", headerText: "Profile Picture", width: 120, template: "#profilePictureTemplate" },
+                    { field: "FirstName", headerText: "First Name", width: 140 },
+                    { field: "LastName", headerText: "Last Name", width: 140 },
+                    { field: "EmployeeTypeText", headerText: "Employee Type", width: 180 },
+                    { field: "ShiftText", headerText: "Shift Type", width: 140 },
+                    { field: "StatusText", headerText: "Status", width: 120 },
+                    { headerText: "Actions", width: 220, template: "#actionTemplate" }
+                ],
+                rowHeight: 60, // Aumenta a altura das linhas
+                gridLines: 'Horizontal',
+                queryCellInfo: function (args) {
+                    args.cell.style.fontSize = "1.1rem"; // Ajusta o tamanho da fonte
+                }
             });
             grid.appendTo("#Grid");
         });

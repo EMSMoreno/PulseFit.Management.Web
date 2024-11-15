@@ -4,130 +4,138 @@
     ViewData["Title"] = "Edit Personal Trainer";
 }
 
-<h2>Edit Personal Trainer</h2>
+<div class="container my-5">
+    <h2 class="title-neon text-center mb-4">Edit Personal Trainer</h2>
 
-@if (!ViewData.ModelState.IsValid)
-{
-    <div class="alert alert-danger">
-        <ul>
-            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-            {
-                <li>@error.ErrorMessage</li>
-            }
-        </ul>
-    </div>
-}
+    <form id="editPersonalTrainerForm" asp-action="Edit" method="post" enctype="multipart/form-data" class="p-4 card-neon" novalidate>
+        <!-- Validation Summary -->
+        <div asp-validation-summary="ModelOnly" class="text-warning mb-3"></div>
 
-<form id="editPersonalTrainerForm" asp-action="Edit" method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Id" />
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label asp-for="FirstName" class="form-label">First Name <span class="text-danger">*</span></label>
-            <input asp-for="FirstName" class="form-control" required />
-            <span asp-validation-for="FirstName" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label asp-for="LastName" class="form-label">Last Name <span class="text-danger">*</span></label>
-            <input asp-for="LastName" class="form-control" required />
-            <span asp-validation-for="LastName" class="text-danger"></span>
-        </div>
-    </div>
+        <div class="row">
+            <!-- Personal Information -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="FirstName" class="text-neon-pink">First Name</label>
+                    <input asp-for="FirstName" class="form-control input-neon" required />
+                    <span asp-validation-for="FirstName" class="text-warning"></span>
+                </div>
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label asp-for="Email" class="form-label">Email <span class="text-danger">*</span></label>
-            <input asp-for="Email" class="form-control" readonly />
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
-            <input asp-for="PhoneNumber" class="form-control" />
-            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label asp-for="Certification" class="form-label">Certification</label>
-            <select asp-for="Certification" class="form-select">
-                <option value="">Select Certification</option>
-                @foreach (var cert in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.CertificationType)))
-                {
-                    <option value="@cert">@cert</option>
-                }
-            </select>
-            <span asp-validation-for="Certification" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label asp-for="HireDate" class="form-label">Hire Date</label>
-            <input asp-for="HireDate" type="date" class="form-control" />
-            <span asp-validation-for="HireDate" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label asp-for="Status" class="form-label">Status <span class="text-danger">*</span></label>
-            <select asp-for="Status" class="form-select">
-                <option value="">Select Status</option>
-                @foreach (var status in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.Status)))
-                {
-                    <option value="@status">@status</option>
-                }
-            </select>
-            <span asp-validation-for="Status" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label asp-for="ProfilePictureFile" class="form-label">Profile Picture</label>
-            <input asp-for="ProfilePictureFile" type="file" class="form-control" id="newImageFile" />
-            <small class="form-text text-muted">Maximum file size: 2 MB</small>
-            <span asp-validation-for="ProfilePictureFile" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label>Image Preview</label>
-            <img id="currentImage" src="@Model.ProfilePictureUrl" alt="Current Profile Picture" class="rounded-circle shadow-sm" style="width: 150px; height: 150px;" />
-            <img id="newImagePreview" class="rounded-circle shadow-sm" style="width: 150px; height: 150px; display: none;" alt="New Image Preview" />
-        </div>
-    </div>
-
-    <!-- Seleção de Especialidades -->
-    <h4>Select Specialties</h4>
-    <div class="row mb-1">
-        @foreach (var specialty in Model.Specialties)
-        {
-            var isSelected = Model.SpecialtyIds.Contains(int.Parse(specialty.Value));
-            <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-1">
-                <div class="card specialty-card p-1 @(isSelected ? "selected-card" : "")" style="cursor: pointer; min-height: 180px;">
-                    <div class="card-img-wrapper d-flex align-items-center justify-content-center" style="height: 120px;">
-                        <img src="@specialty.ImageUrl" class="card-img-top" alt="@specialty.Text" style="max-height: 100%; width: auto; object-fit: contain; margin: 0 auto;">
-                    </div>
-                    <div class="card-body p-1 text-center">
-                        <small class="card-title d-block text-truncate" style="margin-top: auto;">@specialty.Text</small>
-                        <input type="checkbox" name="SpecialtyIds" value="@specialty.Value" class="form-check-input mt-1" id="specialty-@specialty.Value" @(isSelected ? "checked" : "") style="display: none;" />
-                    </div>
+                <div class="mb-3">
+                    <label asp-for="LastName" class="text-neon-pink">Last Name</label>
+                    <input asp-for="LastName" class="form-control input-neon" required />
+                    <span asp-validation-for="LastName" class="text-warning"></span>
                 </div>
             </div>
-        }
-    </div>
 
-    <div class="d-flex justify-content-between mt-3">
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-    </div>
-</form>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Email" class="text-neon-pink">Email</label>
+                    <input asp-for="Email" type="email" class="form-control input-neon" readonly />
+                    <span asp-validation-for="Email" class="text-warning"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PhoneNumber" class="text-neon-pink">Phone Number</label>
+                    <input asp-for="PhoneNumber" type="tel" class="form-control input-neon" maxlength="9" id="phoneField" pattern="^9[1236]\d{7}$" />
+                    <small class="text-muted">Enter a 9-digit Portuguese number starting with 9, followed by 1, 2, 3, or 6.</small>
+                    <span asp-validation-for="PhoneNumber" class="text-warning"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Certification and Hire Date -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Certification" class="text-neon-blue">Certification</label>
+                    <select asp-for="Certification" class="form-select input-neon">
+                        <option value="">Select Certification</option>
+                        @foreach (var cert in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.CertificationType)))
+                        {
+                            <option value="@cert">@cert</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Certification" class="text-warning"></span>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="HireDate" class="text-neon-blue">Hire Date</label>
+                    <input asp-for="HireDate" type="date" class="form-control input-neon" />
+                    <span asp-validation-for="HireDate" class="text-warning"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Status and Profile Picture -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Status" class="text-neon-blue">Status</label>
+                    <select asp-for="Status" class="form-select input-neon" required>
+                        <option value="">Select Status</option>
+                        @foreach (var status in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.Status)))
+                        {
+                            <option value="@status">@status</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Status" class="text-warning"></span>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="ProfilePictureFile" class="text-neon-pink">Profile Picture</label>
+                <input asp-for="ProfilePictureFile" type="file" class="form-control input-neon" id="trainerPictureUpload" />
+                <small class="form-text text-muted">Maximum file size: 2 MB</small>
+                <span asp-validation-for="ProfilePictureFile" class="text-warning"></span>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <label class="text-neon-pink">Current Image</label>
+            <img id="imagePreview" src="@Model.ProfilePictureUrl" alt="Image Preview" class="img-fluid rounded-circle mt-2" style="max-width: 150px; max-height: 150px;" />
+        </div>
+
+        <!-- Specialties -->
+        <h4 class="text-neon-pink mt-4">Edit Specialties</h4>
+        <div class="row mb-4">
+            @foreach (var specialty in Model.Specialties)
+            {
+                var isSelected = Model.SpecialtyIds.Contains(int.Parse(specialty.Value));
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-2">
+                    <div class="card-neon specialization-card text-center p-2 @(isSelected ? "selected-card" : "")" style="cursor: pointer;">
+                        <div class="card-img-wrapper d-flex align-items-center justify-content-center mb-2" style="height: 120px;">
+                            <img src="@specialty.ImageUrl" alt="@specialty.Text" class="img-fluid" style="max-height: 100%; object-fit: contain;" />
+                        </div>
+                        <small class="text-truncate">@specialty.Text</small>
+                        <input type="checkbox" name="SpecialtyIds" value="@specialty.Value" class="form-check-input mt-2" id="specialty-@specialty.Value" @(isSelected ? "checked" : "") style="display: none;" />
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Submit Buttons -->
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-neon-blue neon-hover-shadow">Save Changes</button>
+            <a asp-action="Index" class="btn btn-neon-secondary neon-hover-shadow">Cancel</a>
+        </div>
+    </form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script src="~/js/formHelpers.js"></script>
 
     <script>
-        setupNewImagePreview("newImageFile", "newImagePreview", "currentImage");
+        setupImageUploadPreview("trainerPictureUpload", "imagePreview");
         setupSweetAlertOnSubmit("editPersonalTrainerForm", "Personal Trainer updated successfully.", "Please correct the errors in the form.");
 
-        // Configuração da seleção visual dos cards
+        // Specialties card selection
         $(document).ready(function () {
-            $(".specialty-card").on("click", function () {
+            $(".specialization-card").on("click", function () {
                 var checkbox = $(this).find("input[type='checkbox']");
                 checkbox.prop("checked", !checkbox.prop("checked"));
                 $(this).toggleClass("selected-card");
@@ -137,41 +145,15 @@
 }
 
 <style>
-    .specialty-card {
+    .specialization-card {
         transition: border 0.3s, box-shadow 0.3s;
         border-radius: 5px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        margin: 2px;
+        background-color: var(--light-bg);
+        border: 1px solid var(--neon-blue);
     }
 
-    .selected-card {
-        border: 2px solid #007bff;
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
-    }
-
-    .card-body {
-        padding: 0.2rem;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-end;
-    }
-
-    .card-img-wrapper {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 120px;
-        overflow: hidden;
-    }
-
-    .card-img-top {
-        max-height: 100%;
-        width: auto;
-        object-fit: contain;
-        margin: 0 auto;
+    .specialization-card.selected-card {
+        border-color: var(--neon-pink);
+        box-shadow: 0 0 10px rgba(233, 53, 113, 0.5);
     }
 </style>
