@@ -62,7 +62,7 @@
         <div class="col-md-6">
             <label asp-for="DayOff" class="form-label">DayOff <span class="text-danger">*</span></label>
             <select asp-for="DayOff" class="form-select" required>
-                <option value="">Select DayOff</option>
+                <option value="">Select DayOff ...</option>
                 @foreach (var cert in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.Gym.GymDayOff)))
                 {
                     <option value="@cert">@cert</option>
@@ -82,7 +82,7 @@
         <div class="col-md-6">
             <label asp-for="Status" class="form-label">Status <span class="text-danger">*</span></label>
             <select asp-for="Status" class="form-select" required>
-                <option value="">Select Status</option>
+                <option value="">Select Status ...</option>
                 @foreach (var status in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.Gym.GymStatus)))
                 {
                     <option value="@status">@status</option>

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PulseFit.Management.Web.Data;
 using PulseFit.Management.Web.Data.Entities;
 using PulseFit.Management.Web.Data.Repositories;
@@ -47,7 +46,7 @@ namespace PulseFit.Management.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var workouts = _workoutRepository.GetAll();
-                            
+
             return View(workouts);
         }
 
@@ -93,10 +92,10 @@ namespace PulseFit.Management.Web.Controllers
             if (ModelState.IsValid)
             {
                 var imageId = model.WorkoutImageFile != null
-                    ?await _blobHelper.UploadBlobAsync(model.WorkoutImageFile, "workouts-pics")
+                    ? await _blobHelper.UploadBlobAsync(model.WorkoutImageFile, "workouts-pics")
                     : Guid.Empty;
 
-                if(model.IndividualType == null && model.GroupType == null)
+                if (model.IndividualType == null && model.GroupType == null)
                 {
                     ModelState.AddModelError(string.Empty, "You must select the Workout Type!");
 
@@ -138,7 +137,7 @@ namespace PulseFit.Management.Web.Controllers
 
             var model = _converterHelper.ToWorkoutViewModel(workout);
             await LoadViewBags();
-            
+
             return View(model);
         }
 

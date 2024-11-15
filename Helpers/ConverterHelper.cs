@@ -327,6 +327,7 @@ namespace PulseFit.Management.Web.Helpers
                 Email = gym.Email,
                 PhoneNumber = gym.PhoneNumber,
                 DayOff = gym.DayOff,
+                GymImageId = gym.GymImageId,
             };
         }
 
@@ -415,7 +416,38 @@ namespace PulseFit.Management.Web.Helpers
                 UserId = booking.UserId,
                 TrainingDate = booking.TrainingDate,
                 GymId = booking.GymId,
-                GymName = booking.GymName,
+                GymName = booking.GymName,                
+            };
+        }
+
+        public Equipment ToEquipment(EquimentViewModel model, Guid imageId, bool isNew)
+        {
+            return new Equipment
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                Quantity = model.Quantity,
+                Type = model.Type,
+                Status = model.Status,
+                GymId= model.GymId,
+                GymName = model.GymName,
+                EquipmentImageId = imageId,
+            };
+        }
+
+        public EquimentViewModel ToEquipmentViewModel(Equipment equipment)
+        {
+            return new EquimentViewModel
+            {
+                Id = equipment.Id,
+                Name = equipment.Name,
+                Quantity = equipment.Quantity,
+                Type = equipment.Type,
+                Status = equipment.Status,
+                GymId = equipment.GymId,
+                GymName = equipment.GymName,
+                EquipmentImageId = equipment.EquipmentImageId,
+
             };
         }
     }

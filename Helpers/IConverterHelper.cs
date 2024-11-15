@@ -40,5 +40,9 @@ namespace PulseFit.Management.Web.Helpers
 
         Task<Booking> ToBookingAsync(BookingViewModel model, Guid imageId, bool isNew);
         BookingViewModel ToBookingViewModel(Booking booking);
+
+
+        Equipment ToEquipment(EquimentViewModel model, Guid imageId, bool isNew);
+        EquimentViewModel ToEquipmentViewModel(Equipment equipment);
     }
 }
