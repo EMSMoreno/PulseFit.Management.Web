@@ -58,13 +58,14 @@ public class SeedDb
 
     private async Task SeedUsersAsync()
     {
-        // Criação de usuários com roles específicas
-        var adminUser = await CreateUserAsync("admin@pulsefit.com", "Admin", "User", "Admin123!", "Admin");
-        var clientUser = await CreateUserAsync("client@pulsefit.com", "Client", "User", "Client123!", "Client");
-        var trainerUser = await CreateUserAsync("trainer@pulsefit.com", "Trainer", "User", "Trainer123!", "PersonalTrainer");
-        var employeeUser = await CreateUserAsync("employee@pulsefit.com", "Employee", "User", "Employee123!", "Employee");
-        var nutritionistUser = await CreateUserAsync("nutritionist@pulsefit.com", "Nutritionist", "User", "Nutritionist123!", "Nutritionist");
+        // Creating users with specific roles
+        var adminUser = await CreateUserAsync("admin@pulsefit.com", "Admin", "User", "Admin@123!", "Admin");
+        var clientUser = await CreateUserAsync("client@pulsefit.com", "Client", "User", "Client@123!", "Client");
+        var trainerUser = await CreateUserAsync("trainer@pulsefit.com", "Trainer", "User", "Trainer@123!", "PersonalTrainer");
+        var employeeUser = await CreateUserAsync("employee@pulsefit.com", "Employee", "User", "Employee@123!", "Employee");
+        var nutritionistUser = await CreateUserAsync("nutritionist@pulsefit.com", "Nutritionist", "User", "Nutri@123!", "Nutritionist");
     }
+
 
     private async Task<User> CreateUserAsync(string email, string firstName, string lastName, string password, string role)
     {

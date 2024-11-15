@@ -4,77 +4,83 @@
     ViewData["Title"] = "Employee Details";
 }
 
-<div class="container mt-4">
-    <h2>Employee Details</h2>
+<div class="container mt-5">
+    <h2 class="title-neon mb-4">Employee Details</h2>
 
-    <div class="card shadow-lg p-4">
+    <div class="card-neon p-4">
         <div class="row align-items-center mb-4">
             <div class="col-md-4 d-flex justify-content-center">
-                <img src="@Model.ProfilePictureUrl" alt="Profile Picture" class="rounded-circle shadow-sm" style="width: 180px; height: 180px;" />
+                <img src="@Model.ProfilePictureUrl" alt="Profile Picture" class="rounded-circle shadow-sm"
+                     style="width: 180px; height: 180px; border: 3px solid var(--neon-green);" />
             </div>
             <div class="col-md-8">
-                <h3 class="text-primary">@Model.FirstName @Model.LastName</h3>
-                <hr class="my-3" />
+                <h3 class="text-neon-blue">@Model.FirstName @Model.LastName</h3>
+                <hr class="my-3 neon-divider" />
                 <dl class="row">
-                    <dt class="col-sm-4 fw-semibold text-muted">Email:</dt>
+                    <dt class="col-sm-4 text-neon-pink">Email:</dt>
                     <dd class="col-sm-8">@Model.Email</dd>
 
-                    <dt class="col-sm-4 fw-semibold text-muted">Phone:</dt>
+                    <dt class="col-sm-4 text-neon-pink">Phone:</dt>
                     <dd class="col-sm-8">@Model.PhoneNumber</dd>
 
-                    <dt class="col-sm-4 fw-semibold text-muted">Employee Type:</dt>
+                    <dt class="col-sm-4 text-neon-pink">Employee Type:</dt>
                     <dd class="col-sm-8">@Model.EmployeeType</dd>
 
-                    <dt class="col-sm-4 fw-semibold text-muted">Status:</dt>
+                    <dt class="col-sm-4 text-neon-pink">Status:</dt>
                     <dd class="col-sm-8">@Model.Status</dd>
 
-                    <dt class="col-sm-4 fw-semibold text-muted">Shift:</dt>
+                    <dt class="col-sm-4 text-neon-pink">Shift:</dt>
                     <dd class="col-sm-8">@Model.Shift</dd>
 
-                    <dt class="col-sm-4 fw-semibold text-muted">Hire Date:</dt>
+                    <dt class="col-sm-4 text-neon-pink">Hire Date:</dt>
                     <dd class="col-sm-8">@Model.HireDate?.ToString("d")</dd>
                 </dl>
             </div>
         </div>
 
         <div class="d-flex justify-content-end mt-3">
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Edit</a>
-            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger me-2">Delete</a>
-            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-neon-blue neon-hover-shadow me-2">Edit</a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-neon-pink neon-hover-shadow me-2">Delete</a>
+            <a asp-action="Index" class="btn btn-neon-secondary neon-hover-shadow">Back to List</a>
         </div>
     </div>
 </div>
 
 <style>
-    .card {
+    /* Card Styles */
+    .card-neon {
+        background-color: var(--light-bg);
+        border: 1px solid var(--neon-green);
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border-radius: 8px;
-        padding: 1.5rem;
     }
 
-        .card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        .card-neon:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-color: var(--neon-blue);
         }
 
-    .card-img-wrapper {
-        padding: 15px;
-        border-bottom: 1px solid #ddd;
-        border-radius: 8px 8px 0 0;
+    /* Divider */
+    .neon-divider {
+        border-top: 2px solid var(--neon-blue);
     }
 
-    h3 {
-        color: #007bff;
-        font-weight: bold;
-    }
-
+    /* Details Section */
     dl.row dt {
-        font-weight: 500;
-        color: #6c757d;
+        font-weight: 600;
+        color: var(--neon-pink);
     }
 
     dl.row dd {
         font-weight: 400;
-        color: #212529;
+        color: var(--light-text);
+    }
+
+    /* Title */
+    h3.text-neon-blue {
+        font-size: 1.75rem;
+        font-weight: bold;
     }
 </style>

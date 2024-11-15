@@ -305,9 +305,27 @@ namespace PulseFit.Management.Web.Controllers
 
         private string GenerateRandomPassword(int length = 8)
         {
-            const string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()?_-";
+            const string upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string lowerChars = "abcdefghijklmnopqrstuvwxyz";
+            const string digitChars = "0123456789";
+            const string specialChars = "!@#$%^&*()?_-";
+            const int requiredUniqueChars = 1;
+
             Random random = new Random();
-            return new string(Enumerable.Repeat(validChars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+
+            string password = new string(new[]
+            {
+        upperChars[random.Next(upperChars.Length)],
+        lowerChars[random.Next(lowerChars.Length)],
+        digitChars[random.Next(digitChars.Length)],
+        specialChars[random.Next(specialChars.Length)]
+    });
+
+            string allChars = upperChars + lowerChars + digitChars + specialChars;
+            password += new string(Enumerable.Repeat(allChars, length - 4)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+
+            return new string(password.ToCharArray().OrderBy(_ => random.Next()).ToArray());
         }
     }
 }

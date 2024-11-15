@@ -3,37 +3,45 @@
     ViewData["Title"] = "Login";
 }
 
-<h2>Login</h2>
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card-neon p-5" style="max-width: 400px; width: 100%;">
+        <!-- Neon-styled title -->
+        <h2 class="title-neon text-center mb-4">@ViewData["Title"]</h2>
 
-<div class="row">
-    <div class="col-md-4 offset-md-4">
         <form method="post">
-            <div asp-validation-summary="ModelOnly"></div>
-            <div class="form-group">
-                <label asp-for="Username">Username</label>
-                <input asp-for="Username" class="form-control" />
+            <!-- Validation Summary -->
+            <div asp-validation-summary="ModelOnly" class="text-warning mb-3"></div>
+
+            <!-- Username Field -->
+            <div class="form-group mb-3">
+                <label asp-for="Username" class="text-neon-pink">Username</label>
+                <input asp-for="Username" class="form-control input-neon" />
                 <span asp-validation-for="Username" class="text-warning"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Password">Password</label>
-                <input asp-for="Password" type="password" class="form-control" />
+
+            <!-- Password Field -->
+            <div class="form-group mb-3">
+                <label asp-for="Password" class="text-neon-pink">Password</label>
+                <input asp-for="Password" type="password" class="form-control input-neon" />
                 <span asp-validation-for="Password" class="text-warning"></span>
             </div>
-            <div class="form-group">
-                <div class="form-check">
-                    <input asp-for="RememberMe" type="checkbox" class="form-check-input" />
-                    <label asp-for="RememberMe" class="form-check-label">Remember Me?</label>
-                </div>
-                <span asp-validation-for="RememberMe" class="text-warning"></span>
+
+            <!-- Remember Me Checkbox -->
+            <div class="form-check mb-3">
+                <input asp-for="RememberMe" type="checkbox" class="form-check-input" />
+                <label asp-for="RememberMe" class="form-check-label text-neon-green">Remember Me?</label>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Login" class="btn btn-success" />
-                <a asp-action="Register" class="btn btn-primary">Register New User</a>
-                <a asp-action="RecoverPassword" class="btn btn-link">Forgot your password?</a>
+
+            <!-- Action Buttons -->
+            <div class="d-flex flex-column gap-2">
+                <button type="submit" class="btn btn-neon-pink w-100">Login</button>
+                <a asp-action="Register" class="btn btn-neon-blue w-100">Register New User</a>
+                <a asp-action="RecoverPassword" class="btn btn-link text-neon-yellow text-center">Forgot your password?</a>
             </div>
         </form>
     </div>
 </div>
+
 
 @section Scripts {
     @{
