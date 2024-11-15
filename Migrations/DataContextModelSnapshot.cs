@@ -1085,10 +1085,6 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GymId");
-
-                    b.HasIndex("InstructorId");
-
                     b.HasIndex("SubscriptionId");
 
                     b.ToTable("Workouts");
@@ -1408,26 +1404,10 @@ namespace PulseFit.Management.Web.Migrations
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Workout", b =>
                 {
-                    b.HasOne("PulseFit.Management.Web.Data.Entities.Gym", "Gym")
-                        .WithMany()
-                        .HasForeignKey("GymId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("PulseFit.Management.Web.Data.Entities.User", "Instructor")
-                        .WithMany()
-                        .HasForeignKey("InstructorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("PulseFit.Management.Web.Data.Entities.Subscription", null)
                         .WithMany("IncludedWorkouts")
                         .HasForeignKey("SubscriptionId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Gym");
-
-                    b.Navigation("Instructor");
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Client", b =>

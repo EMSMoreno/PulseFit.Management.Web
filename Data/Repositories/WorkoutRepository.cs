@@ -15,6 +15,9 @@ namespace PulseFit.Management.Web.Data.Repositories
             _context = context;
         }
 
-
+        public async Task<IEnumerable<Workout>> GetAllAsync()
+        {
+            return await _context.Workouts.ToListAsync();
+        }
     }
 }

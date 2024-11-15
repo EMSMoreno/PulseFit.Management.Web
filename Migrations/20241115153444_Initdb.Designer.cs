@@ -12,8 +12,8 @@ using PulseFit.Management.Web.Data;
 namespace PulseFit.Management.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241106011940_ModifyGyms")]
-    partial class ModifyGyms
+    [Migration("20241115153444_Initdb")]
+    partial class Initdb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -254,6 +254,9 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("GymId")
                         .HasColumnType("int");
 
+                    b.Property<string>("GymName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("ReservationDate")
                         .HasColumnType("datetime2");
 
@@ -265,6 +268,9 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("WorkoutId")
@@ -288,7 +294,8 @@ namespace PulseFit.Management.Web.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("Birthdate")
+                    b.Property<DateTime?>("Birthdate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Gender")
@@ -303,9 +310,6 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("SubscriptionPlanId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -313,8 +317,6 @@ namespace PulseFit.Management.Web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PersonalTrainerId");
-
-                    b.HasIndex("SubscriptionPlanId");
 
                     b.HasIndex("UserId");
 
@@ -506,7 +508,12 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SubscriptionId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SubscriptionId");
 
                     b.ToTable("Gyms");
                 });
@@ -574,6 +581,9 @@ namespace PulseFit.Management.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SubscriptionId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -581,6 +591,8 @@ namespace PulseFit.Management.Web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GymId");
+
+                    b.HasIndex("SubscriptionId");
 
                     b.HasIndex("UserId");
 
@@ -638,6 +650,9 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SubscriptionId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -649,6 +664,8 @@ namespace PulseFit.Management.Web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("InstructorId");
+
+                    b.HasIndex("SubscriptionId");
 
                     b.ToTable("OnlineClasses");
                 });
@@ -662,15 +679,22 @@ namespace PulseFit.Management.Web.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Method")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PaymentMethodSelected")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
+                    b.Property<int>("SubscriptionId")
                         .HasColumnType("int");
 
                     b.Property<string>("TransactionId")
@@ -682,6 +706,8 @@ namespace PulseFit.Management.Web.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SubscriptionId");
 
                     b.HasIndex("UserId");
 
@@ -810,17 +836,36 @@ namespace PulseFit.Management.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DurationMonths")
+                    b.Property<int>("DiscountPercentage")
                         .HasColumnType("int");
+
+                    b.Property<int>("DurationType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DurationValue")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Has24HourAccess")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasVIPAccess")
+                        .HasColumnType("bit");
 
                     b.Property<Guid>("ImageId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsAllGymsAccessible")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsExclusive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MaxPersonalTrainerSessions")
+                        .HasColumnType("int");
 
                     b.Property<int>("MaxWorkouts")
                         .HasColumnType("int");
@@ -829,10 +874,16 @@ namespace PulseFit.Management.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PerformanceReportFrequencyInMonths")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubscriptionType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -936,11 +987,17 @@ namespace PulseFit.Management.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<decimal>("AmountPaid")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -950,6 +1007,10 @@ namespace PulseFit.Management.Web.Migrations
 
                     b.Property<int>("SubscriptionId")
                         .HasColumnType("int");
+
+                    b.Property<string>("TransactionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -993,8 +1054,14 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("GymId")
                         .HasColumnType("int");
 
+                    b.Property<string>("GymName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("InstructorId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InstructorName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MaxCapacity")
@@ -1013,10 +1080,15 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SubscriptionId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SubscriptionId");
 
                     b.ToTable("Workouts");
                 });
@@ -1119,19 +1191,11 @@ namespace PulseFit.Management.Web.Migrations
                         .HasForeignKey("PersonalTrainerId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("PulseFit.Management.Web.Data.Entities.Subscription", "SubscriptionPlan")
-                        .WithMany()
-                        .HasForeignKey("SubscriptionPlanId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("PulseFit.Management.Web.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("SubscriptionPlan");
 
                     b.Navigation("User");
                 });
@@ -1204,6 +1268,14 @@ namespace PulseFit.Management.Web.Migrations
                     b.Navigation("Workout");
                 });
 
+            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Gym", b =>
+                {
+                    b.HasOne("PulseFit.Management.Web.Data.Entities.Subscription", null)
+                        .WithMany("IncludedGyms")
+                        .HasForeignKey("SubscriptionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Membership", b =>
                 {
                     b.HasOne("PulseFit.Management.Web.Data.Entities.User", "User")
@@ -1221,6 +1293,11 @@ namespace PulseFit.Management.Web.Migrations
                         .HasForeignKey("GymId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("PulseFit.Management.Web.Data.Entities.Subscription", null)
+                        .WithMany("IncludedNutritionPlans")
+                        .HasForeignKey("SubscriptionId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("PulseFit.Management.Web.Data.Entities.User", "User")
                         .WithMany()
@@ -1252,16 +1329,29 @@ namespace PulseFit.Management.Web.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("PulseFit.Management.Web.Data.Entities.Subscription", null)
+                        .WithMany("IncludedOnlineClasses")
+                        .HasForeignKey("SubscriptionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Instructor");
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Payment", b =>
                 {
+                    b.HasOne("PulseFit.Management.Web.Data.Entities.Subscription", "Subscription")
+                        .WithMany()
+                        .HasForeignKey("SubscriptionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("PulseFit.Management.Web.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Subscription");
 
                     b.Navigation("User");
                 });
@@ -1315,6 +1405,14 @@ namespace PulseFit.Management.Web.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Workout", b =>
+                {
+                    b.HasOne("PulseFit.Management.Web.Data.Entities.Subscription", null)
+                        .WithMany("IncludedWorkouts")
+                        .HasForeignKey("SubscriptionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Client", b =>
                 {
                     b.Navigation("UserSubscriptions");
@@ -1327,6 +1425,14 @@ namespace PulseFit.Management.Web.Migrations
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Subscription", b =>
                 {
+                    b.Navigation("IncludedGyms");
+
+                    b.Navigation("IncludedNutritionPlans");
+
+                    b.Navigation("IncludedOnlineClasses");
+
+                    b.Navigation("IncludedWorkouts");
+
                     b.Navigation("UserSubscriptions");
                 });
 #pragma warning restore 612, 618
