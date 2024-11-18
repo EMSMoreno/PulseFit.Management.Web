@@ -450,5 +450,42 @@ namespace PulseFit.Management.Web.Helpers
 
             };
         }
+
+        public async Task<WorkoutPlan> ToWorkoutPlanAsync(WorkoutPlanViewModel model, Guid imageId, bool isNew)
+        {
+            var equipments = await _context.Equipments
+                .Where(e => model.EquipmentIds.Contains(e.Id))
+                .ToListAsync();
+
+            return new WorkoutPlan
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                Description = model.Description,
+                Difficulty = (WorkoutPlan.WorkoutPlanDifficulty)model.Difficulty,
+                WorkoutPlanType = (WorkoutPlan.WorkoutPlanTypeList)model.WorkoutPlanType,
+                Equipments = equipments,
+                WorkoutPlanImageId = imageId,
+            };
+        }
+
+        public WorkoutPlanViewModel ToWorkoutPlanViewModel(WorkoutPlan workoutPlan)
+        {
+            return new WorkoutPlanViewModel
+            {
+                Id = workoutPlan.Id,
+                Name = workoutPlan.Name,
+                Description = workoutPlan.Description,
+                Difficulty = (WorkoutPlanViewModel.WorkoutPlanDifficulty)workoutPlan.Difficulty,
+                EquipmentIds = workoutPlan.Equipments.Select(e => e.Id).ToList(),
+                Equipments = workoutPlan.Equipments.Select(e => new EquipmentItemViewModel
+                {
+                    Value = e.Id.ToString(),
+                    Text = e.Name,
+                    ImageUrl = e.EquipmentImageUrl
+                }).ToList(),
+                WorkoutPlanImageId = workoutPlan.WorkoutPlanImageId ?? Guid.Empty,
+            };
+        }
     }
 }

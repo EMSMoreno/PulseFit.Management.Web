@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PulseFit.Management.Web.Data;
 
@@ -11,9 +12,11 @@ using PulseFit.Management.Web.Data;
 namespace PulseFit.Management.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241115113211_WorkoutPlans")]
+    partial class WorkoutPlans
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -427,12 +430,7 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.Property<int?>("WorkoutPlanId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("WorkoutPlanId");
 
                     b.ToTable("Equipments");
                 });
@@ -1073,12 +1071,9 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<Guid?>("WorkoutPlanImageId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("WorkoutPlanType")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.ToTable("WorkoutPlans");
+                    b.ToTable("WorkoutPlan");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1224,14 +1219,6 @@ namespace PulseFit.Management.Web.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Equipment", b =>
-                {
-                    b.HasOne("PulseFit.Management.Web.Data.Entities.WorkoutPlan", null)
-                        .WithMany("Equipments")
-                        .HasForeignKey("WorkoutPlanId")
-                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Feedback", b =>
@@ -1385,11 +1372,6 @@ namespace PulseFit.Management.Web.Migrations
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Subscription", b =>
                 {
                     b.Navigation("UserSubscriptions");
-                });
-
-            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.WorkoutPlan", b =>
-                {
-                    b.Navigation("Equipments");
                 });
 #pragma warning restore 612, 618
         }

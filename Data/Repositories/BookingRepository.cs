@@ -58,7 +58,7 @@ namespace PulseFit.Management.Web.Data.Repositories
         public async Task<IEnumerable<Booking>> GetBookingsByUserAsync(string userId)
         {
             return await _context.Bookings
-                .Where(b => b.UserId == userId)
+                .Where(b => b.UserId == userId && b.TrainingDate >= DateTime.Today)
                 .OrderBy(b => b.TrainingDate)
                 .ToListAsync();
         }

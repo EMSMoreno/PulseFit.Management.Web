@@ -1,0 +1,98 @@
+﻿@model IEnumerable<IGrouping<PulseFit.Management.Web.Data.Entities.WorkoutPlan.WorkoutPlanTypeList, PulseFit.Management.Web.Data.Entities.WorkoutPlan>>
+
+@{
+    ViewData["Title"] = "Workout Plans List";
+}
+
+<h2 class="text-center my-4">Workout Plans List</h2>
+
+<div>
+    <a asp-action="Create" class="btn btn-primary mb-3">Add New Workout Plan</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No Workout Plans found.</div>
+}
+else
+{
+    <div class="container">
+        @foreach (var group in Model)
+        {
+            <hr />
+            <h3 class="text-center mt-4">@group.Key</h3>
+            <div id="carousel-@group.Key" class="carousel slide mt-3" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @if (group.Any())
+                    {
+                        var first = true;
+                        foreach (var workoutPlan in group)
+                        {
+                            <div class="carousel-item @(first ? "active" : "")">
+                                <a href="@Url.Action("Details", "WorkoutPlans", new { id = workoutPlan.Id })">
+                                    <img src="@workoutPlan.WorkoutPlanImageUrl" class="d-block w-100 rounded" alt="@workoutPlan.Name">
+                                </a>
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>@workoutPlan.Name</h5>
+                                    <p>@workoutPlan.Description</p>
+                                    <p>Difficulty: @workoutPlan.Difficulty</p>
+                                </div>
+                            </div>
+                            first = false;
+                        }
+                    }
+                    else
+                    {
+                        <div class="carousel-item active">
+                            <img src="/images/noimage.png" class="d-block w-100 rounded" alt="Image">
+                            <div class="carousel-caption d-none d-md-block">
+                                <p>No workout plans available.</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@group.Key" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel-@group.Key" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Próximo</span>
+                </button>
+            </div>
+        }
+    </div>
+}
+
+<style>
+    .carousel-item img {
+        max-width: 35%;
+        max-height: 35%;
+        object-fit: cover;
+        margin: 0 auto;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 50%;
+        padding: 10px;
+        transition: background-color 0.3s;
+    }
+
+        .carousel-control-prev-icon:hover,
+        .carousel-control-next-icon:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+    h3 {
+        font-weight: bold;
+        text-transform: capitalize;
+    }
+
+    .carousel-caption {
+        background-color: rgba(0, 0, 0, 0.6);
+        border-radius: 10px;
+        padding: 10px;
+    }
+</style>

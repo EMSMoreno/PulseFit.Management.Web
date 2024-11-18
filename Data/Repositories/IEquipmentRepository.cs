@@ -7,5 +7,9 @@ namespace PulseFit.Management.Web.Data.Repositories
         Task<IEnumerable<Equipment>> GetEquipmentsByGymIdAsync(int gymId);
 
         Task<Equipment?> GetEquipmentByIdAsync(int id);
+
+        Task<List<Equipment>> GetEquipmentsListByIdsAsync(List<int> ids);
+
+        Task<List<Equipment>> GetAllAsync();
     }
 }

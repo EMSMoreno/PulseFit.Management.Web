@@ -66,7 +66,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Equipments/Create
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             LoadViewBags();
 
@@ -109,7 +109,7 @@ namespace PulseFit.Management.Web.Controllers
                 return NotFound();
             }
 
-            var equipment = await _context.Equipments.FindAsync(id);
+            var equipment = await _equipmentRepository.GetByIdAsync(id.Value);
             if (equipment == null)
             {
                 return NotFound();

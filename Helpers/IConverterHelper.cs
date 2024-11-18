@@ -44,5 +44,9 @@ namespace PulseFit.Management.Web.Helpers
 
         Equipment ToEquipment(EquimentViewModel model, Guid imageId, bool isNew);
         EquimentViewModel ToEquipmentViewModel(Equipment equipment);
+
+
+        Task<WorkoutPlan> ToWorkoutPlanAsync(WorkoutPlanViewModel model, Guid imageId, bool isNew);
+        WorkoutPlanViewModel ToWorkoutPlanViewModel(WorkoutPlan workoutPlan);
     }
 }
