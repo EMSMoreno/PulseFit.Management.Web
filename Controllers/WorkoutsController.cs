@@ -278,7 +278,6 @@ namespace PulseFit.Management.Web.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-
         public async Task<IActionResult> CancelBooking(int id)
         {
             var booking = await _bookingRepository.GetByIdAsync(id);
@@ -291,7 +290,6 @@ namespace PulseFit.Management.Web.Controllers
             await _workoutRepository.UpdateAsync(workout);
             return RedirectToAction("MyBookings");
         }
-
 
         public async Task LoadViewBags()
         {
@@ -313,5 +311,51 @@ namespace PulseFit.Management.Web.Controllers
             ViewBag.Difficulty = new SelectList(Enum.GetValues(typeof(Workout.WorkoutDifficulty)).Cast<Workout.WorkoutDifficulty>());
             ViewBag.Status = new SelectList(Enum.GetValues(typeof(Workout.WorkoutStatus)).Cast<Workout.WorkoutStatus>());
         }
+
+        // Rate Workout (Implementação do método)
+        public IActionResult RateWorkout(int workoutId)
+        {
+            var workout = _context.Workouts.Find(workoutId);
+            if (workout == null)
+            {
+                return NotFound();
+            }
+
+            // Get userId via HttpContext.User inside the action method
+            var userId = _userHelper.GetUserId(HttpContext.User);  // Ensure to pass ClaimsPrincipal
+
+            // Convert userId to int (assuming it's stored as a numeric ID in your claims)
+            int userIdInt;
+            if (!int.TryParse(userId, out userIdInt))
+            {
+                return Unauthorized(); // or handle as needed
+            }
+
+            // Check if the user has already evaluated this training
+            var existingRating = _context.WorkoutRatings
+                .FirstOrDefault(r => r.WorkoutId == workoutId && r.UserId == userIdInt);  // Now comparing with int
+
+            if (existingRating != null)
+            {
+                // If the user has already reviewed, you can redirect them or show a message
+                return RedirectToAction("Details", new { id = workoutId });
+            }
+
+            var ratingViewModel = new RatingViewModel
+            {
+                WorkoutId = workoutId
+            };
+
+            return View(ratingViewModel);
+        }
+
+        // Average Ratings
+        public IActionResult GetAverageRating(int workoutId)
+        {
+            var ratings = _context.WorkoutRatings.Where(r => r.WorkoutId == workoutId).ToList();
+            var averageRating = ratings.Any() ? ratings.Average(r => r.RatingValue) : 0;
+            return Json(new { averageRating });
+        }
+
     }
 }

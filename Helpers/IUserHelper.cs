@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PulseFit.Management.Web.Data.Entities;
 using PulseFit.Management.Web.Models;
- 
+using System.Security.Claims;
+
 namespace PulseFit.Management.Web.Helpers
 {
     public interface IUserHelper
@@ -98,5 +99,8 @@ namespace PulseFit.Management.Web.Helpers
 
         Task<string> GetUserEmailByPaymentIdAsync(int paymentId);
 
+        string GetUserId(ClaimsPrincipal user);  // Method that accepts ClaimsPrincipal
+
+        string GetUserId();  // Method that returns the current logged-in user's UserId
     }
 }

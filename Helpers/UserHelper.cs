@@ -2,6 +2,7 @@
 using PulseFit.Management.Web.Data.Entities;
 using PulseFit.Management.Web.Data.Repositories;
 using PulseFit.Management.Web.Models;
+using System.Security.Claims;
 
 namespace PulseFit.Management.Web.Helpers
 {
@@ -113,6 +114,18 @@ namespace PulseFit.Management.Web.Helpers
             return user.Id;
         }
 
+        // This method is used when you want to pass the ClaimsPrincipal (user)
+        public string GetUserId(ClaimsPrincipal user)
+        {
+            return _userManager.GetUserId(user);  // Get the user Id from claims
+        }
+
+        // This method is used to get the UserId directly from the current logged-in user
+        public string GetUserId()
+        {
+            var userId = _userManager.GetUserId(ClaimsPrincipal.Current);
+            return userId;
+        }
 
         // Optional: Uncomment if needed for specific notifications
         // public async Task NotifySecretaryPendingUserAsync(User user)

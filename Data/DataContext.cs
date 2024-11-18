@@ -29,11 +29,10 @@ namespace PulseFit.Management.Web.Data
         public DbSet<User> Users { get; set; }
         public DbSet<UserSubscription> UserSubscriptions { get; set; }
         public DbSet<Workout> Workouts { get; set; }
+        public DbSet<WorkoutPlan> WorkoutPlans { get; set; }
+        public DbSet<WorkoutRating> WorkoutRatings { get; set; }
         public DbSet<Specialty> Specialties { get; set; }
         public DbSet<Specialization> Specializations { get; set; }
-        public DbSet<WorkoutPlan> WorkoutPlans { get; set; }
-
-
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
