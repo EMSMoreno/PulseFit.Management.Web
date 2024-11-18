@@ -71,7 +71,7 @@ namespace PulseFit.Management.Web.Helpers
                     Text = s.Name,
                     ImageUrl = s.ImageUrl
                 }).ToList(),
-                ImageId = personalTrainer.User.ProfilePictureId ?? Guid.Empty 
+                ImageId = personalTrainer.User.ProfilePictureId ?? Guid.Empty
             };
         }
 
@@ -361,6 +361,42 @@ namespace PulseFit.Management.Web.Helpers
             };
         }
 
+
+
+        public async Task<Payment> ToPaymentAsync(PaymentViewModel model, string userId, Guid transactionId, Payment.PaymentStatus status)
+        {
+            var subscription = await _context.Subscriptions.FindAsync(model.SubscriptionId);
+
+            return new Payment
+            {
+                Amount = model.Amount,
+                PaymentDate = DateTime.UtcNow,
+                UserId = userId,
+                Subscription = subscription,
+                SubscriptionId = model.SubscriptionId,
+                Method = model.SelectedMethod,
+                Status = status,
+                TransactionId = transactionId.ToString(),
+                Description = model.Description
+            };
+        }
+
+        // Converte Payment para PaymentViewModel
+        public PaymentViewModel ToPaymentViewModel(Payment payment)
+        {
+            return new PaymentViewModel
+            {
+                Id = payment.Id,
+                SubscriptionId = payment.SubscriptionId,
+                Amount = payment.Amount,
+                UserId = payment.UserId,
+                SelectedMethod = payment.Method,
+                Description = payment.Description,
+                PaymentDate = payment.PaymentDate,
+                TransactionId = payment.TransactionId
+            };
+        }
+
         public async Task<Gym> ToGym(GymViewModel model, Guid imageId, bool isNew)
         {
             return new Gym
@@ -384,14 +420,175 @@ namespace PulseFit.Management.Web.Helpers
         {
             return new GymViewModel
             {
-                Id = payment.Id,
-                SubscriptionId = payment.SubscriptionId,
-                Amount = payment.Amount,
-                UserId = payment.UserId,
-                SelectedMethod = payment.Method,
-                Description = payment.Description,
-                PaymentDate = payment.PaymentDate,
-                TransactionId = payment.TransactionId
+                Id = gym.Id,
+                Name = gym.Name,
+                Location = gym.Location,
+                Capacity = gym.Capacity,
+                OpeningTime = gym.OpeningTime,
+                ClosingTime = gym.ClosingTime,
+                CreationDate = gym.CreationDate,
+                Status = gym.Status,
+                Email = gym.Email,
+                PhoneNumber = gym.PhoneNumber,
+                DayOff = gym.DayOff,
+                GymImageId = gym.GymImageId,
+            };
+        }
+
+        public Workout ToWorkout(WorkoutViewModel model, Guid imageId, bool isNew)
+        {
+            var workout = new Workout
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                Description = model.Description,
+                Duration = model.Duration,
+                Type = model.Type,
+                IndividualType = model.IndividualType,
+                GroupType = model.GroupType,
+                Popularity = model.Popularity,
+                DifficultyLevel = model.DifficultyLevel,
+                StartDate = model.StartDate,
+                MaxCapacity = model.MaxCapacity,
+                Status = model.Status,
+                InstructorId = model.InstructorId,
+                InstructorName = model.InstructorName,
+                GymId = model.GymId,
+                GymName = model.GymName,
+                Bookings = model.Bookings,
+                WorkoutImageId = imageId,
+            };
+
+            workout.EndDate = workout.StartDate.AddMinutes(workout.Duration);
+
+            return workout;
+        }
+
+        public WorkoutViewModel ToWorkoutViewModel(Workout workout)
+        {
+            return new WorkoutViewModel
+            {
+                Id = workout.Id,
+                Name = workout.Name,
+                Description = workout.Description,
+                Duration = workout.Duration,
+                Type = workout.Type,
+                IndividualType = workout.IndividualType,
+                GroupType = workout.GroupType,
+                Popularity = workout.Popularity,
+                DifficultyLevel = workout.DifficultyLevel,
+                StartDate = workout.StartDate,
+                EndDate = workout.EndDate,
+                MaxCapacity = workout.MaxCapacity,
+                Status = workout.Status,
+                InstructorId = workout.InstructorId,
+                InstructorName = workout.InstructorName,
+                GymId = workout.GymId,
+                GymName = workout.GymName,
+                Bookings = workout.Bookings,
+                WorkoutImageId = workout.WorkoutImageId,
+            };
+        }
+
+        public async Task<Booking> ToBookingAsync(BookingViewModel model, Guid imageId, bool isNew)
+        {
+            return new Booking
+            {
+                Id = isNew ? 0 : model.Id,
+                ReservationDate = model.ReservationDate,
+                Status = model.Status,
+                WorkoutId = model.WorkoutId,
+                WorkoutName = model.WorkoutName,
+                UserName = model.UserName,
+                UserId = model.UserId,
+                TrainingDate = model.TrainingDate,
+                GymId = model.GymId,
+                GymName = model.GymName,
+            };
+        }
+
+        public BookingViewModel ToBookingViewModel(Booking booking)
+        {
+            return new BookingViewModel
+            {
+                Id = booking.Id,
+                ReservationDate = booking.ReservationDate,
+                Status = booking.Status,
+                WorkoutId = booking.WorkoutId,
+                WorkoutName = booking.WorkoutName,
+                UserName = booking.UserName,
+                UserId = booking.UserId,
+                TrainingDate = booking.TrainingDate,
+                GymId = booking.GymId,
+                GymName = booking.GymName,
+            };
+        }
+
+        public Equipment ToEquipment(EquimentViewModel model, Guid imageId, bool isNew)
+        {
+            return new Equipment
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                Quantity = model.Quantity,
+                Type = model.Type,
+                Status = model.Status,
+                GymId = model.GymId,
+                GymName = model.GymName,
+                EquipmentImageId = imageId,
+            };
+        }
+
+        public EquimentViewModel ToEquipmentViewModel(Equipment equipment)
+        {
+            return new EquimentViewModel
+            {
+                Id = equipment.Id,
+                Name = equipment.Name,
+                Quantity = equipment.Quantity,
+                Type = equipment.Type,
+                Status = equipment.Status,
+                GymId = equipment.GymId,
+                GymName = equipment.GymName,
+                EquipmentImageId = equipment.EquipmentImageId,
+
+            };
+        }
+
+        public async Task<WorkoutPlan> ToWorkoutPlanAsync(WorkoutPlanViewModel model, Guid imageId, bool isNew)
+        {
+            var equipments = await _context.Equipments
+                .Where(e => model.EquipmentIds.Contains(e.Id))
+                .ToListAsync();
+
+            return new WorkoutPlan
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                Description = model.Description,
+                Difficulty = (WorkoutPlan.WorkoutPlanDifficulty)model.Difficulty,
+                WorkoutPlanType = (WorkoutPlan.WorkoutPlanTypeList)model.WorkoutPlanType,
+                Equipments = equipments,
+                WorkoutPlanImageId = imageId,
+            };
+        }
+
+        public WorkoutPlanViewModel ToWorkoutPlanViewModel(WorkoutPlan workoutPlan)
+        {
+            return new WorkoutPlanViewModel
+            {
+                Id = workoutPlan.Id,
+                Name = workoutPlan.Name,
+                Description = workoutPlan.Description,
+                Difficulty = (WorkoutPlanViewModel.WorkoutPlanDifficulty)workoutPlan.Difficulty,
+                EquipmentIds = workoutPlan.Equipments.Select(e => e.Id).ToList(),
+                Equipments = workoutPlan.Equipments.Select(e => new EquipmentItemViewModel
+                {
+                    Value = e.Id.ToString(),
+                    Text = e.Name,
+                    ImageUrl = e.EquipmentImageUrl
+                }).ToList(),
+                WorkoutPlanImageId = workoutPlan.WorkoutPlanImageId ?? Guid.Empty,
             };
         }
 

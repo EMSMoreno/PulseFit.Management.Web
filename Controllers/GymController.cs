@@ -1,12 +1,12 @@
-﻿//using Microsoft.AspNetCore.Authorization;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.AspNetCore.Mvc.Rendering;
-//using Microsoft.EntityFrameworkCore;
-//using PulseFit.Management.Web.Data;
-//using PulseFit.Management.Web.Data.Entities;
-//using PulseFit.Management.Web.Data.Repositories;
-//using PulseFit.Management.Web.Helpers;
-//using PulseFit.Management.Web.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using PulseFit.Management.Web.Data;
+using PulseFit.Management.Web.Data.Entities;
+using PulseFit.Management.Web.Data.Repositories;
+using PulseFit.Management.Web.Helpers;
+using PulseFit.Management.Web.Models;
 
 namespace PulseFit.Management.Web.Controllers
 {

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PulseFit.Management.Web.Migrations
 {
     /// <inheritdoc />
-    public partial class Initdb : Migration
+    public partial class UpdatedDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -80,6 +80,7 @@ namespace PulseFit.Management.Web.Migrations
                     ReservationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     WorkoutId = table.Column<int>(type: "int", nullable: false),
+                    WorkoutName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TrainingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -149,6 +150,23 @@ namespace PulseFit.Management.Web.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Subscriptions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WorkoutPlans",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Difficulty = table.Column<int>(type: "int", nullable: false),
+                    WorkoutPlanType = table.Column<int>(type: "int", nullable: false),
+                    WorkoutPlanImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkoutPlans", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -496,6 +514,8 @@ namespace PulseFit.Management.Web.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Duration = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
+                    IndividualType = table.Column<int>(type: "int", nullable: true),
+                    GroupType = table.Column<int>(type: "int", nullable: true),
                     Popularity = table.Column<int>(type: "int", nullable: false),
                     DifficultyLevel = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -507,6 +527,7 @@ namespace PulseFit.Management.Web.Migrations
                     GymId = table.Column<int>(type: "int", nullable: false),
                     GymName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Bookings = table.Column<int>(type: "int", nullable: false),
+                    WorkoutImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     SubscriptionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -516,6 +537,32 @@ namespace PulseFit.Management.Web.Migrations
                         name: "FK_Workouts_Subscriptions_SubscriptionId",
                         column: x => x.SubscriptionId,
                         principalTable: "Subscriptions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Equipments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    GymId = table.Column<int>(type: "int", nullable: false),
+                    GymName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EquipmentImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    WorkoutPlanId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Equipments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Equipments_WorkoutPlans_WorkoutPlanId",
+                        column: x => x.WorkoutPlanId,
+                        principalTable: "WorkoutPlans",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -625,29 +672,6 @@ namespace PulseFit.Management.Web.Migrations
                         name: "FK_PersonalTrainerSpecialties_Specialties_SpecialtiesId",
                         column: x => x.SpecialtiesId,
                         principalTable: "Specialties",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Equipments",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    GymId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Equipments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Equipments_Gyms_GymId",
-                        column: x => x.GymId,
-                        principalTable: "Gyms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -836,9 +860,9 @@ namespace PulseFit.Management.Web.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Equipments_GymId",
+                name: "IX_Equipments_WorkoutPlanId",
                 table: "Equipments",
-                column: "GymId");
+                column: "WorkoutPlanId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Feedbacks_GymId",
@@ -1011,6 +1035,9 @@ namespace PulseFit.Management.Web.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "WorkoutPlans");
 
             migrationBuilder.DropTable(
                 name: "Workouts");

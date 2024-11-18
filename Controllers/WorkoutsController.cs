@@ -43,9 +43,9 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Workouts
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var workouts = _workoutRepository.GetAll().Where(w => w.StartDate >= DateTime.Today);
+            var workouts = _workoutRepository.GetAll();
 
             return View(workouts);
         }
@@ -214,18 +214,14 @@ namespace PulseFit.Management.Web.Controllers
             {
                 string userId = await _userHelper.GetUserIdByEmailAsync(userLoged);
 
-                var bookings = await _bookingRepository.GetBookingsByUserAsync(userId);
+                var bookings = _bookingRepository.GetAll();
+                var bookingViewModels = bookings.Select(b => _converterHelper.ToBookingViewModel(b)).ToList();
 
-                var model = bookings
-                    .Select(b => _converterHelper.ToBookingViewModel(b))
-                    .ToList();
-
-                return View(model);
+                return View(bookingViewModels);
             }
 
             return RedirectToAction("Login", "Account");
         }
-
 
         public async Task<IActionResult> CreateBooking(int? id)
         {
@@ -296,27 +292,6 @@ namespace PulseFit.Management.Web.Controllers
             return RedirectToAction("MyBookings");
         }
 
-        public async Task<IActionResult> MyBookingsDetails(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var workout = await _workoutRepository.GetByIdAsync(id.Value);
-
-            if (workout == null)
-            {
-                return NotFound();
-            }
-
-            ViewBag.Spots = workout.MaxCapacity - workout.Bookings;
-            ViewBag.GymImage = await _gymRepository.GetGymImageAsync(workout.GymId);
-            ViewBag.PtProfilePic = await _personalTrainerRepository.GetPtProfilePicAsync(workout.InstructorId);
-
-
-            return View(workout);
-        }
 
         public async Task LoadViewBags()
         {

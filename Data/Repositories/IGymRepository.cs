@@ -8,5 +8,7 @@ namespace PulseFit.Management.Web.Data.Repositories
         Task<string> GetGymNameByIdAsync(int id);
 
         Task<string> GetGymImageAsync(int id);
+
+        Task<IEnumerable<Gym>> GetAllAsync();
     }
 }

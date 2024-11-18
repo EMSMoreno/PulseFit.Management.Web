@@ -44,7 +44,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\uploads\employees-pics\" />
     <Folder Include="wwwroot\uploads\gyms-pics\" />
     <Folder Include="wwwroot\uploads\personaltrainers-pics\" />
