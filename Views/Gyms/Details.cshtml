@@ -1,84 +1,51 @@
 ﻿@model PulseFit.Management.Web.Data.Entities.Gym
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Gym Details";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <h2>Gym Details</h2>
 
-<div>
-    <h4>Gym</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Location)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Location)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Capacity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Capacity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.OpeningTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.OpeningTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ClosingTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ClosingTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreationDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreationDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DayOff)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DayOff)
-        </dd>
-       @*  <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.GymImagePath)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.GymImagePath)
-        </dd> *@
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="card shadow-lg p-4">
+        <div class="row align-items-center mb-4">
+            <div class="col-md-4 d-flex justify-content-center">
+                <img src="@Model.GymImageUrl" alt="Gym Picture" class="rounded shadow-sm" style="width: 180px; height: 180px;" />
+            </div>
+            <div class="col-md-8">
+                <h3 class="text-primary">@Model.Name</h3>
+                <hr class="my-3" />
+                <dl class="row">
+                    <dt class="col-sm-4 fw-semibold text-muted">Email:</dt>
+                    <dd class="col-sm-8">@Model.Email</dd>
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Phone:</dt>
+                    <dd class="col-sm-8">@Model.PhoneNumber</dd>
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Location:</dt>
+                    <dd class="col-sm-8">@Model.Location</dd>
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Capacity:</dt>
+                    <dd class="col-sm-8">@Model.Capacity</dd>
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Day Off:</dt>
+                    <dd class="col-sm-8">@Model.DayOff</dd>
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Opening Time:</dt>
+                    <dd class="col-sm-8">@Model.OpeningTime.ToString(@"hh\:mm")</dd>
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Closing Time:</dt>
+                    <dd class="col-sm-8">@Model.ClosingTime.ToString(@"hh\:mm")</dd>
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Creation:</dt>
+                    <dd class="col-sm-8">@Model.CreationDate.ToString("dd/MM/yyyy")</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end mt-3">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Edit</a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger me-2">Delete</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
 </div>

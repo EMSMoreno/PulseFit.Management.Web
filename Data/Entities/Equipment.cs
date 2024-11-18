@@ -6,31 +6,42 @@
 
         public string Name { get; set; }
 
-        // Equipment Type: Cardio, Bodybuilding and Others
-        public EquipmentType Type { get; set; }
-
         public int Quantity { get; set; }
 
-        // Equipment Status: Active or Inactive
+        public EquipmentType Type { get; set; }
+
+        public enum EquipmentType
+        {
+            Cardio,
+            Chest,
+            Biceps,
+            Triceps,
+            Shoulders,
+            Lats,
+            Quadriceps,
+            Hamstrings,
+            Calves,
+            Glutes,
+            Abs,
+            Forearms
+        }
+
         public EquipmentStatus Status { get; set; }
+
+        public enum EquipmentStatus
+        {
+            Active,
+            Inactive
+        }
 
         public int GymId { get; set; }
 
-        public Gym Gym { get; set; }
-    }
+        public string? GymName { get; set; }
 
-    // Enum for Equipment Type
-    public enum EquipmentType
-    {
-        Cardio,
-        Bodybuilding,
-        Others
-    }
+        public Guid? EquipmentImageId { get; set; }
 
-    // Enum for Equipment Status
-    public enum EquipmentStatus
-    {
-        Active,
-        Inactive
+        public string EquipmentImageUrl => EquipmentImageId == null
+            ? "/images/noimage.png"
+            : $"/uploads/equipments-pics/{EquipmentImageId}.jpg";
     }
 }

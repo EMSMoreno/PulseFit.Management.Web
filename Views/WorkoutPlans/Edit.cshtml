@@ -1,0 +1,158 @@
+﻿@model PulseFit.Management.Web.Models.WorkoutPlanViewModel
+
+@{
+    ViewData["Title"] = "Edit Workout Plan";
+}
+
+<h2>Edit Workout Plan</h2>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+
+<form id="editWorkoutPlanForm" asp-action="Edit" method="post" enctype="multipart/form-data">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="Name" class="form-label">Name <span class="text-danger">*</span></label>
+            <input asp-for="Name" class="form-control" required />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Description" class="form-label">Description <span class="text-danger">*</span></label>
+            <input asp-for="Description" class="form-control" required />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="WorkoutPlanType" class="form-label">Workout Type <span class="text-danger">*</span></label>
+            <select asp-for="WorkoutPlanType" class="form-select" asp-items="ViewBag.Type">
+                <option value="">Select a Type ...</option>
+            </select>
+            <span asp-validation-for="WorkoutPlanType" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Difficulty" class="form-label">Difficulty <span class="text-danger">*</span></label>
+            <select asp-for="Difficulty" class="form-select" asp-items="ViewBag.Difficulty">
+                <option value="">Select a Difficulty ...</option>
+            </select>
+            <span asp-validation-for="Difficulty" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Profile Picture and Preview -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="WorkoutPlanImageFile" class="form-label">Workout Plan Picture</label>
+            <input asp-for="WorkoutPlanImageFile" type="file" class="form-control" id="workoutPlanPictureUpload" />
+            <small class="form-text text-muted">Maximum file size: 2 MB</small>
+            <span asp-validation-for="WorkoutPlanImageFile" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label>Image Preview</label>
+            <img id="imagePreview" src="@Model.WorkoutPlanImageFile" alt="Image Preview" style="max-width: 150px; max-height: 150px; border-radius: 10px;" />
+        </div>
+    </div>
+
+    <!-- Specialization Selection -->
+    <h4>Select Equipments</h4>
+    <div class="row mb-1">
+        @foreach (var equipment in Model.Equipments)
+        {
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-1">
+                <div class="card specialization-card p-1" style="cursor: pointer; min-height: 180px;">
+                    <div class="card-img-wrapper d-flex align-items-center justify-content-center" style="height: 120px;">
+                        <img src="@equipment.ImageUrl" class="card-img-top" alt="@equipment.Text" style="max-height: 100%; width: auto; object-fit: contain; margin: 0 auto;">
+                    </div>
+                    <!-- Ajuste no template do card -->
+                    <div class="card-body p-1 text-center">
+                        <small class="card-title specialization-title d-block" style="margin-top: auto;">@equipment.Text</small>
+                        <input type="checkbox" name="EquipmentsIds" value="@equipment.Value" class="form-check-input mt-1" id="specialization-@equipment.Value" style="display: none;" />
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="mt-3 d-flex justify-content-between">
+        <button type="submit" class="btn btn-primary">Create Workout Plan</button>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/formHelpers.js"></script>
+
+    <script>
+        setupImageUploadPreview("workoutPlanPictureUpload", "imagePreview");
+        setupSweetAlertOnSubmit("editWorkoutPlanForm", "Workout Plan updated successfully.", "Please correct the errors in the form.");
+
+        // Configuração da seleção visual dos cards
+        $(document).ready(function () {
+            $(".specialization-card").on("click", function () {
+                var checkbox = $(this).find("input[type='checkbox']");
+                checkbox.prop("checked", !checkbox.prop("checked"));
+                $(this).toggleClass("selected-card");
+            });
+        });
+    </script>
+}
+
+<style>
+    .specialization-card {
+        transition: border 0.3s, box-shadow 0.3s;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin: 2px;
+    }
+
+    .selected-card {
+        border: 2px solid #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    }
+
+    .card-body {
+        padding: 0.2rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .specialization-title {
+        max-height: 40px;
+        overflow: hidden;
+        white-space: normal; /* Permite que o texto seja quebrado */
+        text-overflow: ellipsis;
+    }
+
+    .card-img-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 120px;
+        overflow: hidden;
+    }
+
+    .card-img-top {
+        max-height: 100%;
+        width: auto;
+        object-fit: contain;
+        margin: 0 auto;
+    }
+</style>

@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PulseFit.Management.Web.Models
 {
-    public class GymViewModel : Gym
+    public class WorkoutViewModel : Workout
     {
-        [Display(Name = "Gym Picture")]
-        public IFormFile? GymImageFile { get; set; }
+        [Display(Name = "Workout Picture")]
+        public IFormFile? WorkoutImageFile { get; set; }
     }
 }

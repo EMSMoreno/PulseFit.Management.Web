@@ -27,15 +27,16 @@ namespace PulseFit.Management.Web.Data.Repositories
             }
 
             booking.Status = Booking.BookingStatus.Canceled;
+
+            _context.Bookings.Update(booking);
             await _context.SaveChangesAsync();
         }
 
         public async Task CreateBookingAsync(Booking booking)
         {
-            
             booking.ReservationDate = DateTime.Now;
             booking.Status = Booking.BookingStatus.Reserved;
-
+            
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
         }
@@ -47,10 +48,17 @@ namespace PulseFit.Management.Web.Data.Repositories
             return workout.MaxCapacity - reservedSlots;
         }
 
+        public async Task<Booking> GetBookingByUserAndWorkoutAsync(string userId, int workoutId)
+        {
+            return await _context.Bookings
+                .FirstOrDefaultAsync(b => b.UserId == userId && b.WorkoutId == workoutId);
+        }
+
+
         public async Task<IEnumerable<Booking>> GetBookingsByUserAsync(string userId)
         {
             return await _context.Bookings
-                .Where(b => b.UserId == userId)
+                .Where(b => b.UserId == userId && b.TrainingDate >= DateTime.Today)
                 .OrderBy(b => b.TrainingDate)
                 .ToListAsync();
         }

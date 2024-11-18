@@ -32,5 +32,23 @@ namespace PulseFit.Management.Web.Helpers
         Task<Payment> ToPaymentAsync(PaymentViewModel model, string userId, Guid transactionId, Payment.PaymentStatus status);
         PaymentViewModel ToPaymentViewModel(Payment payment);
 
+        Task<Gym> ToGym(GymViewModel model,  Guid imageId, bool isNew);
+        GymViewModel ToGymViewModel(Gym gym);
+
+
+        Workout ToWorkout(WorkoutViewModel model, Guid imageId, bool isNew);
+        WorkoutViewModel ToWorkoutViewModel(Workout workout);
+
+
+        Task<Booking> ToBookingAsync(BookingViewModel model, Guid imageId, bool isNew);
+        BookingViewModel ToBookingViewModel(Booking booking);
+
+
+        Equipment ToEquipment(EquimentViewModel model, Guid imageId, bool isNew);
+        EquimentViewModel ToEquipmentViewModel(Equipment equipment);
+
+
+        Task<WorkoutPlan> ToWorkoutPlanAsync(WorkoutPlanViewModel model, Guid imageId, bool isNew);
+        WorkoutPlanViewModel ToWorkoutPlanViewModel(WorkoutPlan workoutPlan);
     }
 }

@@ -8,164 +8,164 @@
 //using PulseFit.Management.Web.Helpers;
 //using PulseFit.Management.Web.Models;
 
-//namespace PulseFit.Management.Web.Controllers
-//{
-//    public class GymsController : Controller
-//    {
-//        private readonly IGymRepository _gymRepository;
-//        private readonly DataContext _context;
-//        private readonly IBlobHelper _blobHelper;
-//        private readonly IConverterHelper _converterHelper;
+namespace PulseFit.Management.Web.Controllers
+{
+    public class GymsController : Controller
+    {
+        private readonly IGymRepository _gymRepository;
+        private readonly DataContext _context;
+        private readonly IBlobHelper _blobHelper;
+        private readonly IConverterHelper _converterHelper;
 
-//        public GymsController(IGymRepository gymRepository, DataContext context, IBlobHelper blobHelper, IConverterHelper converterHelper)
-//        {
-//            _gymRepository = gymRepository;
-//            _context = context;
-//            _blobHelper = blobHelper;
-//            _converterHelper = converterHelper;
-//        }
+        public GymsController(IGymRepository gymRepository, DataContext context, IBlobHelper blobHelper, IConverterHelper converterHelper)
+        {
+            _gymRepository = gymRepository;
+            _context = context;
+            _blobHelper = blobHelper;
+            _converterHelper = converterHelper;
+        }
 
-//        // GET: Gyms
-//        public IActionResult Index()
-//        {
-//            return View(_gymRepository.GetAll());
-//        }
+        // GET: Gyms
+        public IActionResult Index()
+        {
+            return View(_gymRepository.GetAll());
+        }
 
-//        // GET: Gyms/Details/5
-//        public async Task<IActionResult> Details(int? id)
-//        {
-//            if (id == null)
-//            {
-//                return NotFound();
-//            }
+        // GET: Gyms/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-//            var gym = await _gymRepository.GetByIdAsync(id.Value);
-//            if (gym == null)
-//            {
-//                return NotFound();
-//            }
+            var gym = await _gymRepository.GetByIdAsync(id.Value);
+            if (gym == null)
+            {
+                return NotFound();
+            }
 
-//            return View(gym);
-//        }
+            return View(gym);
+        }
 
-//        // GET: Gyms/Create
-//        public IActionResult Create()
-//        {
-//            ViewBag.Status = new SelectList(Enum.GetValues(typeof(Gym.GymStatus)).Cast<Gym.GymStatus>());
-//            ViewBag.DayOff = new SelectList(Enum.GetValues(typeof(Gym.GymDayOff)).Cast<Gym.GymDayOff>());
-
-//            return View();
-//        }
+        // GET: Gyms/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
 
 
-//        // POST: Gyms/Create
-//        // To protect from overposting attacks, enable the specific properties you want to bind to.
-//        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        public async Task<IActionResult> Create(GymViewModel model)
-//        {
-//            if (ModelState.IsValid)
-//            {
-//                var imageId = model.GymImageFile != null
-//                    ? await _blobHelper.UploadBlobAsync(model.GymImageFile, "gyms-pics")
-//                    : Guid.Empty;
+        // POST: Gyms/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(GymViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var imageId = model.GymImageFile != null
+                    ? await _blobHelper.UploadBlobAsync(model.GymImageFile, "gyms-pics")
+                    : Guid.Empty;
 
-//                var gym = await _converterHelper.ToGym(model, imageId, isNew : true);
+                model.CreationDate = DateTime.Now.Date;
 
-//                await _gymRepository.CreateAsync(gym);
+                var gym = await _converterHelper.ToGym(model, imageId, isNew : true);
+
+                await _gymRepository.CreateAsync(gym);
                 
-//                return RedirectToAction(nameof(Index));
-//            }
+                return RedirectToAction(nameof(Index));
+            }
 
-//            ViewBag.Status = new SelectList(Enum.GetValues(typeof(Gym.GymStatus)).Cast<Gym.GymStatus>());
-//            ViewBag.DayOff = new SelectList(Enum.GetValues(typeof(Gym.GymDayOff)).Cast<Gym.GymDayOff>());
 
-//            return View(model);
-//        }
+            return View(model);
+        }
 
-//        // GET: Gyms/Edit/5
-//        public async Task<IActionResult> Edit(int? id)
-//        {
-//            if (id == null)
-//            {
-//                return NotFound();
-//            }
+        // GET: Gyms/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-//            var gym = await _gymRepository.GetByIdAsync(id.Value);
-//            if (gym == null)
-//            {
-//                return NotFound();
-//            }
+            var gym = await _gymRepository.GetByIdAsync(id.Value);
+            if (gym == null)
+            {
+                return NotFound();
+            }
 
-//            ViewBag.Status = new SelectList(Enum.GetValues(typeof(Gym.GymStatus)).Cast<Gym.GymStatus>());
-//            ViewBag.DayOff = new SelectList(Enum.GetValues(typeof(Gym.GymDayOff)).Cast<Gym.GymDayOff>());
+            var model = _converterHelper.ToGymViewModel(gym);
 
-//            return View(gym);
-//        }
+            return View(model);
+        }
 
-//        // POST: Gyms/Edit/5
-//        // To protect from overposting attacks, enable the specific properties you want to bind to.
-//        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        public async Task<IActionResult> Edit(int id, Gym gym)
-//        {
-//            if (ModelState.IsValid)
-//            {
-//                try
-//                {
-//                    await _gymRepository.UpdateAsync(gym);
+        // POST: Gyms/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(GymViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var imageId = model.GymImageFile != null
+                    ? await _blobHelper.UploadBlobAsync(model.GymImageFile, "gyms-pics")
+                    : Guid.Empty;
 
-//                }
-//                catch (DbUpdateConcurrencyException)
-//                {
-//                    if (!await _gymRepository.ExistAsync(gym.Id))
-//                    {
-//                        return NotFound();
-//                    }
-//                    else
-//                    {
-//                        throw;
-//                    }
-//                }
-//                return RedirectToAction(nameof(Index));
-//            }
+                    var gym = await _converterHelper.ToGym(model, imageId, false);
 
-//            ViewBag.Status = new SelectList(Enum.GetValues(typeof(Gym.GymStatus)).Cast<Gym.GymStatus>());
-//            ViewBag.DayOff = new SelectList(Enum.GetValues(typeof(Gym.GymDayOff)).Cast<Gym.GymDayOff>());
+                    await _gymRepository.UpdateAsync(gym);
 
-//            return View(gym);
-//        }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!await _gymRepository.ExistAsync(model.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
 
-//        // GET: Gyms/Delete/5
-//        public async Task<IActionResult> Delete(int? id)
-//        {
-//            if (id == null)
-//            {
-//                return NotFound();
-//            }
-
-//            var gym = await _context.Gyms
-//                .FirstOrDefaultAsync(m => m.Id == id);
-//            if (gym == null)
-//            {
-//                return NotFound();
-//            }
-
-//            return View(gym);
-//        }
-
-//        // POST: Gyms/Delete/5
-//        [HttpPost, ActionName("Delete")]
-//        [ValidateAntiForgeryToken]
-//        public async Task<IActionResult> DeleteConfirmed(int id)
-//        {
-//            var gym = await _gymRepository.GetByIdAsync(id);
             
-//            await _gymRepository.DeleteAsync(gym);
+            return View(model);
+        }
 
-//            return RedirectToAction(nameof(Index));
-//        }
-//    }
-//}
+        // GET: Gyms/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var gym = await _context.Gyms
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (gym == null)
+            {
+                return NotFound();
+            }
+
+            return View(gym);
+        }
+
+        // POST: Gyms/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var gym = await _gymRepository.GetByIdAsync(id);
+            
+            await _gymRepository.DeleteAsync(gym);
+
+            return RedirectToAction(nameof(Index));
+        }
+    }
+}

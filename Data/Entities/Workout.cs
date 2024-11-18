@@ -6,13 +6,13 @@ namespace PulseFit.Management.Web.Data.Entities
     {
         [Required]
         public int Id { get; set; }
-        
+
         [Required]
         public string Name { get; set; }
-        
+
         [Required]
         public string Description { get; set; }
-        
+
         [Required]
         public int Duration { get; set; }
 
@@ -21,18 +21,49 @@ namespace PulseFit.Management.Web.Data.Entities
 
         public enum WorkoutType
         {
-            Cardio,
+            Individual,
+            Group
+        }
+
+        public IndividualWorkoutType? IndividualType { get; set; }
+
+        public enum IndividualWorkoutType
+        {
             Strenght,
+            Hypertrophy,
+            Calisthenics,
+            Functional,
+            Cardio,
+            Crossfit,
+            Rehabilitation,
+            Prenatal,
+            Postnatal,
+            Senior,
+        }
+
+        public GroupWorkoutType? GroupType { get; set; }
+
+        public enum GroupWorkoutType
+        {
             Yoga,
+            Pilates,
+            HIIT,
+            Martial_Arts,
+            Dance,
+            Swimming,
+            Boxing,
+            KickBoxing,
+            Mobility,
+            Meditation,
             Cycling,
-            Bumbum
+            Aqua_Aerobics
         }
 
         [Required]
         public int Popularity { get; set; }
 
         [Required]
-        public WorkoutDifficulty DifficultyLevel { get; set; } 
+        public WorkoutDifficulty DifficultyLevel { get; set; }
 
         public enum WorkoutDifficulty
         {
@@ -43,13 +74,13 @@ namespace PulseFit.Management.Web.Data.Entities
 
         [Required]
         public DateTime StartDate { get; set; }
-        
+
         [Required]
         public DateTime EndDate { get; set; }
-        
+
         [Required]
         public int MaxCapacity { get; set; }
-        
+
         [Required]
         public WorkoutStatus Status { get; set; }
 
@@ -62,7 +93,7 @@ namespace PulseFit.Management.Web.Data.Entities
         }
 
         [Required]
-        public string InstructorId { get; set; } 
+        public string InstructorId { get; set; }
 
         public string? InstructorName { get; set; }
 
@@ -73,5 +104,12 @@ namespace PulseFit.Management.Web.Data.Entities
 
         [Required]
         public int Bookings { get; set; }
+
+        [Display(Name = "Workout Image")]
+        public Guid? WorkoutImageId { get; set; }
+
+        public string WorkoutImageUrl => WorkoutImageId == null
+            ? "/images/noimage.png"
+            : $"/uploads/workouts-pics/{WorkoutImageId}.jpg";
     }
 }

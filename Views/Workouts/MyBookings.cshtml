@@ -1,25 +1,69 @@
-﻿@model IEnumerable<PulseFit.Management.Web.Data.Entities.Booking>
+﻿@model IEnumerable<PulseFit.Management.Web.Models.BookingViewModel>
+@using Newtonsoft.Json
+
+@{
+    ViewData["Title"] = "Bookings List";
+    var jsonSerializerSettings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                Formatting = Formatting.Indented
+            };
+    var serializedData = JsonConvert.SerializeObject(Model, jsonSerializerSettings);
+}
 
 <h2>My Bookings</h2>
-<table>
-    <tr>
-        <th>Traning Date</th>
-        <th>Status</th>
-        <th>Options</th>
-    </tr>
-    @foreach (var booking in Model)
-    {
-        <tr>
-            <td>@booking.TrainingDate.ToString("dd/MM/yyyy HH:mm")</td>
-            <td>@booking.Status</td>
-            <td>
-                @if (booking.Status == PulseFit.Management.Web.Data.Entities.Booking.BookingStatus.Reserved && (booking.TrainingDate - DateTime.Now).TotalHours >= 24)
-                {
-                    <form asp-action="CancelBooking" asp-route-bookingId="@booking.Id" method="post">
-                        <button type="submit">Cancell</button>
-                    </form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No bookings found.</div>
+}
+else
+{
+    <div id="Grid"></div>
+}
+
+@section Scripts{
+    <script id="actionTemplate" type="text/x-template">
+        <a href="/Workouts/MyBookingsDetails/${Id}" class="btn btn-warning me-2">Details</a>
+        <a href="/Workouts/CancelBooking/${Id}" class="btn btn-danger me-2">Cancel</a>
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            var serializedData = @Html.Raw(serializedData);
+
+            serializedData.forEach(function (booking) {
+                switch (booking.Status) {
+                    case 0:
+                        booking.StatusText = "Reserved";
+                        break;
+                    case 1:
+                        booking.StatusText = "Confirmed";
+                        break;
+                    case 2:
+                        booking.StatusText = "Canceled";
+                        break;
                 }
-            </td>
-        </tr>
-    }
-</table>
+            });
+
+            // Configuração do Grid
+            var grid = new ej.grids.Grid({
+                dataSource: serializedData,
+                allowPaging: true,
+                allowSorting: true,
+                allowFiltering: true,
+                pageSettings: { pageSize: 10 },
+                toolbar: ['Search'],
+                columns: [
+                    { field: "TrainingDate", headerText: "Training Date", type: "date", format: 'yMd', width: 130 },
+                    { field: "ReservationDate", headerText: "Reservation Date", type: "date", format: 'yMd', width: 130 },
+                    { field: "WorkoutName", headerText: "Workout", width: 120 },
+                    { field: "GymName", headerText: "Gym", width: 150 },
+                    { field: "StatusText", headerText: "Status", width: 100 },
+                    { headerText: "Actions", width: 180, template: "#actionTemplate" }
+                ]
+            });
+            grid.appendTo("#Grid");
+        });
+    </script>
+}

@@ -13,6 +13,17 @@ namespace PulseFit.Management.Web.Data.Repositories
             _context = context;
         }
 
+        public async Task<string> GetGymImageAsync(int id)
+        {
+            var gym = await _context.Gyms.FirstOrDefaultAsync(g => g.Id == id);
+            if (gym == null)
+            {
+                return null;
+            }
+
+            return gym.GymImageUrl;
+        }
+
         public async Task<string> GetGymNameByIdAsync(int id)
         {
             var gym = await _context.Gyms

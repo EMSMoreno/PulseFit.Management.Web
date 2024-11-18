@@ -361,30 +361,28 @@ namespace PulseFit.Management.Web.Helpers
             };
         }
 
-
-
-        public async Task<Payment> ToPaymentAsync(PaymentViewModel model, string userId, Guid transactionId, Payment.PaymentStatus status)
+        public async Task<Gym> ToGym(GymViewModel model, Guid imageId, bool isNew)
         {
-            var subscription = await _context.Subscriptions.FindAsync(model.SubscriptionId);
-
-            return new Payment
+            return new Gym
             {
-                Amount = model.Amount,
-                PaymentDate = DateTime.UtcNow,
-                UserId = userId,
-                Subscription = subscription,
-                SubscriptionId = model.SubscriptionId,
-                Method = model.SelectedMethod,
-                Status = status,
-                TransactionId = transactionId.ToString(),
-                Description = model.Description
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                Location = model.Location,
+                Capacity = model.Capacity,
+                OpeningTime = model.OpeningTime,
+                ClosingTime = model.ClosingTime,
+                CreationDate = model.CreationDate,
+                Status = model.Status,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                DayOff = model.DayOff,
+                GymImageId = imageId,
             };
         }
 
-        // Converte Payment para PaymentViewModel
-        public PaymentViewModel ToPaymentViewModel(Payment payment)
+        public GymViewModel ToGymViewModel(Gym gym)
         {
-            return new PaymentViewModel
+            return new GymViewModel
             {
                 Id = payment.Id,
                 SubscriptionId = payment.SubscriptionId,

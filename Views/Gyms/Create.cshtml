@@ -1,84 +1,114 @@
 ﻿@model PulseFit.Management.Web.Models.GymViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Workout";
 }
 
-<h1>Create</h1>
+<h2>Create Workout</h2>
 
-<h4>Gym</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Capacity" class="control-label"></label>
-                <input asp-for="Capacity" class="form-control" />
-                <span asp-validation-for="Capacity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="OpeningTime" class="control-label"></label>
-                <input asp-for="OpeningTime" class="form-control" />
-                <span asp-validation-for="OpeningTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClosingTime" class="control-label"></label>
-                <input asp-for="ClosingTime" class="form-control" />
-                <span asp-validation-for="ClosingTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreationDate" class="control-label"></label>
-                <input asp-for="CreationDate" class="form-control" />
-                <span asp-validation-for="CreationDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-control" asp-items="ViewBag.Status"></select>
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DayOff" class="control-label"></label>
-                <select asp-for="DayOff" class="form-control" asp-items="ViewBag.DayOff"></select>
-                <span asp-validation-for="DayOff" class="text-danger"></span>
-            </div>
-            <div class="col-md-6">
-                <label asp-for="GymImageFile" class="form-label">Profile Picture</label>
-                <input asp-for="GymImageFile" type="file" class="form-control" id="trainerPictureUpload" />
-                <small class="form-text text-muted">Maximum file size: 2 MB</small> <!-- Indicação do tamanho máximo -->
-                <span asp-validation-for="GymImageFile" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
     </div>
-</div>
+}
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<form id="createWorkoutForm" asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="Name" class="form-label">Name <span class="text-danger">*</span></label>
+            <input asp-for="Name" class="form-control" required />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Email" class="form-label">Email: <span class="text-danger">*</span></label>
+            <input asp-for="Email" class="form-control" required />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="PhoneNumber" class="form-label">Phone Number: <span class="text-danger">*</span></label>
+            <input asp-for="PhoneNumber" class="form-control" required />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Location" class="form-label">Location: <span class="text-danger">*</span></label>
+            <input asp-for="Location" class="form-control" required />
+            <span asp-validation-for="Location" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="OpeningTime" class="form-label">Opening Time: <span class="text-danger">*</span></label>
+            <input asp-for="OpeningTime" class="form-control" required />
+            <span asp-validation-for="OpeningTime" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="ClosingTime" class="form-label">Closing Time: <span class="text-danger">*</span></label>
+            <input asp-for="ClosingTime" class="form-control" required />
+            <span asp-validation-for="ClosingTime" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="DayOff" class="form-label">DayOff <span class="text-danger">*</span></label>
+            <select asp-for="DayOff" class="form-select" required>
+                <option value="">Select DayOff ...</option>
+                @foreach (var cert in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.Gym.GymDayOff)))
+                {
+                    <option value="@cert">@cert</option>
+                }
+            </select>
+            <span asp-validation-for="DayOff" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Capacity" class="form-label">Capacity: <span class="text-danger">*</span></label>
+            <input asp-for="Capacity" class="form-control" />
+            <span asp-validation-for="Capacity" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Status -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="Status" class="form-label">Status <span class="text-danger">*</span></label>
+            <select asp-for="Status" class="form-select" required>
+                <option value="">Select Status ...</option>
+                @foreach (var status in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.Gym.GymStatus)))
+                {
+                    <option value="@status">@status</option>
+                }
+            </select>
+            <span asp-validation-for="Status" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="GymImageFile" class="form-label">Profile Picture</label>
+            <input asp-for="GymImageFile" type="file" class="form-control" id="gymPictureUpload" />
+            <small class="form-text text-muted">Maximum file size: 2 MB</small> <!-- Indicação do tamanho máximo -->
+            <span asp-validation-for="GymImageFile" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mt-3 d-flex justify-content-between">
+        <button type="submit" class="btn btn-primary">Create Gym</button>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/formHelpers.js"></script>
+
+    <script>
+        setupSweetAlertOnSubmit("createWorkoutForm", "Gym created successfully.", "Please correct the errors in the form.");
+    </script>
 }

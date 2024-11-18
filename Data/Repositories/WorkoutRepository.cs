@@ -15,9 +15,18 @@ namespace PulseFit.Management.Web.Data.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Workout>> GetAllAsync()
+        public async Task IncrementBookingsAsync(int workoutId)
         {
-            return await _context.Workouts.ToListAsync();
+            var workout = await _context.Workouts.FindAsync(workoutId);
+            if (workout == null)
+            {
+                throw new Exception("Workout not found.");
+            }
+
+            workout.Bookings += 1;
+
+            _context.Workouts.Update(workout);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -35,6 +35,7 @@ namespace PulseFit.Management.Web.Data.Entities
 
         public enum GymDayOff
         {
+            None,
             Sunday,
             Monday,
             Tuesday,
