@@ -19,20 +19,18 @@ namespace PulseFit.Management.Web.Controllers
         private readonly IGymRepository _gymRepository;
         private readonly IConverterHelper _converterHelper;
         private readonly IBlobHelper _blobHelper;
-        private readonly DataContext _context;
 
         public EquipmentsController(
             IEquipmentRepository equipmentRepository,
             IGymRepository gymRepository,
             IConverterHelper converterHelper,
-            IBlobHelper blobHelper,
-            DataContext context)
+            IBlobHelper blobHelper
+            )
         {
             _equipmentRepository = equipmentRepository;
             _gymRepository = gymRepository;
             _converterHelper = converterHelper;
             _blobHelper = blobHelper;
-            _context = context;
         }
 
         // GET: Equipments
@@ -55,8 +53,7 @@ namespace PulseFit.Management.Web.Controllers
                 return NotFound();
             }
 
-            var equipment = await _context.Equipments
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var equipment = await _equipmentRepository.GetByIdAsync(id.Value);
             if (equipment == null)
             {
                 return NotFound();

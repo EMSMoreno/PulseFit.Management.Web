@@ -43,7 +43,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Workouts
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var workouts = _workoutRepository.GetAll();
 

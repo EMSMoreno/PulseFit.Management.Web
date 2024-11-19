@@ -1,0 +1,76 @@
+﻿@model PulseFit.Management.Web.Models.OnlineClassViewModel
+
+@{
+    ViewData["Title"] = "Create Class";
+}
+
+<h2>Create Online Class</h2>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+
+<hr />
+<form id="createClassForm" asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="Title" class="form-label">Title <span class="text-danger">*</span></label>
+            <input asp-for="Title" class="form-control" required />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Description" class="form-label">Description <span class="text-danger">*</span></label>
+            <input asp-for="Description" class="form-control" required />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="Category" class="form-label"></label>
+            <select asp-for="Category" class="form-control" asp-items="ViewBag.Category">
+                <option value="">Select a Category...</option>
+            </select>
+            <span asp-validation-for="Category" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="VideoUrl" class="form-label">VideoUrl <span class="text-danger">*</span></label>
+            <input asp-for="VideoUrl" class="form-control" required />
+            <span asp-validation-for="VideoUrl" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="ClassImageFile" class="form-label">Class Picture</label>
+            <input asp-for="ClassImageFile" type="file" class="form-control"/>
+            <small class="form-text text-muted">Maximum file size: 2 MB</small> <!-- Indicação do tamanho máximo -->
+            <span asp-validation-for="ClassImageFile" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mt-3 d-flex justify-content-between">
+        <button type="submit" class="btn btn-primary">Create Workout</button>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</form>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/formHelpers.js"></script>
+
+    <script>
+        setupSweetAlertOnSubmit("createClassForm", "Class created successfully.", "Please correct the errors in the form.");
+    </script>
+}

@@ -11,9 +11,9 @@
         gym.Location,
         GymImageUrl = gym.GymImageUrl,
         OpeningTime = gym.OpeningTime.ToString(@"hh\:mm"),
-        ClosingTime = gym.ClosingTime.ToString(@"hh\:mm"), 
+        ClosingTime = gym.ClosingTime.ToString(@"hh\:mm"),
         gym.Status,
-        StatusText = gym.Status == 0 ? "Active" : "Inactive" 
+        StatusText = gym.Status == 0 ? "Active" : "Inactive"
     });
 
     var jsonSerializerSettings = new JsonSerializerSettings

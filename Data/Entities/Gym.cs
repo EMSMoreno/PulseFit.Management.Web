@@ -50,6 +50,6 @@ namespace PulseFit.Management.Web.Data.Entities
 
         public string GymImageUrl => GymImageId == Guid.Empty
             ? "/images/noimage.png"
-            : $"/uploads/gyms-pics/{GymImageId}.png";
+            : $"/uploads/gyms-pics/{GymImageId}.jpg";
     }
 }

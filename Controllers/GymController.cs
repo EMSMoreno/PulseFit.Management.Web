@@ -13,14 +13,12 @@ namespace PulseFit.Management.Web.Controllers
     public class GymsController : Controller
     {
         private readonly IGymRepository _gymRepository;
-        private readonly DataContext _context;
         private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
 
-        public GymsController(IGymRepository gymRepository, DataContext context, IBlobHelper blobHelper, IConverterHelper converterHelper)
+        public GymsController(IGymRepository gymRepository, IBlobHelper blobHelper, IConverterHelper converterHelper)
         {
             _gymRepository = gymRepository;
-            _context = context;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
         }
@@ -28,7 +26,9 @@ namespace PulseFit.Management.Web.Controllers
         // GET: Gyms
         public IActionResult Index()
         {
-            return View(_gymRepository.GetAll());
+            var gyms = _gymRepository.GetAll();
+
+            return View(gyms);
         }
 
         // GET: Gyms/Details/5
@@ -70,7 +70,7 @@ namespace PulseFit.Management.Web.Controllers
 
                 model.CreationDate = DateTime.Now.Date;
 
-                var gym = await _converterHelper.ToGym(model, imageId, isNew : true);
+                var gym = _converterHelper.ToGym(model, imageId, isNew : true);
 
                 await _gymRepository.CreateAsync(gym);
                 
@@ -115,7 +115,7 @@ namespace PulseFit.Management.Web.Controllers
                     ? await _blobHelper.UploadBlobAsync(model.GymImageFile, "gyms-pics")
                     : Guid.Empty;
 
-                    var gym = await _converterHelper.ToGym(model, imageId, false);
+                    var gym = _converterHelper.ToGym(model, imageId, false);
 
                     await _gymRepository.UpdateAsync(gym);
 
@@ -146,8 +146,7 @@ namespace PulseFit.Management.Web.Controllers
                 return NotFound();
             }
 
-            var gym = await _context.Gyms
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var gym = await _gymRepository.GetByIdAsync(id.Value);
             if (gym == null)
             {
                 return NotFound();
@@ -162,7 +161,6 @@ namespace PulseFit.Management.Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var gym = await _gymRepository.GetByIdAsync(id);
-            
             await _gymRepository.DeleteAsync(gym);
 
             return RedirectToAction(nameof(Index));

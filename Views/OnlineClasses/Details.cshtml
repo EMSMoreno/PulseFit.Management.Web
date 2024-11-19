@@ -1,0 +1,37 @@
+﻿@model PulseFit.Management.Web.Data.Entities.OnlineClass
+
+@{
+    ViewData["Title"] = "Class Details";
+}
+
+<div class="container mt-4">
+    <h2>Class Details</h2>
+
+    <div class="card shadow-lg p-4">
+        <div class="row align-items-center mb-4">
+            <div class="col-md-4 d-flex justify-content-center">
+                <img src="@Model.ClassImageUrl" alt="Class Picture" class="rounded shadow-sm" style="width: 180px; height: 180px;" />
+            </div>
+            <div class="col-md-8">
+                <h3 class="text-primary">@Model.Title</h3>
+                <hr class="my-3" />
+                <dl class="row">
+                    <dt class="col-sm-4 fw-semibold text-muted">Description:</dt>
+                    <dd class="col-sm-8">@Model.Description</dd>
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Category:</dt>
+                    <dd class="col-sm-8">@Model.Category</dd>
+
+                    <dt class="col-sm-4 fw-semibold text-muted">Video:</dt>
+                    <dd class="col-sm-8">@Model.VideoUrl</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end mt-3">
+            <a href="@Model.VideoUrl" target="_blank" class="btn btn-success">Watch Video</a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Edit</a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger me-2">Delete</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>

@@ -41,9 +41,9 @@
             <span asp-validation-for="StartDate" class="text-danger"></span>
         </div>
         <div class="col-md-6">
-            <label asp-for="Popularity" class="form-label">Popularity <span class="text-danger">*</span></label>
-            <input asp-for="Popularity" class="form-control" />
-            <span asp-validation-for="Popularity" class="text-danger"></span>
+            <label asp-for="Status" class="form-label"></label>
+            <select asp-for="Status" class="form-control" asp-items="ViewBag.Status"></select>
+            <span asp-validation-for="Status" class="text-danger"></span>
         </div>
         
     </div>
@@ -63,29 +63,20 @@
     
     <div class="row mb-2">
         <div class="col-md-6">
-            <label asp-for="MaxCapacity" class="form-label">Maximum Capacity <span class="text-danger">*</span></label>
-            <input asp-for="MaxCapacity" class="form-control" />
-            <span asp-validation-for="MaxCapacity" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
             <label asp-for="InstructorId" class="form-label">Instructors</label>
             <select asp-for="InstructorId" class="form-control" asp-items="ViewBag.Instructors">
                 <option value="">Select Instructor ...</option>
             </select>
             <span asp-validation-for="InstructorId" class="text-danger"></span>
         </div>
+        <div class="col-md-6">
+            <label asp-for="MaxCapacity" class="form-label">Maximum Capacity <span class="text-danger">*</span></label>
+            <input asp-for="MaxCapacity" class="form-control" />
+            <span asp-validation-for="MaxCapacity" class="text-danger"></span>
+        </div>
     </div>
     
     <div class="row mb-2">
-        <div class="col-md-6">
-            <label asp-for="Type" class="form-label">Workout Type <span class="text-danger">*</span></label>
-            <select asp-for="Type" class="form-select" asp-items="ViewBag.Type" id="TypeSelect">
-                <option value="">Select a Type ...</option>
-            </select>
-            <span asp-validation-for="Type" class="text-danger"></span>
-        </div>
-        
-        
         <div class="col-md-6">
             <label asp-for="GymId" class="control-label">Gyms</label>
             <select asp-for="GymId" class="form-control" asp-items="ViewBag.GymId">
@@ -93,36 +84,37 @@
             </select>
             <span asp-validation-for="GymId" class="text-danger"></span>
         </div>
+        <div class="col-md-6">
+            <label asp-for="Type" class="form-label">Workout Type <span class="text-danger">*</span></label>
+            <select asp-for="Type" class="form-select" asp-items="ViewBag.Type" id="TypeSelect">
+                <option value="">Select a Type ...</option>
+            </select>
+            <span asp-validation-for="Type" class="text-danger"></span>
+        </div>
     </div>
 
     <div class="row mb-2">
-        <div class="col-md-6">
-            <label asp-for="Status" class="form-label"></label>
-            <select asp-for="Status" class="form-control" asp-items="ViewBag.Status"></select>
-            <span asp-validation-for="Status" class="text-danger"></span>
-        </div>
         <div class="col-md-6">
             <label asp-for="WorkoutImageFile" class="form-label">Workout Picture</label>
             <input asp-for="WorkoutImageFile" type="file" class="form-control" id="workoutPictureUpload" />
             <small class="form-text text-muted">Maximum file size: 2 MB</small> <!-- Indicação do tamanho máximo -->
             <span asp-validation-for="WorkoutImageFile" class="text-danger"></span>
         </div>
-    </div>
+        <div class="col-md-6" id="GroupTypeGroup" style="display:none;">
+            <label asp-for="GroupType" class="control-label"></label>
+            <select asp-for="GroupType" class="form-control" asp-items="ViewBag.GroupType">
+                <option value="">Select Group Type ...</option>
+            </select>
+            <span asp-validation-for="GroupType" class="text-danger"></span>
+        </div>
 
-    <div class="form-group" id="GroupTypeGroup" style="display:none;">
-        <label asp-for="GroupType" class="control-label"></label>
-        <select asp-for="GroupType" class="form-control" asp-items="ViewBag.GroupType">
-            <option value="">Select Group Type ...</option>
-        </select>
-        <span asp-validation-for="GroupType" class="text-danger"></span>
-    </div>
-
-    <div class="form-group" id="IndividualTypeGroup" style="display:none;">
-        <label asp-for="IndividualType" class="control-label"></label>
-        <select asp-for="IndividualType" class="form-control" asp-items="ViewBag.IndividualType">
-            <option value="">Select Individual Type ...</option>
-        </select>
-        <span asp-validation-for="IndividualType" class="text-danger"></span>
+        <div class="col-md-6" id="IndividualTypeGroup" style="display:none;">
+            <label asp-for="IndividualType" class="control-label"></label>
+            <select asp-for="IndividualType" class="form-control" asp-items="ViewBag.IndividualType">
+                <option value="">Select Individual Type ...</option>
+            </select>
+            <span asp-validation-for="IndividualType" class="text-danger"></span>
+        </div>
     </div>
     
     <div class="mt-3 d-flex justify-content-between">

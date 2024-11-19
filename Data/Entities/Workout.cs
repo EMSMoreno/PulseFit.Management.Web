@@ -59,8 +59,7 @@ namespace PulseFit.Management.Web.Data.Entities
             Aqua_Aerobics
         }
 
-        [Required]
-        public int Popularity { get; set; }
+        public int? Popularity { get; set; }
 
         [Required]
         public WorkoutDifficulty DifficultyLevel { get; set; }
