@@ -156,7 +156,7 @@ public class SeedDb
             new Specialization { Name = "Other", ImageUrl = "/images/specializations/default.jpg", ImageName = "default.jpg" }
         };
 
-
+        
         _context.Specialties.AddRange(specialties);
         _context.Specializations.AddRange(specializations);
     }

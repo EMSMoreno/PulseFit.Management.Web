@@ -45,14 +45,10 @@ namespace PulseFit.Management.Web.Data.Repositories
         {
             var pt = await _context.PersonalTrainers
                 .Include(p => p.User)
-                .FirstOrDefaultAsync (p => p.UserId == id);
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.UserId == id);
 
-            if(pt == null)
-            {
-                return null;
-            }
-
-            return pt.User.ProfilePictureUrl;
+            return pt?.User?.ProfilePictureUrl ?? "/images/noimage.png";
         }
     }
 }

@@ -2,30 +2,38 @@
 @using Newtonsoft.Json
 
 @{
-    ViewData["Title"] = "Bookings List";
+    ViewData["Title"] = "My Bookings";
+
     var jsonSerializerSettings = new JsonSerializerSettings
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 Formatting = Formatting.Indented
             };
+
     var serializedData = JsonConvert.SerializeObject(Model, jsonSerializerSettings);
 }
 
-<h2>My Bookings</h2>
+<div class="container my-5">
+    <h2 class="title-neon mb-4">My Bookings</h2>
 
-@if (!Model.Any())
-{
-    <div class="alert alert-info">No bookings found.</div>
-}
-else
-{
-    <div id="Grid"></div>
-}
+    @if (!Model.Any())
+    {
+        <div class="alert-neon text-center">No bookings found.</div>
+    }
+    else
+    {
+        <div id="Grid"></div>
+    }
+</div>
 
-@section Scripts{
+@section Scripts {
     <script id="actionTemplate" type="text/x-template">
-        <a href="/Workouts/MyBookingsDetails/${Id}" class="btn btn-warning me-2">Details</a>
-        <a href="/Workouts/CancelBooking/${Id}" class="btn btn-danger me-2">Cancel</a>
+        <a href="/Workouts/MyBookingsDetails/${Id}" class="btn btn-neon-blue neon-hover-shadow me-2">
+            <i class="fas fa-info-circle"></i> Details
+        </a>
+        <a href="/Workouts/CancelBooking/${Id}" class="btn btn-neon-pink neon-hover-shadow me-2">
+            <i class="fas fa-times"></i> Cancel
+        </a>
     </script>
 
     <script>
@@ -33,20 +41,19 @@ else
             var serializedData = @Html.Raw(serializedData);
 
             serializedData.forEach(function (booking) {
-                switch (booking.Status) {
-                    case 0:
-                        booking.StatusText = "Reserved";
-                        break;
-                    case 1:
-                        booking.StatusText = "Confirmed";
-                        break;
-                    case 2:
-                        booking.StatusText = "Canceled";
-                        break;
+            switch (booking.Status) {
+                case 0:
+                    booking.StatusText = "Reserved";
+                    break;
+                case 1:
+                    booking.StatusText = "Confirmed";
+                    break;
+                case 2:
+                    booking.StatusText = "Canceled";
+                    break;
                 }
             });
 
-            // Configuração do Grid
             var grid = new ej.grids.Grid({
                 dataSource: serializedData,
                 allowPaging: true,
@@ -55,15 +62,65 @@ else
                 pageSettings: { pageSize: 10 },
                 toolbar: ['Search'],
                 columns: [
-                    { field: "TrainingDate", headerText: "Training Date", type: "date", format: 'yMd', width: 130 },
-                    { field: "ReservationDate", headerText: "Reservation Date", type: "date", format: 'yMd', width: 130 },
-                    { field: "WorkoutName", headerText: "Workout", width: 120 },
-                    { field: "GymName", headerText: "Gym", width: 150 },
-                    { field: "StatusText", headerText: "Status", width: 100 },
-                    { headerText: "Actions", width: 180, template: "#actionTemplate" }
-                ]
+                    { field: "WorkoutName", headerText: "Workout", width: 140 },
+                    { field: "GymName", headerText: "Gym", width: 140 },
+                    { field: "TrainingDate", headerText: "Training Date", type: "date", format: 'yMd', width: 140 },
+                    { field: "ReservationDate", headerText: "Reservation Date", type: "date", format: 'yMd', width: 140 },
+                    { field: "StatusText", headerText: "Status", width: 120 },
+                    { headerText: "Actions", width: 200, template: "#actionTemplate" }
+                ],
+                rowHeight: 60,
+                gridLines: 'Horizontal',
+                queryCellInfo: function (args) {
+                    args.cell.style.fontSize = "1.1rem";
+                }
             });
             grid.appendTo("#Grid");
         });
     </script>
 }
+
+<style>
+    .alert-neon {
+        background-color: rgba(28, 28, 28, 0.8);
+        border: 1px solid var(--neon-purple);
+        border-radius: 10px;
+        padding: 15px;
+        color: var(--neon-blue);
+        font-weight: bold;
+    }
+
+    .btn-neon-blue {
+        background-color: var(--neon-blue);
+        color: var(--dark-bg);
+        border: 1px solid var(--neon-blue);
+        border-radius: 6px;
+        transition: box-shadow 0.3s ease;
+    }
+
+        .btn-neon-blue:hover {
+            box-shadow: 0 0 10px var(--neon-blue);
+            color: var(--neon-blue);
+            background-color: var(--dark-bg);
+        }
+
+    .btn-neon-pink {
+        background-color: var(--neon-pink);
+        color: var(--dark-bg);
+        border: 1px solid var(--neon-pink);
+        border-radius: 6px;
+        transition: box-shadow 0.3s ease;
+    }
+
+        .btn-neon-pink:hover {
+            box-shadow: 0 0 10px var(--neon-pink);
+            color: var(--neon-pink);
+            background-color: var(--dark-bg);
+        }
+
+    .title-neon {
+        font-size: 2rem;
+        color: var(--neon-blue);
+        text-align: center;
+    }
+</style>

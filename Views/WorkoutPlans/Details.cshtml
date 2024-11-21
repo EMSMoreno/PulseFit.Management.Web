@@ -4,47 +4,57 @@
     ViewData["Title"] = "Workout Plan Details";
 }
 
+<div class="container mt-5">
+    <h2 class="title-neon mb-4">Workout Plan Details</h2>
 
-<div class="container mt-4">
-    <h2>Nutritionist Details</h2>
-
-    <div class="card shadow-lg p-4">
+    <div class="card-neon p-4">
         <div class="row align-items-center mb-4">
             <div class="col-md-4 d-flex justify-content-center">
-                <img src="@Model.WorkoutPlanImageUrl" alt="Workout Picture" class=" shadow-sm" style="width: 180px; height: 180px;" />
+                @if (!string.IsNullOrEmpty(Model.WorkoutPlanImageUrl))
+                {
+                    <img src="@Model.WorkoutPlanImageUrl" alt="Workout Plan Image" class="rounded shadow-sm"
+                         style="width: 180px; height: 180px; border: 3px solid var(--neon-pink); border-radius: 15px;" />
+                }
+                else
+                {
+                    <div class="text-center text-muted" style="width: 180px; height: 180px; display: flex; align-items: center; justify-content: center; border: 3px solid var(--neon-pink); border-radius: 15px;">
+                        <span>No Image</span>
+                    </div>
+                }
             </div>
             <div class="col-md-8">
-                <h3 class="text-primary">@Model.Name</h3>
-                <hr class="my-3" />
+                <h3 class="text-neon-blue">@Model.Name</h3>
+                <hr class="my-3 neon-divider" />
                 <dl class="row">
-                    <dt class="col-sm-4 fw-semibold text-muted">Description:</dt>
+                    <dt class="col-sm-4 text-neon-green">Description:</dt>
                     <dd class="col-sm-8">@Model.Description</dd>
 
-                    <dt class="col-sm-4 fw-semibold text-muted">Plan Type:</dt>
+                    <dt class="col-sm-4 text-neon-green">Plan Type:</dt>
                     <dd class="col-sm-8">@Model.WorkoutPlanType</dd>
 
-                    <dt class="col-sm-4 fw-semibold text-muted">Difficulty:</dt>
+                    <dt class="col-sm-4 text-neon-green">Difficulty:</dt>
                     <dd class="col-sm-8">@Model.Difficulty</dd>
-
                 </dl>
             </div>
         </div>
 
         <div class="mb-4">
-            <h4 class="text-secondary">Equipements</h4>
-            <hr />
+            <h4 class="text-neon-green">Equipments</h4>
+            <hr class="neon-divider" />
             @if (Model.Equipments.Any())
             {
                 <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3">
                     @foreach (var equipment in Model.Equipments)
                     {
                         <div class="col">
-                            <div class="card h-100 specialty-card shadow-sm border-0">
-                                <div class="card-img-wrapper d-flex align-items-center justify-content-center" style="height: 140px; background-color: #f7f7f7;">
-                                    <img src="@equipment.ImageUrl" class="card-img-top" alt="@equipment.Text" style="max-height: 100%; width: auto; object-fit: contain;" />
+                            <div class="card card-neon border-0">
+                                <div class="card-img-wrapper d-flex align-items-center justify-content-center"
+                                     style="height: 140px; background-color: var(--light-bg);">
+                                    <img src="@equipment.ImageUrl" class="card-img-top"
+                                         alt="@equipment.Text" style="max-height: 100%; width: auto; object-fit: contain;" />
                                 </div>
                                 <div class="card-body text-center">
-                                    <p class="card-title text-muted mb-0">@equipment.Text</p>
+                                    <p class="card-title text-neon-blue mb-0">@equipment.Text</p>
                                 </div>
                             </div>
                         </div>
@@ -58,43 +68,66 @@
         </div>
 
         <div class="d-flex justify-content-end mt-3">
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Edit</a>
-            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger me-2">Delete</a>
-            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-neon-blue neon-hover-shadow me-2">Edit</a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-neon-pink neon-hover-shadow me-2">Delete</a>
+            <a asp-action="Index" class="btn btn-neon-secondary neon-hover-shadow">Back to List</a>
         </div>
     </div>
 </div>
 
 <style>
-    .card {
+    /* Card Styles */
+    .card-neon {
+        background-color: var(--light-bg);
+        border: 1px solid var(--neon-pink);
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border-radius: 8px;
-        padding: 1.5rem;
     }
 
-        .card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        .card-neon:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-color: var(--neon-blue);
         }
 
-    .card-img-wrapper {
-        padding: 15px;
-        border-bottom: 1px solid #ddd;
-        border-radius: 8px 8px 0 0;
+    /* Divider */
+    .neon-divider {
+        border-top: 2px solid var(--neon-blue);
     }
 
-    h3 {
-        color: #007bff;
-        font-weight: bold;
-    }
-
+    /* Details Section */
     dl.row dt {
-        font-weight: 500;
-        color: #6c757d;
+        font-weight: 600;
+        color: var(--neon-green);
     }
 
     dl.row dd {
         font-weight: 400;
-        color: #212529;
+        color: var(--light-text);
     }
+
+    /* Title */
+    h3.text-neon-blue {
+        font-size: 1.75rem;
+        font-weight: bold;
+    }
+
+    /* Equipments */
+    .card-img-wrapper {
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    /* Link Hover */
+    a.neon-hover {
+        color: var(--neon-pink);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+        a.neon-hover:hover {
+            color: var(--neon-blue);
+            text-decoration: underline;
+        }
 </style>

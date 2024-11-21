@@ -223,6 +223,9 @@ namespace PulseFit.Management.Web.Controllers
             return RedirectToAction("Login", "Account");
         }
 
+
+
+
         public async Task<IActionResult> CreateBooking(int? id)
         {
             if (id == null)
@@ -276,6 +279,28 @@ namespace PulseFit.Management.Web.Controllers
             }
 
             return RedirectToAction("Login", "Account");
+        }
+
+        public async Task<IActionResult> MyBookingsDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var workout = await _workoutRepository.GetByIdAsync(id.Value);
+
+            if (workout == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.Spots = workout.MaxCapacity - workout.Bookings;
+            ViewBag.GymImage = await _gymRepository.GetGymImageAsync(workout.GymId);
+            ViewBag.PtProfilePic = await _personalTrainerRepository.GetPtProfilePicAsync(workout.InstructorId);
+
+
+            return View(workout);
         }
 
         public async Task<IActionResult> CancelBooking(int id)

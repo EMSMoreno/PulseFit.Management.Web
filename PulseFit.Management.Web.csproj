@@ -30,6 +30,7 @@
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Common" Version="12.21.0" />
     <PackageReference Include="DinkToPdf" Version="1.0.8" />
+    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.68.0.3596" />
     <PackageReference Include="MailKit" Version="4.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
