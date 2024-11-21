@@ -1,44 +1,98 @@
-﻿@model IEnumerable<PulseFit.Management.Web.Data.Entities.OnlineClass>
+﻿@model IEnumerable<IGrouping<PulseFit.Management.Web.Data.Entities.OnlineClass.ClassCategory, PulseFit.Management.Web.Data.Entities.OnlineClass>>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Online Classes";
 }
 
+<h2 class="title-neon mt-4">Online Classes</h2>
 
-<h2>Available Online Classes</h2>
-
-<div>
-    <a asp-action="Create" class="btn btn-primary mb-3">Create New Class</a>
+<div class="text-center mb-4">
+    <a asp-action="Create" class="btn btn-neon-pink">Add New Class</a>
 </div>
 
-@if (!Model.Any())
-{
-    <div class="alert alert-info">No Classes found.</div>
-
-}
-else
-{
-    <div class="container">
-        <div class="row">
-            @foreach (var item in Model)
-            {
-                <div class="col-md-3 mb-4">
-                    <a asp-action="Details" asp-route-id="@item.Id" style="text-decoration: none; color: inherit;">
-                        <div class="card h-100 shadow-sm">
-                            <div style="width:100%; height: 200px; overflow:hidden;">
-                                <img src="@Url.Content(item.ClassImageUrl)" alt="Class Image" style="width:100%; height: 100%; object-fit: cover;" />
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">@item.Title</h5>
-                                <p class="card-text">
-                                    @item.Description <br />
-                                    @item.Category
-                                </p>
+<div class="container">
+    @foreach (var group in Model)
+    {
+        <hr class="border-neon" />
+        <h3 class="text-gray mt-4">@group.Key</h3>
+        <div id="carousel-@group.Key" class="carousel slide mt-3" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @if (group.Any())
+                {
+                    var first = true;
+                    foreach (var onlineClass in group)
+                    {
+                        <div class="carousel-item @(first ? "active" : "")">
+                            <a href="@onlineClass.VideoUrl" target="_blank">
+                                <img src="@onlineClass.ThumbnailUrl" class="d-block w-100 rounded neon-outline" alt="@onlineClass.Title">
+                            </a>
+                            <div class="carousel-caption bg-dark-neon">
+                                <h5 class="text-neon">@onlineClass.Title</h5>
                             </div>
                         </div>
-                    </a>
-                </div>
-            }
+                        first = false;
+                    }
+                }
+                else
+                {
+                    <div class="carousel-item active">
+                        <img src="/images/noimage.png" class="d-block w-100 rounded neon-outline" alt="No Classes">
+                        <div class="carousel-caption bg-dark-neon">
+                            <p class="text-neon">No classes available.</p>
+                        </div>
+                    </div>
+                }
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@group.Key" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carousel-@group.Key" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
-    </div>
-}
+    }
+</div>
+
+<style>
+    .carousel-item img {
+        max-width: 40%;
+        max-height: 40%;
+        object-fit: cover;
+        margin: 0 auto;
+        border: 2px solid var(--neon-blue);
+        box-shadow: 0 0 10px var(--neon-pink);
+    }
+
+    .carousel-caption.bg-dark-neon {
+        background-color: rgba(28, 28, 28, 0.8);
+        border: 1px solid var(--neon-purple);
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    .text-neon {
+        color: var(--neon-blue);
+    }
+
+    .border-neon {
+        border-color: var(--neon-green);
+        border-width: 2px;
+    }
+
+    .btn-neon-pink {
+        transition: box-shadow 0.3s ease;
+        font-size: 1.1rem;
+    }
+
+        .btn-neon-pink:hover {
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
+
+    h3 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: bold;
+        color: var(--neon-green);
+    }
+</style>

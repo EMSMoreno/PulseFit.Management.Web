@@ -591,31 +591,5 @@ namespace PulseFit.Management.Web.Helpers
                 WorkoutPlanImageId = workoutPlan.WorkoutPlanImageId ?? Guid.Empty,
             };
         }
-
-        public OnlineClass ToOnlineClass(OnlineClassViewModel model, Guid imageId, bool isNew)
-        {
-            return new OnlineClass
-            {
-                Id = isNew ? 0 : model.Id,
-                Title = model.Title,
-                Description = model.Description,
-                VideoUrl = model.VideoUrl,
-                Category = model.Category,
-                ClassImageId = imageId,
-            };
-        }
-
-        public OnlineClassViewModel ToOnlineClassViewModel(OnlineClass onlineClass)
-        {
-            return new OnlineClassViewModel
-            {
-                Id = onlineClass.Id,
-                Title = onlineClass.Title,
-                Description = onlineClass.Description,
-                VideoUrl = onlineClass.VideoUrl,
-                Category = onlineClass.Category,
-                ClassImageId = onlineClass.ClassImageId ?? Guid.Empty,
-            };
-        }
     }
 }

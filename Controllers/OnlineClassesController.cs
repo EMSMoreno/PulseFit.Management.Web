@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Google.Apis.Services;
+using Google.Apis.YouTube.v3;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using PulseFit.Management.Web.Data.Entities;
 using PulseFit.Management.Web.Data;
+using PulseFit.Management.Web.Data.Entities;
 using PulseFit.Management.Web.Data.Repositories;
 using PulseFit.Management.Web.Helpers;
-using PulseFit.Management.Web.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PulseFit.Management.Web.Controllers
 {
@@ -14,24 +15,29 @@ namespace PulseFit.Management.Web.Controllers
         private readonly IOnlineClassRepository _onlineClassRepository;
         private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
+        private readonly DataContext _context;
 
         public OnlineClassesController(
             IOnlineClassRepository onlineClassRepository,
             IBlobHelper blobHelper,
-            IConverterHelper converterHelper
+            IConverterHelper converterHelper,
+            DataContext context
             )
         {
             _onlineClassRepository = onlineClassRepository;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
+            _context = context;
         }
 
         // GET: OnlineClasses
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var onlineClasses = _onlineClassRepository.GetAll();
+            var videos = _onlineClassRepository.GetAll().ToList()
+                .GroupBy(v => v.Category)
+                .OrderBy(g => g.Key);
 
-            return View(onlineClasses);
+            return View(videos);
         }
 
         // GET: OnlineClasses/Details/5
@@ -54,32 +60,29 @@ namespace PulseFit.Management.Web.Controllers
         // GET: OnlineClasses/Create
         public IActionResult Create()
         {
-            ViewBag.Category = new SelectList(Enum.GetValues(typeof(OnlineClass.ClassCategory)).Cast<OnlineClass.ClassCategory>());
-
+            ViewBag.Categories = new SelectList(Enum.GetValues(typeof(OnlineClass.ClassCategory)).Cast<OnlineClass.ClassCategory>());
             return View();
         }
 
         // POST: OnlineClasses/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(OnlineClassViewModel model)
+        public async Task<IActionResult> Create(OnlineClass onlineClass)
         {
             if (ModelState.IsValid)
             {
-                var imageId = model.ClassImageFile != null
-                    ? await _blobHelper.UploadBlobAsync(model.ClassImageFile, "onlineClasses-pics")
-                    : Guid.Empty;
-
-                var onlineClass = _converterHelper.ToOnlineClass(model, imageId, true);
+                var youtubeData = await GetYouTubeVideoData(onlineClass.VideoUrl);
+                onlineClass.Title = youtubeData.Title;
+                onlineClass.ThumbnailUrl = youtubeData.ThumbnailUrl;
 
                 await _onlineClassRepository.CreateAsync(onlineClass);
 
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Category = new SelectList(Enum.GetValues(typeof(OnlineClass.ClassCategory)).Cast<OnlineClass.ClassCategory>());
+            ViewBag.Categories = new SelectList(Enum.GetValues(typeof(OnlineClass.ClassCategory)).Cast<OnlineClass.ClassCategory>());
 
-            return View(model);
+            return View(onlineClass);
         }
 
         // GET: OnlineClasses/Edit/5
@@ -96,8 +99,7 @@ namespace PulseFit.Management.Web.Controllers
                 return NotFound();
             }
 
-            var model = _converterHelper.ToOnlineClassViewModel(onlineClass);
-            ViewBag.Category = new SelectList(Enum.GetValues(typeof(OnlineClass.ClassCategory)).Cast<OnlineClass.ClassCategory>());
+            ViewBag.Categories = new SelectList(Enum.GetValues(typeof(OnlineClass.ClassCategory)).Cast<OnlineClass.ClassCategory>());
 
             return View(onlineClass);
         }
@@ -105,24 +107,22 @@ namespace PulseFit.Management.Web.Controllers
         // POST: OnlineClasses/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(OnlineClassViewModel model)
+        public async Task<IActionResult> Edit(OnlineClass onlineClass)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var imageId = model.ClassImageFile != null
-                    ? await _blobHelper.UploadBlobAsync(model.ClassImageFile, "onlineClasses-pics")
-                    : Guid.Empty;
-
-                    var onlineClass = _converterHelper.ToOnlineClass(model, imageId, false);
+                    var youtubeData = await GetYouTubeVideoData(onlineClass.VideoUrl);
+                    onlineClass.Title = youtubeData.Title;
+                    onlineClass.ThumbnailUrl = youtubeData.ThumbnailUrl;
 
                     await _onlineClassRepository.UpdateAsync(onlineClass);
 
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await _onlineClassRepository.ExistAsync(model.Id))
+                    if (!await _onlineClassRepository.ExistAsync(onlineClass.Id))
                     {
                         return NotFound();
                     }
@@ -134,9 +134,9 @@ namespace PulseFit.Management.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Category = new SelectList(Enum.GetValues(typeof(OnlineClass.ClassCategory)).Cast<OnlineClass.ClassCategory>());
+            ViewBag.Categories = new SelectList(Enum.GetValues(typeof(OnlineClass.ClassCategory)).Cast<OnlineClass.ClassCategory>());
 
-            return View(model);
+            return View(onlineClass);
         }
 
         // GET: OnlineClasses/Delete/5
@@ -165,6 +165,35 @@ namespace PulseFit.Management.Web.Controllers
             await _onlineClassRepository.DeleteAsync(onlineClass);
 
             return RedirectToAction(nameof(Index));
+        }
+
+
+        private async Task<(string Title, string ThumbnailUrl)> GetYouTubeVideoData(string url)
+        {
+            var videoId = ExtractYouTubeVideoId(url);
+
+            var youtubeService = new YouTubeService(new BaseClientService.Initializer
+            {
+                ApiKey = "AIzaSyDHgfKrHJeyVACrUUG79LsyWcnEDVMF_Bk"
+            });
+
+            var request = youtubeService.Videos.List("snippet");
+            request.Id = videoId;
+
+            var response = await request.ExecuteAsync();
+            var video = response.Items.FirstOrDefault();
+
+            if (video == null)
+                throw new Exception("Vídeo não encontrado!");
+
+            return (video.Snippet.Title, video.Snippet.Thumbnails.Default__.Url);
+        }
+
+        private string ExtractYouTubeVideoId(string url)
+        {
+            var uri = new Uri(url);
+            var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+            return query["v"];
         }
     }
 }

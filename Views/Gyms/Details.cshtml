@@ -4,48 +4,89 @@
     ViewData["Title"] = "Gym Details";
 }
 
-<div class="container mt-4">
-    <h2>Gym Details</h2>
+<div class="container mt-5">
+    <h2 class="title-neon mb-4">Gym Details</h2>
 
-    <div class="card shadow-lg p-4">
+    <div class="card-neon p-4">
         <div class="row align-items-center mb-4">
             <div class="col-md-4 d-flex justify-content-center">
-                <img src="@Model.GymImageUrl" alt="Gym Picture" class="rounded shadow-sm" style="width: 180px; height: 180px;" />
+                <img src="@Model.GymImageUrl" alt="Gym Picture" class="rounded shadow-sm"
+                     style="width: 180px; height: 180px; border: 3px solid var(--neon-pink); border-radius: 15px;" />
             </div>
             <div class="col-md-8">
-                <h3 class="text-primary">@Model.Name</h3>
-                <hr class="my-3" />
+                <h3 class="text-neon-blue">@Model.Name</h3>
+                <hr class="my-3 neon-divider" />
                 <dl class="row">
-                    <dt class="col-sm-4 fw-semibold text-muted">Email:</dt>
+                    <dt class="col-sm-4 text-neon-green">Email:</dt>
                     <dd class="col-sm-8">@Model.Email</dd>
 
-                    <dt class="col-sm-4 fw-semibold text-muted">Phone:</dt>
+                    <dt class="col-sm-4 text-neon-green">Phone:</dt>
                     <dd class="col-sm-8">@Model.PhoneNumber</dd>
 
-                    <dt class="col-sm-4 fw-semibold text-muted">Location:</dt>
+                    <dt class="col-sm-4 text-neon-green">Location:</dt>
                     <dd class="col-sm-8">@Model.Location</dd>
 
-                    <dt class="col-sm-4 fw-semibold text-muted">Capacity:</dt>
+                    <dt class="col-sm-4 text-neon-green">Capacity:</dt>
                     <dd class="col-sm-8">@Model.Capacity</dd>
 
-                    <dt class="col-sm-4 fw-semibold text-muted">Day Off:</dt>
+                    <dt class="col-sm-4 text-neon-green">Day Off:</dt>
                     <dd class="col-sm-8">@Model.DayOff</dd>
 
-                    <dt class="col-sm-4 fw-semibold text-muted">Opening Time:</dt>
+                    <dt class="col-sm-4 text-neon-green">Opening Time:</dt>
                     <dd class="col-sm-8">@Model.OpeningTime.ToString(@"hh\:mm")</dd>
 
-                    <dt class="col-sm-4 fw-semibold text-muted">Closing Time:</dt>
+                    <dt class="col-sm-4 text-neon-green">Closing Time:</dt>
                     <dd class="col-sm-8">@Model.ClosingTime.ToString(@"hh\:mm")</dd>
 
-                    <dt class="col-sm-4 fw-semibold text-muted">Creation:</dt>
+                    <dt class="col-sm-4 text-neon-green">Creation Date:</dt>
                     <dd class="col-sm-8">@Model.CreationDate.ToString("dd/MM/yyyy")</dd>
                 </dl>
             </div>
         </div>
+
         <div class="d-flex justify-content-end mt-3">
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Edit</a>
-            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger me-2">Delete</a>
-            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-neon-blue neon-hover-shadow me-2">Edit</a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-neon-pink neon-hover-shadow me-2">Delete</a>
+            <a asp-action="Index" class="btn btn-neon-secondary neon-hover-shadow">Back to List</a>
         </div>
     </div>
 </div>
+
+<style>
+    /* Card Styles */
+    .card-neon {
+        background-color: var(--light-bg);
+        border: 1px solid var(--neon-pink);
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .card-neon:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-color: var(--neon-blue);
+        }
+
+    /* Divider */
+    .neon-divider {
+        border-top: 2px solid var(--neon-blue);
+    }
+
+    /* Details Section */
+    dl.row dt {
+        font-weight: 600;
+        color: var(--neon-green);
+    }
+
+    dl.row dd {
+        font-weight: 400;
+        color: var(--light-text);
+    }
+
+    /* Title */
+    h3.text-neon-blue {
+        font-size: 1.75rem;
+        font-weight: bold;
+    }
+</style>

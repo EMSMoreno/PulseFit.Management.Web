@@ -4,30 +4,54 @@
     ViewData["Title"] = "Delete Gym";
 }
 
-<div class="container mt-4">
-    <h2 class="text-danger">Delete Gym</h2>
+<div class="container my-5">
+    <h2 class="text-neon-pink text-center mb-4">Delete Gym</h2>
 
-    <h3>Are you sure you want to delete this gym?</h3>
+    <div class="card-neon p-4">
+        <h4 class="text-center text-danger">Are you sure you want to delete this gym?</h4>
+        <p class="text-center">
+            This action cannot be undone. You are about to delete <strong>@Model.Name</strong>.
+        </p>
 
-    <div class="alert alert-danger">
-        Are you sure you want to delete this gym?: <strong>@Model.Name</strong>
+        <div class="d-flex justify-content-center mt-4">
+            <form id="deleteForm" asp-action="Delete" method="post">
+                <input type="hidden" asp-for="Id" />
+                <button type="button" class="btn btn-neon-pink neon-hover-shadow me-3" id="confirmDelete">
+                    <i class="fas fa-trash-alt"></i> Delete
+                </button>
+                <a asp-action="Index" class="btn btn-neon-secondary neon-hover-shadow">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </form>
+        </div>
     </div>
-
-    <form id="deleteForm" asp-action="Delete" method="post">
-        <input type="hidden" asp-for="Id" />
-        <button type="button" class="btn btn-danger" id="confirmDelete">
-            <i class="fas fa-trash-alt"></i> Delete
-        </button>
-        <a asp-action="Index" class="btn btn-secondary">
-            <i class="fas fa-times"></i> Cancel
-        </a>
-    </form>
 </div>
 
 @section Scripts {
     <script src="~/js/formHelpers.js"></script>
     <script>
-        setupSweetAlertOnDelete("confirmDelete", "deleteForm", "You won't be able to revert this!");
+        setupSweetAlertOnDelete("confirmDelete", "deleteForm", "This action is irreversible! Are you sure?");
     </script>
 }
 
+<style>
+    .card-neon {
+        background-color: var(--light-bg);
+        border: 1px solid var(--neon-pink);
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(233, 53, 113, 0.5);
+        text-align: center;
+    }
+
+    .btn-neon-pink:hover {
+        background-color: var(--dark-bg);
+        color: var(--neon-pink);
+        box-shadow: 0 0 15px rgba(233, 53, 113, 0.7);
+    }
+
+    .btn-neon-secondary:hover {
+        background-color: var(--dark-bg);
+        color: var(--neon-purple);
+        box-shadow: 0 0 15px rgba(226, 0, 254, 0.7);
+    }
+</style>

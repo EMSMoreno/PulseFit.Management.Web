@@ -1,102 +1,85 @@
 ﻿@model IEnumerable<PulseFit.Management.Web.Data.Entities.Workout>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Workouts List";
 }
 
+<h2 class="title-neon mt-4">Available Workouts</h2>
 
-<h2>Available Workouts</h2>
-
-<div>
-    <a asp-action="Create" class="btn btn-primary mb-3">Create New Workout</a>
+<div class="text-center mb-4">
+    <a asp-action="Create" class="btn btn-neon-pink">Create New Workout</a>
 </div>
 
 @if (!Model.Any())
 {
     <div class="alert alert-info">No workouts found.</div>
-
 }
 else
 {
-    <!-- Search Formulary -->
-    <form asp-action="Index" method="get" class="mb-4">
-        <div class="row">
-            <div class="col-md-3">
-                <label for="searchTerm">Simple Search</label>
-                <input type="text" name="searchTerm" class="form-control" placeholder="Name or Description">
-            </div>
-            <div class="col-md-3">
-                <label for="type">Tipo</label>
-                <select name="type" class="form-control">
-                    <option value="">Select...</option>
-                    <option value="Cardio">Cardio</option>
-                    <option value="Strenght">Strenght</option>
-                    <option value="Yoga">Yoga</option>
-                    <option value="Cycling">Cycling</option>
-                    <option value="Bumbum">Bumbum</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label for="difficulty">Workout Difficulty</label>
-                <select name="difficulty" class="form-control">
-                    <option value="">Select...</option>
-                    <option value="Easy">Easy</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Hard">Hard</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label for="status">Status</label>
-                <select name="status" class="form-control">
-                    <option value="">Select...</option>
-                    <option value="Ongoing">Ongoing</option>
-                    <option value="Cancelled">Cancelled</option>
-                    <option value="Finished">Finished</option>
-                </select>
-            </div>
-        </div>
-        <div class="row mt-3">
-            <div class="col-md-3">
-                <label for="instructorName">Instructor</label>
-                <input type="text" name="instructorName" class="form-control" placeholder="Instructor Name">
-            </div>
-            <div class="col-md-3">
-                <label for="gymName">Gym</label>
-                <input type="text" name="gymName" class="form-control" placeholder="Gym Name">
-            </div>
-            <div class="col-md-3 align-self-end">
-                <button type="submit" class="btn btn-primary">Search</button>
-                <a asp-action="Index" class="btn btn-secondary">Clear</a>
-            </div>
-        </div>
-    </form>
-
-
-
-    <!--Workouts Table -->
-
     <div class="container">
         <div class="row">
-            @foreach (var item in Model)
+            @foreach (var workout in Model)
             {
-                <div class="col-md-3 mb-4">
-                    <a asp-action="Details" asp-route-id="@item.Id" style="text-decoration: none; color: inherit;">
-                        <div class="card h-100 shadow-sm">
-                            <div style="width:100%; height: 200px; overflow:hidden;">
-                                <img src="@Url.Content(item.WorkoutImageUrl)" alt="Workout Image" style="width:100%; height: 100%; object-fit: cover;" />
-                            </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card-neon h-100">
+                        <a asp-action="Details" asp-route-id="@workout.Id" style="text-decoration: none; color: inherit;">
+                            <img src="@Url.Content(workout.WorkoutImageUrl ?? "/images/noimage.png")"
+                                 alt="Workout Image" class="card-img-top rounded neon-outline"
+                                 style="max-height: 200px; object-fit: cover;" />
+                        
                             <div class="card-body">
-                                <h5 class="card-title">@item.Name @item.Popularity</h5>
-                                <p class="card-text">
-                                    @item.Description <br />
-                                    @item.DifficultyLevel <br />
-                                    @item.StartDate.ToString("dd/MM HH:mm") (@item.Duration Min.)
+                                <h5 class="text-neon">@workout.Name</h5>
+                                <p class="text-muted">
+                                    Difficulty: @workout.DifficultyLevel <br />
+                                    Starts: @workout.StartDate.ToString("dd/MM HH:mm") (@workout.Duration Min.)<br />
                                 </p>
                             </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 </div>
             }
         </div>
     </div>
 }
+
+<style>
+    /* Card Styles */
+    .card-neon {
+        background-color: var(--light-bg);
+        border: 1px solid var(--neon-pink);
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .card-neon:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-color: var(--neon-blue);
+        }
+
+    .card-img-top {
+        border-bottom: 3px solid var(--neon-pink);
+    }
+
+    .text-neon {
+        color: var(--neon-blue);
+    }
+
+    /* Buttons */
+    .btn-neon-blue, .btn-neon-pink {
+        border-radius: 8px;
+        font-weight: bold;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .btn-neon-blue:hover {
+            background-color: var(--dark-bg);
+            color: var(--neon-blue);
+        }
+
+        .btn-neon-pink:hover {
+            background-color: var(--dark-bg);
+            color: var(--neon-pink);
+        }
+</style>
