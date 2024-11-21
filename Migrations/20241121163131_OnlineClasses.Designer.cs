@@ -12,8 +12,8 @@ using PulseFit.Management.Web.Data;
 namespace PulseFit.Management.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241120183353_Clients")]
-    partial class Clients
+    [Migration("20241121163131_OnlineClasses")]
+    partial class OnlineClasses
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -274,6 +274,9 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("WorkoutId")
                         .HasColumnType("int");
 
+                    b.Property<string>("WorkoutName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Bookings");
@@ -394,8 +397,14 @@ namespace PulseFit.Management.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<Guid?>("EquipmentImageId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("GymId")
                         .HasColumnType("int");
+
+                    b.Property<string>("GymName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -410,9 +419,12 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
+                    b.Property<int?>("WorkoutPlanId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("GymId");
+                    b.HasIndex("WorkoutPlanId");
 
                     b.ToTable("Equipments");
                 });
@@ -620,26 +632,13 @@ namespace PulseFit.Management.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Duration")
+                    b.Property<int>("Category")
                         .HasColumnType("int");
 
-                    b.Property<string>("InstructorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
+                    b.Property<string>("ThumbnailUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VideoUrl")
@@ -647,8 +646,6 @@ namespace PulseFit.Management.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("InstructorId");
 
                     b.ToTable("OnlineClasses");
                 });
@@ -1040,11 +1037,17 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("GroupType")
+                        .HasColumnType("int");
+
                     b.Property<int>("GymId")
                         .HasColumnType("int");
 
                     b.Property<string>("GymName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("IndividualType")
+                        .HasColumnType("int");
 
                     b.Property<string>("InstructorId")
                         .IsRequired()
@@ -1060,7 +1063,7 @@ namespace PulseFit.Management.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Popularity")
+                    b.Property<int?>("Popularity")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
@@ -1075,11 +1078,79 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("WorkoutImageId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SubscriptionId");
 
                     b.ToTable("Workouts");
+                });
+
+            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.WorkoutPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Difficulty")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("WorkoutPlanImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("WorkoutPlanType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WorkoutPlans");
+                });
+
+            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.WorkoutRating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RatingValue")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("WorkoutId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("WorkoutRatings");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1222,13 +1293,10 @@ namespace PulseFit.Management.Web.Migrations
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Equipment", b =>
                 {
-                    b.HasOne("PulseFit.Management.Web.Data.Entities.Gym", "Gym")
-                        .WithMany()
-                        .HasForeignKey("GymId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Gym");
+                    b.HasOne("PulseFit.Management.Web.Data.Entities.WorkoutPlan", null)
+                        .WithMany("Equipments")
+                        .HasForeignKey("WorkoutPlanId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Feedback", b =>
@@ -1304,17 +1372,6 @@ namespace PulseFit.Management.Web.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.OnlineClass", b =>
-                {
-                    b.HasOne("PulseFit.Management.Web.Data.Entities.User", "Instructor")
-                        .WithMany()
-                        .HasForeignKey("InstructorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Instructor");
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Payment", b =>
@@ -1393,6 +1450,17 @@ namespace PulseFit.Management.Web.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.WorkoutRating", b =>
+                {
+                    b.HasOne("PulseFit.Management.Web.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Client", b =>
                 {
                     b.Navigation("UserSubscriptions");
@@ -1410,6 +1478,11 @@ namespace PulseFit.Management.Web.Migrations
                     b.Navigation("IncludedWorkouts");
 
                     b.Navigation("UserSubscriptions");
+                });
+
+            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.WorkoutPlan", b =>
+                {
+                    b.Navigation("Equipments");
                 });
 #pragma warning restore 612, 618
         }
