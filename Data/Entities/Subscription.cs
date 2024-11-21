@@ -41,8 +41,8 @@ namespace PulseFit.Management.Web.Data.Entities
         public List<Gym> IncludedGyms { get; set; } = new List<Gym>();
         public List<Workout> IncludedWorkouts { get; set; } = new List<Workout>();
         public int MaxPersonalTrainerSessions { get; set; } = 0;
-        public List<NutritionPlan> IncludedNutritionPlans { get; set; } = new List<NutritionPlan>();
-        public List<OnlineClass> IncludedOnlineClasses { get; set; } = new List<OnlineClass>();
+        public bool IncludeNutritionPlans { get; set; } = false;
+        public bool IncludeOnlineClasses { get; set; } = false;
 
         public bool Has24HourAccess { get; set; } = false;
         public bool HasVIPAccess { get; set; } = false;
@@ -73,12 +73,16 @@ namespace PulseFit.Management.Web.Data.Entities
 
     public enum SubscriptionType
     {
-        General,
-        Monthly,
-        Annual,
-        Individual,
-        OnlineClasses
+        General,         // Grants access to all gyms and services.
+        Monthly,         // Fixed duration of one month.
+        Annual,          // Fixed duration of one year.
+        Individual,      // Specific to a single gym.
+        OnlineClasses,   // Online classes only.
+        Regional,        // Group of selected gyms.
+        Corporate,       // For businesses, multiple users under one plan.
+        Trial            // Temporary trial period.
     }
+
 
     // Enum para definir o tipo de duração (dias, semanas, meses ou anos)
     public enum DurationType

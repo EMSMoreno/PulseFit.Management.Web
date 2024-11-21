@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Confirmation</title>
+    <style>
+        /* Reset and basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f4f4f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .email-container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+        }
+
+        /* Header */
+        .email-header {
+            background-color: #0d6efd;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+            .email-header h1 {
+                margin: 0;
+                font-size: 24px;
+            }
+
+        /* Content */
+        .email-content {
+            padding: 30px 20px;
+            color: #555;
+        }
+
+            .email-content h2 {
+                color: #0d6efd;
+                font-size: 22px;
+                margin: 0 0 20px;
+            }
+
+            .email-content p {
+                margin: 10px 0;
+                line-height: 1.6;
+            }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 20px 0;
+            background-color: #0d6efd;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+        /* Footer */
+        .email-footer {
+            background-color: #f4f4f7;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #777;
+        }
+
+            .email-footer p {
+                margin: 5px 0;
+            }
+
+            .email-footer a {
+                color: #0d6efd;
+                text-decoration: none;
+            }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <h1>Welcome to PulseFit</h1>
+        </div>
+
+        <!-- Content -->
+        <div class="email-content">
+            <h2>Hello, {{FirstName}}!</h2>
+            <p>We are excited to have you join us. To complete your registration, please confirm your email by clicking the button below:</p>
+            <a href="{{ConfirmationLink}}" class="btn-primary">Confirm Email</a>
+            <p>If you did not create an account with us, you can safely ignore this email.</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+            <p>Thank you for choosing PulseFit!</p>
+            <p><a href="https://yourwebsite.com">PulseFit</a> | <a href="mailto:pulsefit.support@sapo.pt">Contact Support</a></p>
+            <p>&copy; 2024 PulseFit. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

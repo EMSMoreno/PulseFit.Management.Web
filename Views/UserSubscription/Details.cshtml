@@ -6,25 +6,25 @@
 }
 
 <div class="container my-5">
-    <h2 class="text-center text-primary mb-4 fw-bold">Subscription Details</h2>
+    <h2 class="text-center text-neon-blue fw-bold mb-4">Subscription Details</h2>
 
     @if (!Model.Any())
     {
-        <div class="alert alert-info text-center">This client has no subscriptions.</div>
+        <div class="alert alert-neon-blue text-center">This client has no subscriptions.</div>
     }
     else
     {
         <div class="subscription-list">
             @foreach (var subscription in Model)
             {
-                <div class="card mb-4 shadow animate-fade">
-                    <div class="card-header text-center">
-                        <h3>@subscription.Subscription.Name</h3>
-                        <span class="badge @((subscription.Status == SubscriptionStatus.Active) ? "badge-success" : "badge-danger")">
+                <div class="card subscription-card shadow-neon mb-4">
+                    <div class="card-header text-center text-light">
+                        <h3 class="text-neon-pink">@subscription.Subscription.Name</h3>
+                        <span class="badge @((subscription.Status == SubscriptionStatus.Active) ? "badge-neon-green" : "badge-neon-red")">
                             @subscription.Status
                         </span>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body bg-dark text-light">
                         <p><strong>Start Date:</strong> @subscription.StartDate.ToShortDateString()</p>
                         <p><strong>End Date:</strong> @subscription.EndDate.ToShortDateString()</p>
                         <p><strong>Amount Paid:</strong> €@subscription.AmountPaid</p>
@@ -32,9 +32,9 @@
                     </div>
 
                     <!-- Payment History for each subscription -->
-                    <div class="card-footer">
-                        <h5 class="text-center mt-3">Payment History</h5>
-                        <table class="table table-bordered mt-3">
+                    <div class="card-footer bg-dark text-light">
+                        <h5 class="text-center text-neon-blue mt-3">Payment History</h5>
+                        <table class="table table-neon mt-3">
                             <thead>
                                 <tr>
                                     <th>Date</th>
@@ -53,7 +53,7 @@
                                             <td>@payment.Amount.ToString("C2")</td>
                                             <td>@payment.TransactionId</td>
                                             <td>
-                                                <a href="@Url.Action("GenerateInvoicePdf", "UserSubscription", new { paymentId = payment.Id })" class="btn btn-secondary btn-sm">Generate PDF</a>
+                                                <a href="@Url.Action("GenerateInvoicePdf", "UserSubscription", new { paymentId = payment.Id })" class="btn btn-neon-blue">Generate PDF</a>
                                             </td>
                                         </tr>
                                     }
@@ -74,62 +74,83 @@
 
     <div class="text-center mt-4">
         <a asp-action="SelectSubscriptionForClient" asp-route-clientId="@Model.FirstOrDefault()?.ClientId"
-           class="btn btn-primary animate-fade">Add New Subscription</a>
+           class="btn btn-neon-pink btn-lg">Add New Subscription</a>
     </div>
 </div>
 
 <style>
-    .card-header {
-        background-color: #e9ecef;
-        font-size: 1.2rem;
-        font-weight: bold;
+    .subscription-card {
+        border-radius: 10px;
+        background: var(--dark-bg);
+        box-shadow: none;
+        transition: transform 0.3s, box-shadow 0.3s;
     }
 
-    .badge-success {
-        background-color: #28a745;
-        color: #fff;
+        .subscription-card:hover {
+            transform: translateY(-10px);
+            box-shadow: none;
+        }
+
+    .badge-neon-green {
+        background-color: var(--neon-green);
+        color: var(--dark-bg);
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border-radius: 5px;
     }
 
-    .badge-danger {
-        background-color: #dc3545;
-        color: #fff;
+    .badge-neon-red {
+        background-color: var(--neon-pink);
+        color: var(--dark-bg);
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border-radius: 5px;
     }
 
-    .card {
-        border-radius: 8px;
-    }
-
-    .btn-primary {
-        font-weight: 600;
-        padding: 0.8rem 1.5rem;
-    }
-
-    .animate-fade {
-        transition: all 0.4s ease;
-    }
-
-    .table {
+    .table-neon {
         width: 100%;
         border-collapse: collapse;
-        margin: 0 auto;
+        color: var(--light-text);
+        border: 1px solid var(--neon-pink);
     }
 
-        .table th, .table td {
-            padding: 0.75rem;
-            border: 1px solid #ddd;
+        .table-neon th {
+            background-color: var(--light-bg);
+            color: var(--neon-pink);
+            padding: 0.8rem;
+        }
+
+        .table-neon td {
+            padding: 0.8rem;
             text-align: center;
         }
 
-    .btn-secondary {
-        color: #fff;
-        background-color: #6c757d;
-        padding: 0.4em 0.8em;
+        .table-neon tr:hover {
+            background-color: var(--dark-bg);
+        }
+
+    .btn-neon-blue {
+        background-color: var(--neon-blue);
+        color: var(--dark-bg);
+        border: none;
+        padding: 0.5rem 1rem;
         font-size: 0.85rem;
-        transition: background-color 0.3s ease, transform 0.3s ease;
+        transition: box-shadow 0.3s, transform 0.3s;
     }
 
-        .btn-secondary:hover {
-            background-color: #5a6268;
+        .btn-neon-blue:hover {
+            box-shadow: none;
             transform: scale(1.05);
+        }
+
+    .btn-neon-pink {
+        background-color: var(--neon-pink);
+        color: var(--dark-bg);
+        font-weight: bold;
+        padding: 0.8rem 1.5rem;
+    }
+
+        .btn-neon-pink:hover {
+            box-shadow: none;
         }
 </style>

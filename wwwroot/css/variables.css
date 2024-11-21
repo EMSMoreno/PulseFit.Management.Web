@@ -1,0 +1,36 @@
+﻿:root {
+    /* Core Theme Colors */
+    --neon-pink: #E93571;
+    --neon-blue: #8DFAFF;
+    --neon-green: #AAFF1F;
+    --neon-purple: #E200FE;
+    --neon-yellow: #EDE313;
+    /* Background Colors */
+    --dark-bg: #1c1c1c; /* Primary dark background */
+    --light-bg: #2b2b2b; /* Background for cards and lighter sections */
+    /* Text Colors */
+    --light-text: #ECECEC; /* General light text */
+    --btn-text-pink: #FFFFFF; /* Button text for pink buttons */
+    --btn-text-blue: #000000; /* Adjusted for readability on blue buttons */
+    --btn-text-green: #000000; /* Adjusted for readability on green buttons */
+    --btn-text-purple: #FFFFFF; /* Button text for purple buttons */
+    /* Borders */
+    --border-color: #333; /* Default border color */
+    /* Glow Effects */
+    --default-glow: none;
+    /* Typography */
+    --font-primary: 'Roboto', sans-serif;
+    --font-secondary: 'Raleway', sans-serif;
+    --font-accent: 'Montserrat', sans-serif;
+    /* Border Radius */
+    --border-radius-sm: 4px;
+    --border-radius-md: 6px;
+    --border-radius-lg: 10px;
+    /* Alert Colors */
+    --alert-bg: var(--neon-purple);
+    --alert-text: #FFFFFF;
+    /* Input and Form Focus */
+    --input-bg: #333;
+    --input-focus-bg: #444;
+    --input-focus-border: var(--neon-blue);
+}

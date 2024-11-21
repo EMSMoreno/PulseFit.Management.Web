@@ -1,4 +1,10 @@
-﻿@model PulseFit.Management.Web.Models.SubscriptionViewModel
+﻿@{
+    Layout = "_Dashboard";
+    ViewBag.PageTitle = "Subscription";
+    ViewBag.SubPageTitle = "Delete";
+}
+
+@model PulseFit.Management.Web.Models.SubscriptionViewModel
 @{
     ViewData["Title"] = "Delete Subscription";
 }
@@ -23,7 +29,7 @@
         background-color: var(--dark-bg);
         border: 2px solid var(--neon-yellow);
         border-radius: 10px;
-        box-shadow: 0px 4px 10px rgba(255, 255, 0, 0.3);
+        box-shadow: none;
     }
 
     .text-neon-danger {
@@ -42,7 +48,7 @@
         .btn-neon-danger:hover {
             background-color: var(--dark-bg);
             color: var(--neon-pink);
-            box-shadow: 0px 0px 10px var(--neon-pink);
+            box-shadow: none;
         }
 
     .btn-neon-secondary {
@@ -55,6 +61,6 @@
         .btn-neon-secondary:hover {
             background-color: var(--dark-bg);
             color: var(--neon-blue);
-            box-shadow: 0px 0px 10px var(--neon-blue);
+            box-shadow: none;
         }
 </style>

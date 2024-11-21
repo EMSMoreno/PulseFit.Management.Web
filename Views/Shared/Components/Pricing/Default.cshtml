@@ -1,0 +1,85 @@
+﻿@model IEnumerable<PulseFit.Management.Web.Models.SubscriptionViewModel>
+
+<div class="container my-5">
+    <h2 class="title-neon mb-4 text-center">Popular Subscriptions</h2>
+
+    <div id="generalSubscriptionList" class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var subscription in Model.Take(3))
+        {
+            <div class="col">
+                <div class="card card-neon subscription-card">
+                    <img src="@subscription.ImageUrl" alt="Subscription Image" class="card-img-top rounded-top">
+                    <div class="card-body d-flex flex-column align-items-center text-center">
+                        <h5 class="card-title text-neon">@subscription.Name</h5>
+                        <p class="card-text text-gray">@subscription.Description</p>
+
+                        @if (subscription.DiscountPercentage > 0)
+                        {
+                            <p class="price">
+                                <span class="original-price">@subscription.Price.ToString("C2")</span>
+                                <span class="discounted-price">@subscription.CalculatedPrice.ToString("C2")</span>
+                            </p>
+                            <p class="discount">Discount: @subscription.DiscountPercentage%</p>
+                        }
+                        else
+                        {
+                            <p class="price">@subscription.Price.ToString("C2")</p>
+                        }
+
+                        <a href="@Url.Action("Details", "Subscription", new { id = subscription.Id })" class="btn-neon-blue btn-lg w-100 mb-3">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="text-center mt-4">
+        <a asp-action="Index" asp-controller="Subscription" class="btn-neon-green btn-lg px-5">View More</a>
+    </div>
+</div>
+
+<style>
+    .subscription-card {
+        transition: transform 0.3s, box-shadow 0.3s;
+        background-color: var(--light-bg);
+        border: 1px solid var(--border-color);
+        padding: 20px;
+    }
+
+        .subscription-card:hover {
+            transform: scale(1.03);
+            border-color: var(--neon-blue);
+            box-shadow: none;
+        }
+
+    .price {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: var(--neon-pink);
+    }
+
+    .original-price {
+        text-decoration: line-through;
+        color: var(--neon-purple);
+        margin-right: 0.5rem;
+    }
+
+    .discounted-price {
+        color: var(--neon-green);
+        font-weight: bold;
+    }
+
+    .discount {
+        color: var(--neon-yellow);
+        font-size: 0.9em;
+    }
+
+    .btn-lg {
+        padding: 0.7rem 1.5rem;
+        font-size: 1.1rem;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+</style>

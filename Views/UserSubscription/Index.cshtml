@@ -1,4 +1,10 @@
-﻿@model IEnumerable<UserSubscriptionViewModel>
+﻿@{
+    Layout = "_Dashboard";
+    ViewBag.PageTitle = "UserSubscription";
+    ViewBag.SubPageTitle = "ClientSubscriptions";
+}
+
+@model IEnumerable<UserSubscriptionViewModel>
 @using PulseFit.Management.Web.Data.Entities
 
 @{
@@ -6,11 +12,11 @@
 }
 
 <div class="container my-5">
-    <h2 class="text-center text-primary mb-4 fw-bold">Client Subscriptions</h2>
+    <h2 class="text-center text-neon-blue fw-bold mb-4">Client Subscriptions</h2>
 
     <div class="table-responsive">
-        <table class="table table-hover shadow-lg">
-            <thead class="table-header">
+        <table class="table table-hover table-neon shadow-neon">
+            <thead>
                 <tr>
                     <th>Client</th>
                     <th>Subscription</th>
@@ -28,7 +34,7 @@
                         <td>@client.FirstName @client.LastName</td>
                         <td>@(hasSubscriptions ? "With Subscriptions" : "No Subscription")</td>
                         <td>
-                            <span class="badge @((clientGroup.Any(sub => sub.Status == SubscriptionStatus.Active)) ? "badge-success" : "badge-danger")">
+                            <span class="badge @((clientGroup.Any(sub => sub.Status == SubscriptionStatus.Active)) ? "badge-neon-green" : "badge-neon-red")">
                                 @(clientGroup.Any(sub => sub.Status == SubscriptionStatus.Active) ? "Active" : "Inactive")
                             </span>
                         </td>
@@ -36,12 +42,12 @@
                             @if (!hasSubscriptions)
                             {
                                 <a asp-action="SelectSubscriptionForClient" asp-route-clientId="@clientGroup.Key"
-                                   class="btn btn-outline-primary btn-sm animate-fade">Add Subscription</a>
+                                   class="btn btn-neon-blue btn-sm">Add Subscription</a>
                             }
                             else
                             {
                                 <a asp-action="Details" asp-route-clientId="@clientGroup.Key"
-                                   class="btn btn-outline-secondary btn-sm animate-fade">View Details</a>
+                                   class="btn btn-neon-secondary btn-sm">View Details</a>
                             }
                         </td>
                     </tr>
@@ -54,34 +60,77 @@
 <style>
     h2 {
         font-size: 2.5rem;
-        color: #0d6efd;
-        font-weight: 700;
+        color: var(--neon-blue);
+        font-weight: bold;
+        margin-bottom: 1rem;
     }
 
-    .table-header {
-        background-color: #f7f9fc;
+    .table-neon {
+        background-color: var(--dark-bg);
+        color: var(--light-text);
+        border-collapse: collapse;
+        width: 100%;
+        box-shadow: none;
     }
 
-    .badge-success {
-        background-color: #28a745;
-        color: #fff;
-    }
-
-    .badge-danger {
-        background-color: #dc3545;
-        color: #fff;
-    }
-
-    .btn-outline-primary {
-        transition: 0.3s ease;
-    }
-
-        .btn-outline-primary:hover {
-            background-color: #0d6efd;
-            color: #fff;
+        .table-neon th {
+            background-color: var(--light-bg);
+            color: var(--neon-pink);
+            font-weight: bold;
+            padding: 0.8rem;
         }
 
-    .animate-fade {
-        transition: all 0.4s ease;
+        .table-neon td {
+            padding: 0.8rem;
+            text-align: center;
+        }
+
+        .table-neon tr:hover {
+            background-color: var(--light-bg);
+            transition: 0.3s ease;
+        }
+
+    .badge-neon-green {
+        background-color: var(--neon-green);
+        color: var(--dark-bg);
+        padding: 0.4rem 0.8rem;
+        border-radius: 5px;
+        font-size: 0.9rem;
     }
+
+    .badge-neon-red {
+        background-color: var(--neon-pink);
+        color: var(--dark-bg);
+        padding: 0.4rem 0.8rem;
+        border-radius: 5px;
+        font-size: 0.9rem;
+    }
+
+    .btn-neon-blue {
+        background-color: var(--neon-blue);
+        color: var(--dark-bg);
+        border: none;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        transition: box-shadow 0.3s, transform 0.3s;
+    }
+
+        .btn-neon-blue:hover {
+            box-shadow: none;
+            transform: scale(1.05);
+        }
+
+    .btn-neon-secondary {
+        background-color: var(--neon-purple);
+        color: var(--light-text);
+        border: none;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        transition: box-shadow 0.3s, transform 0.3s;
+    }
+
+        .btn-neon-secondary:hover {
+            box-shadow: none;
+            transform: scale(1.05);
+        }
 </style>

@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "About Us";
+}
+
+
+<!-- ChoseUs Section -->
+@await Html.PartialAsync("_ChoseUs")
+
+<!-- About Us Section -->
+@await Html.PartialAsync("_AboutUs")
+
+<!-- Team Section -->
+@await Component.InvokeAsync("PersonalTrainers")
+
+@await Html.PartialAsync("_Banner")
+
+@await Html.PartialAsync("_Testimonial")
+
+<!-- Get In Touch Section -->
+@await Html.PartialAsync("_GetInTouch")

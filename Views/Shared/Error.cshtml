@@ -6,6 +6,16 @@
 <h1 class="text-danger">Error.</h1>
 <h2 class="text-danger">An error occurred while processing your request.</h2>
 
+@if (!string.IsNullOrEmpty(ViewBag.ErrorTitle))
+{
+    <h3 class="text-warning">@ViewBag.ErrorTitle</h3>
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <p class="text-info">@ViewBag.ErrorMessage</p>
+}
+
 @if (Model.ShowRequestId)
 {
     <p>

@@ -31,5 +31,11 @@ namespace PulseFit.Management.Web.Data.Repositories
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
+        // Gets an employee by UserId
+        public async Task<Employee> GetEmployeeByUserIdAsync(string userId)
+        {
+            return await _context.Employees
+                .FirstOrDefaultAsync(e => e.UserId == userId);
+        }
     }
 }

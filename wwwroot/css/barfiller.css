@@ -1,0 +1,50 @@
+body {
+    font-family: var(--font-primary); /* Usando a fonte primária definida */
+}
+
+.barfiller {
+    width: 100%;
+    height: 12px;
+    background: var(--light-text); /* Substitui o #fcfcfc pela cor clara do texto */
+    border: 1px solid var(--border-color); /* Usando a variável para borda */
+    position: relative;
+    margin-bottom: var(--spacing-lg); /* Margem adaptada com variável */
+    box-shadow: inset 1px 4px 9px -6px rgba(0, 0, 0, 0.5); /* Mantido */
+    -moz-box-shadow: inset 1px 4px 9px -6px rgba(0, 0, 0, 0.5); /* Mantido */
+}
+
+    .barfiller .fill {
+        display: block;
+        position: relative;
+        width: 0px;
+        height: 100%;
+        background: var(--input-bg); /* Usando a cor de fundo dos inputs */
+        z-index: 1;
+    }
+
+    .barfiller .tipWrap {
+        display: none;
+    }
+
+    .barfiller .tip {
+        margin-top: -30px;
+        padding: var(--spacing-sm) var(--spacing-md); /* Substituído por variáveis de espaçamento */
+        font-size: calc(var(--font-size-base) * 0.6875); /* Escala para 11px */
+        color: var(--light-text); /* Cor clara para o texto */
+        left: 0px;
+        position: relative;
+        z-index: 2;
+        background: var(--input-bg); /* Fundo do tip alinhado com o fundo do input */
+    }
+
+        .barfiller .tip:after {
+            border: solid;
+            border-color: rgba(0, 0, 0, 0.8) transparent; /* Mantido */
+            border-width: 6px 6px 0 6px;
+            content: "";
+            display: block;
+            position: absolute;
+            left: 9px;
+            top: 100%;
+            z-index: 9;
+        }

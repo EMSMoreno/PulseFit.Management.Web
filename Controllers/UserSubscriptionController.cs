@@ -153,7 +153,7 @@ namespace PulseFit.Management.Web.Controllers
 
         #endregion
 
-        #region Métodos de Cliente (Inalterados)
+        #region Métodos de Cliente
 
         public async Task<IActionResult> ClientSubscriptions()
         {

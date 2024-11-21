@@ -1,4 +1,10 @@
-﻿@model PulseFit.Management.Web.Models.SubscriptionViewModel
+﻿@{
+    Layout = "_Dashboard";
+    ViewBag.PageTitle = "Subscription";
+    ViewBag.SubPageTitle = "Create";
+}
+
+@model PulseFit.Management.Web.Models.SubscriptionViewModel
 @using PulseFit.Management.Web.Data.Entities
 
 @{
@@ -26,98 +32,160 @@
             <div class="col-md-6">
                 <!-- Nome -->
                 <div class="mb-3">
-                    <label asp-for="Name" class="form-label text-neon">Name</label>
+                    <label asp-for="Name" class="form-label text-neon">
+                        Name
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip"  title="A clear name that describes the subscription type (e.g., 'Monthly Basic', 'Annual VIP')."></i>
+                    </label>
                     <input asp-for="Name" class="form-control input-neon" required>
                 </div>
 
                 <!-- Descrição -->
                 <div class="mb-3">
-                    <label asp-for="Description" class="form-label text-neon">Description</label>
+                    <label asp-for="Description" class="form-label text-neon">
+                        Description
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Provide details about what the subscription offers, like benefits and limitations."></i>
+                    </label>
                     <textarea asp-for="Description" class="form-control input-neon" rows="4"></textarea>
                 </div>
 
                 <!-- Preço -->
                 <div class="mb-3">
-                    <label asp-for="Price" class="form-label text-neon">Price</label>
+                    <label asp-for="Price" class="form-label text-neon">
+                        Price
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Set the base price of this subscription (before discounts)."></i>
+                    </label>
                     <input asp-for="Price" class="form-control input-neon" required>
                 </div>
 
                 <!-- Imagem -->
                 <div class="mb-3">
-                    <label asp-for="SubscriptionImageFile" class="form-label text-neon">Image</label>
+                    <label asp-for="SubscriptionImageFile" class="form-label text-neon">
+                        Image
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Upload an image to represent this subscription (e.g., logo or promotional image)."></i>
+                    </label>
                     <input asp-for="SubscriptionImageFile" type="file" class="form-control input-neon">
                 </div>
 
-                <!-- Tipo de Assinatura -->
+                <!-- Tipo de Subscrição -->
                 <div class="mb-3">
-                    <label asp-for="SubscriptionType" class="form-label text-neon">Subscription Type</label>
+                    <label asp-for="SubscriptionType" class="form-label text-neon">
+                        Subscription Type
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Select a type to categorize this subscription (e.g., Monthly, Annual, Online Classes)."></i>
+                    </label>
                     <select asp-for="SubscriptionType" class="form-select input-neon" asp-items="Html.GetEnumSelectList<SubscriptionType>()"></select>
                 </div>
 
                 <!-- Exclusividade -->
                 <div class="form-check form-switch mb-3">
                     <input asp-for="IsExclusive" class="form-check-input">
-                    <label asp-for="IsExclusive" class="form-check-label text-neon">Exclusive Subscription</label>
+                    <label asp-for="IsExclusive" class="form-check-label text-neon">
+                        Exclusive Subscription
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Mark as exclusive if users can only have one active subscription of this type."></i>
+                    </label>
                 </div>
 
-                <!-- Duração -->
+                <!-- Valor de Duração -->
                 <div class="mb-3">
-                    <label asp-for="DurationValue" class="form-label text-neon">Duration Value</label>
+                    <label asp-for="DurationValue" class="form-label text-neon">
+                        Duration Value
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Set the length of the subscription period, e.g., 1 for monthly or 365 for daily subscriptions."></i>
+                    </label>
                     <input asp-for="DurationValue" class="form-control input-neon" required>
                 </div>
 
+                <!-- Tipo de Duração -->
                 <div class="mb-3">
-                    <label asp-for="DurationType" class="form-label text-neon">Duration Type</label>
+                    <label asp-for="DurationType" class="form-label text-neon">
+                        Duration Type
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Choose the time unit for the duration (e.g., Days, Weeks, Months, Years)."></i>
+                    </label>
                     <select asp-for="DurationType" class="form-select input-neon" asp-items="Html.GetEnumSelectList<DurationType>()"></select>
                 </div>
             </div>
 
             <!-- Segunda Coluna -->
             <div class="col-md-6">
-                <!-- Benefícios -->
+                <!-- Benefícios Incluídos -->
                 <div class="mb-3">
-                    <label class="form-label text-neon">Included Gyms</label>
-                    <select asp-for="SelectedGymIds" asp-items="Model.GymOptions" class="form-select input-neon" multiple></select>
+                    <label class="form-label text-neon">
+                        Included Gyms
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Select the gyms that this subscription grants access to."></i>
+                    </label>
+                    <div class="d-flex align-items-center mb-2">
+                        <button type="button" id="selectAllGyms" class="btn btn-secondary me-3">Select All Gyms</button>
+                        <select asp-for="SelectedGymIds" asp-items="Model.GymOptions" class="form-select input-neon" multiple></select>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label text-neon">Included Workouts</label>
-                    <select asp-for="SelectedWorkoutIds" asp-items="Model.WorkoutOptions" class="form-select input-neon" multiple></select>
-                </div>
+
 
                 <div class="mb-3">
-                    <label class="form-label text-neon">Included Nutrition Plans</label>
-                    <select asp-for="SelectedNutritionPlanIds" asp-items="Model.NutritionPlanOptions" class="form-select input-neon" multiple></select>
+                    <label class="form-label text-neon">
+                        Included Workouts
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Select the workouts included in this subscription."></i>
+                    </label>
+                    <div class="d-flex align-items-center mb-2">
+                        <button type="button" id="selectAllWorkouts" class="btn btn-secondary me-2">Select All Workouts</button>
+                        <select asp-for="SelectedWorkoutIds" asp-items="Model.WorkoutOptions" class="form-select input-neon" multiple></select>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label text-neon">Included Online Classes</label>
-                    <select asp-for="SelectedOnlineClassIds" asp-items="Model.OnlineClassOptions" class="form-select input-neon" multiple></select>
+
+                <div class="form-check form-switch mb-3">
+                    <input asp-for="IncludeNutritionPlans" class="form-check-input">
+                    <label asp-for="IncludeNutritionPlans" class="form-check-label text-neon">
+                        Include Nutrition Plans
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Toggle to include or exclude nutrition plans in this subscription."></i>
+                    </label>
                 </div>
 
-                <!-- Outras Configurações -->
+                <div class="form-check form-switch mb-3">
+                    <input asp-for="IncludeOnlineClasses" class="form-check-input">
+                    <label asp-for="IncludeOnlineClasses" class="form-check-label text-neon">
+                        Include Online Classes
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Toggle to include or exclude online classes in this subscription."></i>
+                    </label>
+                </div>
+
+
+                <!-- Benefícios Extras -->
                 <div class="mb-3">
-                    <label asp-for="MaxPersonalTrainerSessions" class="form-label text-neon">Max Personal Trainer Sessions</label>
+                    <label asp-for="MaxPersonalTrainerSessions" class="form-label text-neon">
+                        Max Personal Trainer Sessions
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Maximum sessions with a personal trainer included in this subscription."></i>
+                    </label>
                     <input asp-for="MaxPersonalTrainerSessions" class="form-control input-neon" type="number">
                 </div>
 
                 <div class="form-check form-switch mb-3">
                     <input asp-for="Has24HourAccess" class="form-check-input">
-                    <label asp-for="Has24HourAccess" class="form-check-label text-neon">24/7 Access</label>
+                    <label asp-for="Has24HourAccess" class="form-check-label text-neon">
+                        24/7 Access
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Enable for around-the-clock access to the facilities."></i>
+                    </label>
                 </div>
 
                 <div class="form-check form-switch mb-3">
                     <input asp-for="HasVIPAccess" class="form-check-input">
-                    <label asp-for="HasVIPAccess" class="form-check-label text-neon">VIP Access</label>
+                    <label asp-for="HasVIPAccess" class="form-check-label text-neon">
+                        VIP Access
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Allow VIP access for premium facilities."></i>
+                    </label>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="PerformanceReportFrequencyInMonths" class="form-label text-neon">Performance Report Frequency (Months)</label>
+                    <label asp-for="PerformanceReportFrequencyInMonths" class="form-label text-neon">
+                        Performance Report Frequency (Months)
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Frequency for performance reports (e.g., every 3 months)."></i>
+                    </label>
                     <input asp-for="PerformanceReportFrequencyInMonths" class="form-control input-neon" type="number">
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="DiscountPercentage" class="form-label text-neon">Discount Percentage</label>
+                    <label asp-for="DiscountPercentage" class="form-label text-neon">
+                        Discount Percentage
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Enter a discount percentage if this subscription is on promotion."></i>
+                    </label>
                     <input asp-for="DiscountPercentage" class="form-control input-neon" type="number">
                 </div>
             </div>
@@ -126,3 +194,22 @@
         <button type="submit" class="btn-neon-pink btn-lg w-100 mt-4">Create Subscription</button>
     </form>
 </div>
+
+<script>
+    // Função genérica para selecionar todos os itens de um campo select múltiplo
+    function selectAllOptions(selectElementId) {
+        const selectElement = document.querySelector(`[asp-for='${selectElementId}']`);
+        if (selectElement) {
+            Array.from(selectElement.options).forEach(option => option.selected = true);
+        }
+    }
+
+    // Eventos para os botões
+    document.getElementById('selectAllGyms')?.addEventListener('click', function () {
+        selectAllOptions('SelectedGymIds'); // Atualize o ID para o elemento correto
+    });
+
+    document.getElementById('selectAllWorkouts')?.addEventListener('click', function () {
+        selectAllOptions('SelectedWorkoutIds'); // Atualize o ID para o elemento correto
+    });
+</script>

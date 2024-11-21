@@ -1,7 +1,25 @@
-﻿@model PulseFit.Management.Web.Models.EmployeeViewModel
+﻿@{
+    Layout = "_Dashboard";
+    ViewBag.PageTitle = "Employee";
+    ViewBag.SubPageTitle = "Create";
+}
+
+@model PulseFit.Management.Web.Models.EmployeeViewModel
 
 @{
     ViewData["Title"] = "Create Employee";
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
 }
 
 <div class="container my-5">
@@ -120,6 +138,8 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/formHelpers.js"></script>
+
     <script>
         setupImageUploadPreview("employeePictureUpload", "imagePreview");
 
