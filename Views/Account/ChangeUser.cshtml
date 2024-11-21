@@ -42,10 +42,11 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="d-flex flex-column flex-md-row gap-2 mt-3">
-                <button type="submit" class="btn btn-neon-pink neon-hover-shadow w-100">Update</button>
-                <a asp-action="ChangePassword" class="btn btn-neon-blue neon-hover-shadow w-100">Change Password</a>
+            <div class="d-flex justify-content-between mt-3">
+                <button type="submit" class="btn btn-neon-pink neon-hover-shadow">Update</button>
+                <a asp-action="ChangePassword" class="btn btn-neon-blue neon-hover-shadow">Change Password</a>
             </div>
+
 
             <div class="text-success mt-3 text-center">@ViewBag.UserMessage</div>
         </form>

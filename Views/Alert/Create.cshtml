@@ -1,0 +1,43 @@
+﻿@{
+    Layout = "_Dashboard";
+    ViewBag.PageTitle = "Alerts";
+    ViewBag.SubPageTitle = "Create";
+}
+
+
+@model PulseFit.Management.Web.Models.AlertViewModel
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<h2>Create Alert</h2>
+
+<form asp-action="Create" method="post" id="createAlertForm">
+    <div class="form-group">
+        <label asp-for="Message">Alert Description</label>
+        <textarea asp-for="Message" class="form-control" rows="5"></textarea>
+        <span asp-validation-for="Message" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Send Alert</button>
+</form>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/formHelpers.js"></script>
+
+    <script>
+        // SweetAlert2 confirmation before submitting the form
+        setupSweetAlertOnSubmit("createAlertForm", "Alert created successfully.");
+    </script>
+}

@@ -98,5 +98,9 @@ namespace PulseFit.Management.Web.Helpers
 
         Task<string> GetUserEmailByPaymentIdAsync(int paymentId);
 
+        Task<string> GetRoleAsync(User user);
+
+        Task<Employee> GetEmployeeByUserAsync(string userEmail);
+
     }
 }

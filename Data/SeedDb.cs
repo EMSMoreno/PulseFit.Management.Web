@@ -1,12 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using PulseFit.Management.Web.Data;
 using PulseFit.Management.Web.Data.Entities;
 using PulseFit.Management.Web.Helpers;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 public class SeedDb
 {

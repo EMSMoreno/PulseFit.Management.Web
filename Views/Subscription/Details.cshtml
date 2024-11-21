@@ -1,4 +1,5 @@
 ﻿@model PulseFit.Management.Web.Models.SubscriptionViewModel
+
 @{
     ViewData["Title"] = "Subscription Details";
 }
@@ -6,70 +7,75 @@
 <div class="container my-5">
     <!-- Back Button -->
     <div class="mb-4">
-        <a href="@Url.Action("Index", "Subscription")" class="btn btn-outline-secondary">
+        <a href="@Url.Action("Index", "Subscription")" class="btn btn-neon-secondary neon-hover-shadow">
             <i class="bi bi-arrow-left"></i> Back
         </a>
     </div>
 
-    <div class="card shadow-lg p-4">
+    <div class="card-neon shadow p-4">
         <div class="row">
-            <div class="col-md-5 d-flex align-items-center">
-                <img src="@Model.ImageUrl" class="img-fluid rounded" alt="Subscription Image" style="width:100%;">
+            <!-- Subscription Image -->
+            <div class="col-md-5 d-flex align-items-center justify-content-center">
+                <img src="@Model.ImageUrl" class="img-fluid rounded border-neon-blue" alt="Subscription Image" style="max-width: 100%; height: auto;">
             </div>
+
+            <!-- Subscription Details -->
             <div class="col-md-7">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h2 class="mb-1">@Model.Name</h2>
+                    <h2 class="text-neon-blue mb-3">@Model.Name</h2>
                     @if (Model.DiscountPercentage > 0)
                     {
-                        <span class="badge bg-success px-3 py-2">Discount: @Model.DiscountPercentage%</span>
+                        <span class="badge bg-neon-green px-3 py-2">Discount: @Model.DiscountPercentage%</span>
                     }
                 </div>
 
-                <p class="text-muted">@Model.Description</p>
+                <p class="text-light">@Model.Description</p>
 
-                <!-- Pricing Section with Original and Discounted Price -->
+                <!-- Pricing Section -->
                 <div class="my-3">
                     @if (Model.DiscountPercentage > 0)
                     {
-                        <h3 class="text-muted text-decoration-line-through">$@Model.Price.ToString("C2")</h3>
-                        <h3 class="price text-danger">$@Model.CalculatedPrice.ToString("C2") <small class="text-success">with discount</small></h3>
+                        <h3 class="text-light text-decoration-line-through">@Model.Price.ToString("C2")</h3>
+                        <h3 class="price">@Model.CalculatedPrice.ToString("C2") <small class="text-neon-green">with discount</small></h3>
                     }
                     else
                     {
-                        <h3 class="price">$@Model.Price.ToString("C2")</h3>
+                        <h3 class="price">@Model.Price.ToString("C2")</h3>
                     }
                 </div>
 
-                <p class="text-secondary">Duration: <strong>@Model.DurationValue @Model.DurationType</strong></p>
+                <p class="text-secondary">Duration: <strong class="text-neon-pink">@Model.DurationValue @Model.DurationType</strong></p>
 
-                <h4 class="mt-4">Key Benefits:</h4>
+                <!-- Key Benefits -->
+                <h4 class="text-neon-yellow mt-4">Key Benefits:</h4>
                 <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <li class="list-group-item">
                         Access to All Gyms:
-                        <strong class="ms-auto">@((Model.IsAllGymsAccessible ? "Yes" : "No"))</strong>
+                        <strong class="text-neon-green ms-auto">@((Model.IsAllGymsAccessible ? "Yes" : "No"))</strong>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <li class="list-group-item">
                         24/7 Access:
-                        <strong class="ms-auto">@((Model.Has24HourAccess ? "Yes" : "No"))</strong>
+                        <strong class="text-neon-green ms-auto">@((Model.Has24HourAccess ? "Yes" : "No"))</strong>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <li class="list-group-item">
                         <span>
                             VIP Access:
-                            <i class="bi bi-info-circle ms-1" data-bs-toggle="tooltip" title="Includes access to sauna, swimming pool, relaxation lounge, massage chairs, and VIP lounge."></i>
+                            <i class="bi bi-info-circle ms-1 text-neon-blue" data-bs-toggle="tooltip" title="Includes access to sauna, swimming pool, relaxation lounge, massage chairs, and VIP lounge."></i>
                         </span>
-                        <strong class="ms-auto">@((Model.HasVIPAccess ? "Yes" : "No"))</strong>
+                        <strong class="text-neon-green ms-auto">@((Model.HasVIPAccess ? "Yes" : "No"))</strong>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <li class="list-group-item">
                         Max Personal Trainer Sessions:
-                        <strong class="ms-auto">@Model.MaxPersonalTrainerSessions</strong>
+                        <strong class="text-neon-pink ms-auto">@Model.MaxPersonalTrainerSessions</strong>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <li class="list-group-item">
                         Performance Report Frequency:
-                        <strong class="ms-auto">@Model.PerformanceReportFrequencyInMonths month(s)</strong>
+                        <strong class="text-neon-pink ms-auto">@Model.PerformanceReportFrequencyInMonths month(s)</strong>
                     </li>
                 </ul>
 
-                <h4 class="mt-4">Included Plans & Services:</h4>
+                <!-- Included Plans & Services -->
+                <h4 class="text-neon-yellow mt-4">Included Plans & Services:</h4>
                 <ul class="list-group list-group-flush">
                     @if (Model.SelectedGymIds?.Count > 0)
                     {
@@ -89,8 +95,9 @@
                     }
                 </ul>
 
+                <!-- Subscribe Now Button -->
                 <div class="d-grid mt-4">
-                    <a href="@Url.Action("SelectPaymentMethod", "Payment", new { subscriptionId = Model.Id })" class="btn btn-success btn-lg">
+                    <a href="@Url.Action("SelectPaymentMethod", "Payment", new { subscriptionId = Model.Id })" class="btn btn-neon-blue btn-lg neon-hover-shadow">
                         Subscribe Now
                     </a>
                 </div>
@@ -101,20 +108,27 @@
 
 <style>
     .price {
-        font-size: 2rem;
-        color: #28a745;
-        font-weight: 600;
+        font-size: 2.5rem;
+        color: var(--neon-green);
+        font-weight: 700;
     }
 
     .list-group-item {
-        font-size: 1rem;
+        background-color: #2b2b2b; /* Fundo para o item */
+        color: var(--light-text);
+        border: 1px solid var(--border-color);
         padding: 0.75rem 1.25rem;
-        display: flex;
-        justify-content: space-between;
+        font-size: 1.1rem;
     }
 
-    .badge.bg-success {
-        font-size: 0.9rem;
+    .badge.bg-neon-green {
+        background-color: var(--neon-green);
+        color: #000;
+        font-size: 1rem;
+    }
+
+    .text-neon-yellow {
+        color: var(--neon-yellow);
     }
 </style>
 

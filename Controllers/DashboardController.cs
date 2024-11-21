@@ -1,53 +1,59 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PulseFit.Management.Web.Data.Entities;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PulseFit.Management.Web.Data.Repositories;
+using PulseFit.Management.Web.Repositories;
 
 namespace PulseFit.Management.Web.Controllers
 {
+    [Authorize] // Garante que apenas utilizadores autenticados podem aceder ao controller
     public class DashboardController : Controller
     {
         private readonly IAlertRepository _alertRepository;
-        private readonly IGymRepository _gymRepository;
 
-        public DashboardController(IAlertRepository alertRepository, IGymRepository gymRepository)
+        public DashboardController(IAlertRepository alertRepository)
         {
             _alertRepository = alertRepository;
-            _gymRepository = gymRepository;
         }
 
         public async Task<IActionResult> Index()
         {
-            var alerts = await _alertRepository.GetAllAlertsAsync();
-            return View(alerts); // Pass unresolved alerts to View
+            // Página inicial do dashboard acessível para todos os utilizadores autenticados
+            return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateAlert(string message, int userId)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AdminDashboard()
         {
-            var alert = new Alert
-            {
-                Message = message,
-                CreatedAt = DateTime.UtcNow,
-                IsResolved = false,
-                UserId = userId
-            };
-            await _alertRepository.CreateAlertAsync(alert);
-            TempData["Message"] = "Alerta criado com sucesso.";
-            return RedirectToAction("Index");
+            // Dashboard específico para administradores
+            return View();
         }
 
-        public async Task<IActionResult> ViewAlerts()
+        [Authorize(Roles = "Employee")]
+        public IActionResult EmployeeDashboard()
         {
-            var alerts = await _alertRepository.GetAllAlertsAsync();
-            return View(alerts);
+            // Dashboard específico para funcionários
+            return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> MarkAlertAsResolved(int id)
+        [Authorize(Roles = "PersonalTrainer")]
+        public IActionResult PersonalTrainerDashboard()
         {
-            await _alertRepository.MarkAlertAsResolvedAsync(id);
-            TempData["Message"] = "Alert resolved successfully.";
-            return RedirectToAction("ViewAlerts");
+            // Dashboard específico para personal trainers
+            return View();
+        }
+
+        [Authorize(Roles = "Client")]
+        public IActionResult ClientDashboard()
+        {
+            // Dashboard específico para clientes
+            return View();
+        }
+
+        [Authorize(Roles = "Nutritionist")]
+        public IActionResult NutritionistDashboard()
+        {
+            // Dashboard específico para nutricionistas
+            return View();
         }
     }
 }

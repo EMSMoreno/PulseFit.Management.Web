@@ -18,26 +18,35 @@ namespace PulseFit.Management.Web.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Alert>> GetActiveAlertsAsync()
+        public async Task<List<Alert>> GetActiveAlertsAsync()
         {
             return await _context.Alerts
-                .Where(a => !a.IsResolved)
-                .ToListAsync();
+                                 .Where(a => !a.IsResolved)
+                                 .Include(a => a.Employee)
+                                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Alert>> GetAllAlertsAsync()
+        public async Task<Alert> GetAlertByIdAsync(int id)
         {
-            return await _context.Alerts.Where(a => !a.IsResolved).ToListAsync();
+            return await _context.Alerts.FindAsync(id);
         }
 
-        public async Task MarkAlertAsResolvedAsync(int alertId)
+        public async Task MarkAsResolvedAsync(int id)
         {
-            var alert = await _context.Alerts.FindAsync(alertId);
+            var alert = await GetAlertByIdAsync(id);
             if (alert != null)
             {
                 alert.IsResolved = true;
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<List<Alert>> GetAlertsByEmployeeIdAsync(int employeeId)
+        {
+            return await _context.Alerts
+                                 .Where(a => a.EmployeeId == employeeId)
+                                 .Include(a => a.Employee) // Include employee data
+                                 .ToListAsync();
         }
     }
 }

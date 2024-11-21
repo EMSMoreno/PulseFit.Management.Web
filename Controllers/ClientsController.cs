@@ -8,6 +8,7 @@ using PulseFit.Management.Web.Helpers;
 using PulseFit.Management.Web.Models;
 using PulseFit.Management.Web.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace PulseFit.Management.Web.Controllers
 {
@@ -94,6 +95,7 @@ namespace PulseFit.Management.Web.Controllers
                         Email = model.Email,
                         UserName = model.Email,
                         PhoneNumber = model.PhoneNumber,
+                        Address = model.Address,
                         DateCreated = DateTime.UtcNow
                     };
 
@@ -140,7 +142,6 @@ namespace PulseFit.Management.Web.Controllers
                     var client = new Client
                     {
                         Birthdate = model.Birthdate,
-                        Address = model.Address,
                         Gender = model.Gender,
                         UserId = user.Id,  // Atribui o UserId ao Client
                         Status = Status.Active,
@@ -204,6 +205,7 @@ namespace PulseFit.Management.Web.Controllers
                     client.User.FirstName = model.FirstName;
                     client.User.LastName = model.LastName;
                     client.User.PhoneNumber = model.PhoneNumber;
+                    client.User.Address = model.Address;
 
                     if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 0)
                     {
@@ -211,7 +213,6 @@ namespace PulseFit.Management.Web.Controllers
                     }
 
                     client.Birthdate = model.Birthdate;
-                    client.Address = model.Address;
                     client.Status = model.Status;
                     client.Gender = model.Gender;
 
@@ -263,6 +264,10 @@ namespace PulseFit.Management.Web.Controllers
             }
             catch (DbUpdateException ex)
             {
+                var errorModel = new ErrorViewModel
+                {
+                    RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+                };
                 if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
                 {
                     ViewBag.ErrorTitle = $"Client ID {client.Id} is currently in use.";
@@ -273,7 +278,7 @@ namespace PulseFit.Management.Web.Controllers
                     ViewBag.ErrorTitle = "Deletion Error";
                     ViewBag.ErrorMessage = "An unexpected error occurred during deletion. Please try again later.";
                 }
-                return View("Error");
+                return View("Error", errorModel);
             }
         }
 

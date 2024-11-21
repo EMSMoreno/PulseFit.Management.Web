@@ -1,7 +1,25 @@
-﻿@model PulseFit.Management.Web.Models.NutritionistViewModel
+﻿@{
+    Layout = "_Dashboard";
+    ViewBag.PageTitle = "Nutritionist";
+    ViewBag.SubPageTitle = "Create";
+}
+
+@model PulseFit.Management.Web.Models.NutritionistViewModel
 
 @{
     ViewData["Title"] = "Create Nutritionist";
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
 }
 
 <div class="container my-5">

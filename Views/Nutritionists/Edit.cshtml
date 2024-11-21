@@ -1,7 +1,25 @@
-﻿@model PulseFit.Management.Web.Models.NutritionistViewModel
+﻿@{
+    Layout = "_Dashboard";
+    ViewBag.PageTitle = "Nutritionist";
+    ViewBag.SubPageTitle = "Edit";
+}
+
+@model PulseFit.Management.Web.Models.NutritionistViewModel
 
 @{
     ViewData["Title"] = "Edit Nutritionist";
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
 }
 
 <div class="container my-5">
@@ -32,7 +50,7 @@
             <div class="col-md-6">
                 <div class="mb-3">
                     <label asp-for="Email" class="text-neon-pink">Email</label>
-                    <input asp-for="Email" type="email" class="form-control input-neon" readonly />
+                    <input asp-for="Email" type="email" class="form-control input-neon" readonly id="emailInputReadonly" />
                     <span asp-validation-for="Email" class="text-warning"></span>
                 </div>
 
@@ -142,5 +160,12 @@
     .specialization-card.selected-card {
         border-color: var(--neon-pink);
         box-shadow: 0 0 10px rgba(233, 53, 113, 0.5);
+    }
+
+    #emailInputReadonly {
+        background-color: var(--dark-bg);
+        color: var(--light-text);
+        border: 1px solid var(--neon-blue);
+        cursor: not-allowed;
     }
 </style>

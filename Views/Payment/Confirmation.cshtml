@@ -5,13 +5,13 @@
 }
 
 <div class="container my-5">
-    <div class="card-neon shadow-lg p-5 text-center rounded-4">
+    <div class="card-neon p-5 text-center rounded-4">
         <div class="icon-check">
             <i class="bi bi-check-circle-fill text-neon-green"></i>
         </div>
 
         <h2 class="text-neon-blue mb-3 fw-bold">Payment Successful!</h2>
-        <p class="lead text-light">Thank you for your payment. Your subscription is now active.</p>
+        <p class="lead">Thank you for your payment. Your subscription is now active.</p>
 
         <div class="confirmation-details mt-4">
             <div class="row justify-content-center">
@@ -44,7 +44,7 @@
             </div>
         </div>
 
-        <p class="mt-4 text-light">You will receive an email with the subscription details shortly.</p>
+        <p class="mt-4">You will receive an email with the subscription details shortly.</p>
         <div class="mt-4">
             @if (User.IsInRole("Client"))
             {
@@ -58,22 +58,18 @@
 <style>
     /* Card Neon */
     .card-neon {
-        background-color: var(--dark-bg);
+        background-color: #2b2b2b;
         color: var(--light-text);
-        border-radius: 10px;
-        border: 1px solid var(--neon-pink);
-        box-shadow: 0 6px 20px rgba(233, 53, 113, 0.5);
-        max-width: 700px;
+        border-radius: 12px;
+        border: 1px solid var(--neon-blue);
+        max-width: 800px;
         margin: 0 auto;
-        padding: 2rem;
-        border-radius: 10px;
-        background-color: #f9f9f9;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
 
     /* Icon Check Styling */
     .icon-check {
-        font-size: 3rem;
+        font-size: 4rem;
         margin-bottom: 1rem;
     }
 
@@ -81,25 +77,18 @@
         animation: pulse 1.5s infinite;
     }
 
-    .lead {
-        font-size: 1.1rem;
-        color: #555;
-        margin-bottom: 1.5rem;
-    }
-
     /* Details Section */
     .confirmation-details {
-        background: var(--light-bg);
+        background: #1c1c1c;
         padding: 1.5rem;
         border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .detail-item {
         display: flex;
         justify-content: space-between;
         padding: 0.8rem 1rem;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid #444;
         font-size: 1.1rem;
     }
 
@@ -114,7 +103,7 @@
 
     .value {
         font-weight: 500;
-        color: var(--neon-pink);
+        color: var(--neon-green);
     }
 
     /* Badge Neon */
@@ -128,36 +117,37 @@
     }
 
     /* Typography */
-    .text-neon-blue {
-        color: var(--neon-blue);
+    h2.text-neon-blue {
+        font-size: 2.5rem;
     }
 
-    .text-light {
-        color: var(--light-text);
+    p.lead {
+        font-size: 1.2rem;
+        color: #ccc;
     }
 
     /* Buttons */
-    .btn-neon-blue {
-        background-color: var(--neon-blue);
-        color: var(--btn-text-blue);
-        border: 1px solid var(--neon-blue);
-        font-weight: 600;
+    .btn-neon-blue, .btn-neon-pink {
+        padding: 0.7rem 1.8rem;
         font-size: 1.1rem;
-        padding: 0.6rem 1.5rem;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.3s ease;
     }
 
-    .btn-neon-pink {
-        background-color: var(--neon-pink);
-        color: var(--btn-text-pink);
-        border: 1px solid var(--neon-pink);
-        font-weight: 600;
-        font-size: 1.1rem;
-        padding: 0.6rem 1.5rem;
-    }
+        .btn-neon-blue:hover {
+            background-color: #5efcff;
+            color: #000;
+            box-shadow: 0 4px 10px rgba(94, 252, 255, 0.4);
+        }
 
-    .neon-hover-shadow:hover {
-        box-shadow: 0 0 15px rgba(233, 53, 113, 0.8);
-        transform: scale(1.05);
-        transition: 0.3s ease;
+        .btn-neon-pink:hover {
+            background-color: #ff5fa8;
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(255, 95, 168, 0.4);
+        }
+
+    .neon-hover-shadow {
+        transform: scale(1.03);
     }
 </style>

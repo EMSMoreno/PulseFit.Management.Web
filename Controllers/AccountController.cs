@@ -46,7 +46,6 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // Processes the login
-        // POST: Account/Login
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -60,11 +59,32 @@ namespace PulseFit.Management.Web.Controllers
                     {
                         return Redirect(Request.Query["ReturnUrl"].First());
                     }
-                    return RedirectToAction("Index", "Home");
+
+                    // Obtém o utilizador e o respetivo role
+                    var user = await _userHelper.GetUserByEmailAsync(model.Username);
+                    var userRole = await _userHelper.GetRoleAsync(user);
+
+                    // Redireciona o utilizador com base no role
+                    switch (userRole)
+                    {
+                        case "Admin":
+                            return RedirectToAction("AdminDashboard", "Dashboard");
+                        case "Employee":
+                            return RedirectToAction("EmployeeDashboard", "Dashboard");
+                        case "PersonalTrainer":
+                            return RedirectToAction("PersonalTrainerDashboard", "Dashboard");
+                        case "Client":
+                            return RedirectToAction("ClientDashboard", "Dashboard");
+                        case "Nutritionist":
+                            return RedirectToAction("NutritionistDashboard", "Dashboard");
+                        default:
+                            _logger.LogWarning("User {Email} has an undefined role: {Role}", model.Username, userRole);
+                            return RedirectToAction("Index", "Home");
+                    }
                 }
                 else
                 {
-                    // Adiciona um log detalhado sobre a falha no login
+                    // Adiciona logs detalhados para cada caso de falha
                     _logger.LogWarning("Failed login attempt for user: {Email}", model.Username);
 
                     if (result.IsLockedOut)
@@ -81,8 +101,10 @@ namespace PulseFit.Management.Web.Controllers
                     }
                 }
             }
+
             return View(model);
         }
+
 
 
         // Logs out the user
@@ -154,10 +176,17 @@ namespace PulseFit.Management.Web.Controllers
                     string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
                     string tokenLink = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, token = myToken }, protocol: HttpContext.Request.Scheme);
 
-                    var response = _mailHelper.SendEmail(
-                        user.Email,
-                        "Email Confirmation",
-                        $"<h1>Email Confirmation</h1>To confirm your email, click this link: <a href=\"{tokenLink}\">Confirm Email</a>");
+                    // Load and process email template
+                    string emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Views/Emails/EmailConfirmationTemplate.html");
+                    var placeholders = new Dictionary<string, string>
+            {
+                { "FirstName", user.FirstName },
+                { "ConfirmationLink", tokenLink }
+            };
+                    string emailBody = _mailHelper.LoadAndProcessEmailTemplate(emailTemplatePath, placeholders);
+
+                    // Send the email
+                    var response = _mailHelper.SendEmail(user.Email, "Email Confirmation", emailBody);
 
                     if (!response.IsSuccess)
                     {
@@ -169,7 +198,7 @@ namespace PulseFit.Management.Web.Controllers
                     var client = new Client
                     {
                         Birthdate = model.Birthdate,
-                        Address = model.Address,
+                        //Address = model.Address,
                         Gender = model.Gender,
                         UserId = user.Id,
                         Status = Status.Active,

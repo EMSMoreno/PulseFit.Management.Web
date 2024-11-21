@@ -56,6 +56,10 @@ namespace PulseFit.Management.Web.Models
 
         public decimal CalculatedPrice => Price * (1 - DiscountPercentage / 100m);
 
+        public bool IncludeNutritionPlans { get; set; }
+        public bool IncludeOnlineClasses { get; set; }
+
+
         // Propriedades de Imagem
         public Guid ImageId { get; set; }
         public IFormFile? SubscriptionImageFile { get; set; }

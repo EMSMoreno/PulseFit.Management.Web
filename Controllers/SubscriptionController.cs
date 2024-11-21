@@ -16,6 +16,7 @@ namespace PulseFit.Management.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly IBlobHelper _blobHelper;
         private readonly IGymRepository _gymRepository;
+        private readonly IWorkoutRepository _workoutRepository;
         private readonly ILogger<SubscriptionController> _logger;
 
         public SubscriptionController(
@@ -23,12 +24,14 @@ namespace PulseFit.Management.Web.Controllers
             IConverterHelper converterHelper,
             IBlobHelper blobHelper,
             IGymRepository gymRepository,
+            IWorkoutRepository workoutRepository,
             ILogger<SubscriptionController> logger)
         {
             _subscriptionRepository = subscriptionRepository;
             _converterHelper = converterHelper;
             _blobHelper = blobHelper;
             _gymRepository = gymRepository;
+            _workoutRepository = workoutRepository;
             _logger = logger;
         }
 
@@ -217,7 +220,7 @@ namespace PulseFit.Management.Web.Controllers
         private async Task PopulateOptions(SubscriptionViewModel model)
         {
             model.GymOptions = await GetSelectListItems(_gymRepository.GetAllAsync(), "Id", "Name");
-            // Você pode adicionar outras opções aqui, se necessário, como Workouts ou NutritionPlans
+            model.WorkoutOptions = await GetSelectListItems(_workoutRepository.GetAllAsync(), "Id", "Name"); 
         }
 
         private async Task<List<SelectListItem>> GetSelectListItems<T>(Task<IEnumerable<T>> items, string dataValueField, string dataTextField)

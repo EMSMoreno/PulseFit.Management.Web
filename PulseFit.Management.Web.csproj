@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\dashboard.js" />
     <Content Remove="wwwroot\js\formHelpers.js" />
     <Content Remove="wwwroot\uploads\employees-pics\9e83c348-5d91-4f69-9b85-6cbb17e1591c" />
   </ItemGroup>
@@ -17,6 +18,8 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="appsettings.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\variables.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\dashboard.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\formHelpers.js" />
   </ItemGroup>
 
@@ -50,6 +53,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\js\dashboard.js" />
     <None Include="wwwroot\js\formHelpers.js" />
   </ItemGroup>
 

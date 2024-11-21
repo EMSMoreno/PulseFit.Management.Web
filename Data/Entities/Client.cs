@@ -10,9 +10,6 @@ namespace PulseFit.Management.Web.Data.Entities
         [Required]
         public DateTime? Birthdate { get; set; }
 
-        [MaxLength(100)]
-        public string Address { get; set; }
-
         public DateTime RegistrationDate { get; set; } = DateTime.UtcNow;
 
         public Status Status { get; set; } = Status.Active;

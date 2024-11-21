@@ -1,7 +1,25 @@
-﻿@model PulseFit.Management.Web.Models.ClientViewModel
+﻿@{
+    Layout = "_Dashboard";
+    ViewBag.PageTitle = "Client";
+    ViewBag.SubPageTitle = "Create";
+}
+
+@model PulseFit.Management.Web.Models.ClientViewModel
 
 @{
     ViewData["Title"] = "Create Client";
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
 }
 
 <div class="container my-5">

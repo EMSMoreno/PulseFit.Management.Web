@@ -1,0 +1,245 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - PulseFit</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Muli:300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Oswald:300,400,500,600,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;800&family=Montserrat:wght@400;700&family=Roboto:wght@300;500&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" href="@Url.Content("~/images/favicon.ico")" type="image/x-icon">
+
+    <!-- Ícones do Bootstrap para tooltips e ajuda visual -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+
+    <!-- CSS Frameworks & Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <!-- Syncfusion CSS -->
+    <link href="https://cdn.syncfusion.com/ej2/material.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/variables.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container-fluid vh-100">
+        <div class="row h-100">
+            <!-- Sidebar -->
+            <aside class="col-md-3 col-lg-2 bg-dark text-white h-100">
+                <div class="sidebar-logo text-center py-3">
+                    <img src="@Url.Content("~/images/logo.png")" alt="PulseFit Logo" class="img-fluid" loading="lazy">
+                </div>
+                <nav>
+                    <ul class="nav flex-column sidebar-menu">
+                        <!-- Home -->
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/Home/Index" aria-label="Home">
+                                <i class="fas fa-home me-2"></i>Home
+                            </a>
+                        </li>
+
+                        <!-- Clients, Employees, and Gyms -->
+                        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                        {
+                            <li class="nav-item">
+                                <a href="#" class="nav-link text-white" data-toggle="submenu" aria-label="Clients">
+                                    <i class="fas fa-users me-2"></i>Clients
+                                </a>
+                                <ul class="submenu list-unstyled ms-4">
+                                    <li><a href="/Clients/Index" class="nav-link text-white" aria-label="View Clients">View Clients</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link text-white" data-toggle="submenu" aria-label="Employees">
+                                    <i class="fas fa-user-tie me-2"></i>Employees
+                                </a>
+                                <ul class="submenu list-unstyled ms-4">
+                                    <li><a href="/Employees/Index" class="nav-link text-white" aria-label="View Employees">View Employees</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link text-white" data-toggle="submenu" aria-label="Gyms">
+                                    <i class="fas fa-dumbbell me-2"></i>Gyms
+                                </a>
+                                <ul class="submenu list-unstyled ms-4">
+                                    <li><a href="/Gyms/Index" class="nav-link text-white" aria-label="View Gyms">View Gyms</a></li>
+                                </ul>
+                            </li>
+                        }
+
+                        <!-- Nutritionists, Personal Trainers, and Subscriptions -->
+                        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                        {
+                            <li class="nav-item">
+                                <a href="#" class="nav-link text-white" data-toggle="submenu" aria-label="Nutritionists">
+                                    <i class="fas fa-utensils me-2"></i>Nutritionists
+                                </a>
+                                <ul class="submenu list-unstyled ms-4">
+                                    <li><a href="/Nutritionists/Index" class="nav-link text-white" aria-label="View Nutritionists">View Nutritionists</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link text-white" data-toggle="submenu" aria-label="Personal Trainers">
+                                    <i class="fas fa-running me-2"></i>Personal Trainers
+                                </a>
+                                <ul class="submenu list-unstyled ms-4">
+                                    <li><a href="/PersonalTrainers/Index" class="nav-link text-white" aria-label="View Personal Trainers">View Personal Trainers</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link text-white" data-toggle="submenu" aria-label="User Subscriptions">
+                                    <i class="fas fa-clipboard-list me-2"></i>User Subscriptions
+                                </a>
+                                <ul class="submenu list-unstyled ms-4">
+                                    <li><a href="/UserSubscription/Index" class="nav-link text-white" aria-label="View Subscriptions">View Subscriptions</a></li>
+                                </ul>
+                            </li>
+                        }
+
+                        <!-- Subscription -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link text-white" data-toggle="submenu" aria-label="Subscription">
+                                <i class="fas fa-clipboard-list me-2"></i>Subscription
+                            </a>
+                            <ul class="submenu list-unstyled ms-4">
+                                <!-- View Subscriptions (Accessible to Everyone) -->
+                                <li>
+                                    <a href="/Subscription/Index" class="nav-link text-white" aria-label="View Subscriptions">
+                                        <i class="fas fa-eye me-2"></i>View Subscriptions
+                                    </a>
+                                </li>
+                                <!-- Create Subscription (Accessible to Admin Only) -->
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li>
+                                        <a href="/Subscription/Create" class="nav-link text-white" aria-label="Create Subscription">
+                                            <i class="fas fa-plus-circle me-2"></i>Create Subscription
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+
+
+
+                        <!-- Client-Specific Subscriptions -->
+                        @if (User.IsInRole("Client"))
+                        {
+                            <li class="nav-item">
+                                <a href="/UserSubscription/ClientSubscriptions" class="nav-link text-white" aria-label="Client Subscriptions">
+                                    <i class="fas fa-file-invoice-dollar me-2"></i>My Subscriptions
+                                </a>
+                            </li>
+                        }
+
+                        <!-- Workouts -->
+                        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                        {
+                            <li class="nav-item">
+                                <a href="#" class="nav-link text-white" data-toggle="submenu" aria-label="Workouts">
+                                    <i class="fas fa-heartbeat me-2"></i>Workouts
+                                </a>
+                                <ul class="submenu list-unstyled ms-4">
+                                    <li><a href="/Workouts/Index" class="nav-link text-white" aria-label="View Workouts">View Workouts</a></li>
+                                </ul>
+                            </li>
+                        }
+
+                        <!-- My Workouts for Clients -->
+                        @if (User.IsInRole("Client"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" href="/Workouts/MyBookings" aria-label="My Bookings">
+                                    <i class="fas fa-calendar-check me-2"></i>My Bookings
+                                </a>
+                            </li>
+                        }
+
+                        <!-- Alerts -->
+                        @if (User.IsInRole("Employee"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" href="@Url.Action("Create", "Alert")" aria-label="Create Alert">
+                                    <i class="fas fa-exclamation-circle me-2"></i>Create Alert
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" href="@Url.Action("ViewAlerts", "Alert")" aria-label="View Alerts">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>View Alerts
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" href="@Url.Action("UnresolvedAlerts", "Alert")" aria-label="Manage Alerts">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>Manage Alerts
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+
+            </aside>
+
+            <!-- Header + Content -->
+            <div class="col-md-9 col-lg-10 p-0">
+                <!-- Header -->
+                <header class="header-section">
+                    @await Html.PartialAsync("_Header")
+                </header>
+
+                <!-- Main Content -->
+                <main class="content-section flex-grow-1">
+                    <!-- Breadcrumb -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="@Url.Action("Index", "Dashboard")">Dashboard</a>
+                            </li>
+                            @if (ViewBag.PageTitle != null)
+                            {
+                                <li class="breadcrumb-item active" aria-current="page">@ViewBag.PageTitle</li>
+                            }
+                        </ol>
+                    </nav>
+
+                    <!-- Page Content -->
+                    <section>
+                        @RenderBody()
+                    </section>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+
+    <!-- Activate Bootstrap Tooltips -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+                new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+        });
+    </script>
+
+    <!-- Custom Scripts -->
+    <script src="~/js/dashboard.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

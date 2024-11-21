@@ -1,0 +1,71 @@
+﻿@{
+    Layout = "_Dashboard";
+    ViewBag.PageTitle = "Alerts";
+    ViewBag.SubPageTitle = "Unresolved Alerts";
+}
+
+@model IEnumerable<PulseFit.Management.Web.Data.Entities.Alert>
+
+<h2>Unresolved Alerts</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Message</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var alert in Model)
+        {
+            <tr>
+                <td>@alert.Message</td>
+                <td>@alert.CreatedAt</td>
+                <td>
+                    <button class="btn btn-success" onclick="markAsResolved(@alert.Id)">Mark as Resolved</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function markAsResolved(alertId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to mark this alert as resolved!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, resolve it!',
+                cancelButtonText: 'No, cancel!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '@Url.Action("MarkAsResolved", "Alert")',
+                        type: 'POST',
+                        data: { id: alertId },
+                        success: function () {
+                            Swal.fire(
+                                'Resolved!',
+                                'The alert has been marked as resolved.',
+                                'success'
+                            ).then(() => {
+                                location.reload(); // Reload page to update the list
+                            });
+                        },
+                        error: function () {
+                            Swal.fire(
+                                'Error!',
+                                'There was a problem resolving the alert.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}
