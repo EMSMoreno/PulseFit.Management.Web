@@ -113,7 +113,7 @@ namespace PulseFit.Management.Web.Controllers
                 {
                     var imageId = model.GymImageFile != null
                     ? await _blobHelper.UploadBlobAsync(model.GymImageFile, "gyms-pics")
-                    : Guid.Empty;
+                    : model.GymImageId;
 
                     var gym = _converterHelper.ToGym(model, imageId, false);
 

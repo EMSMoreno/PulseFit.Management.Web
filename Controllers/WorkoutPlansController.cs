@@ -148,7 +148,7 @@ namespace PulseFit.Management.Web.Controllers
                 {
                     var imageId = model.WorkoutPlanImageFile != null
                     ? await _blobHelper.UploadBlobAsync(model.WorkoutPlanImageFile, "workoutsPlans-pics")
-                    : Guid.Empty;
+                    : model.WorkoutPlanImageId;
 
                     var workoutPlan = await _workoutPlanRepository.GetWorkoutPlanByIdWithEquipmentsAsync(model.Id);
                     var selectedEquipments = await _equipmentRepository.GetEquipmentsListByIdsAsync(model.EquipmentIds);

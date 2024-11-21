@@ -154,7 +154,7 @@ namespace PulseFit.Management.Web.Controllers
                 {
                     var imageId = model.WorkoutImageFile != null
                     ? await _blobHelper.UploadBlobAsync(model.WorkoutImageFile, "workouts-pics")
-                    : Guid.Empty;
+                    : model.WorkoutImageId;
 
                     var workout = _converterHelper.ToWorkout(model, imageId, false);
 
@@ -230,7 +230,8 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Workout not found.";
+                return RedirectToAction("Details", new { id });
             }
 
             var userLoged = User.Identity.Name;
@@ -239,18 +240,24 @@ namespace PulseFit.Management.Web.Controllers
                 string userId = await _userHelper.GetUserIdByEmailAsync(userLoged);
                 var workout = await _workoutRepository.GetByIdAsync(id.Value);
 
+                if (workout == null)
+                {
+                    TempData["ErrorMessage"] = "Workout not found.";
+                    return RedirectToAction("Details", new { id });
+                }
+
                 var existingBooking = await _bookingRepository.GetBookingByUserAndWorkoutAsync(userId, workout.Id);
                 if (existingBooking != null)
                 {
-                    ViewBag.ErrorMessage = "You have already booked this workout.";
-                    return RedirectToAction("Details", new { id = workout.Id });
+                    TempData["ErrorMessage"] = "You have already booked this workout.";
+                    return RedirectToAction("Details", new { id });
                 }
 
                 var maximumCapacityReached = await _bookingRepository.WorkoutMaximumCapacityReachedAsync(workout.Id);
                 if (maximumCapacityReached)
                 {
-                    ViewBag.ErrorMessage = "Workout Maximum Capacity Reached!";
-                    return RedirectToAction("Details", new { id = workout.Id });
+                    TempData["ErrorMessage"] = "Workout maximum capacity reached!";
+                    return RedirectToAction("Details", new { id });
                 }
 
                 try
@@ -268,18 +275,19 @@ namespace PulseFit.Management.Web.Controllers
                     await _bookingRepository.CreateBookingAsync(booking);
                     await _workoutRepository.IncrementBookingsAsync(workout.Id);
 
-                    TempData["SuccessMessage"] = "Booking Confirmed!";
+                    TempData["SuccessMessage"] = "Booking confirmed!";
                 }
                 catch (Exception ex)
                 {
-                    TempData["ErrorMessage"] = ex.Message;
+                    TempData["ErrorMessage"] = "An unexpected error occurred: " + ex.Message;
                 }
 
-                return RedirectToAction("MyBookings");
+                return RedirectToAction("Details", new { id });
             }
 
             return RedirectToAction("Login", "Account");
         }
+
 
         public async Task<IActionResult> MyBookingsDetails(int? id)
         {

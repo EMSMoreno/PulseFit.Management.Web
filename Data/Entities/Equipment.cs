@@ -38,7 +38,7 @@
 
         public string? GymName { get; set; }
 
-        public Guid? EquipmentImageId { get; set; }
+        public Guid EquipmentImageId { get; set; }
 
         public string EquipmentImageUrl => EquipmentImageId == null
             ? "/images/noimage.png"
