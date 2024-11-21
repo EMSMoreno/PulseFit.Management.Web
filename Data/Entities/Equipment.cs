@@ -43,5 +43,7 @@
         public string EquipmentImageUrl => EquipmentImageId == null
             ? "/images/noimage.png"
             : $"/uploads/equipments-pics/{EquipmentImageId}.jpg";
+
+        public List<WorkoutPlan> WorkoutPlans { get; set; } = new List<WorkoutPlan>();
     }
 }

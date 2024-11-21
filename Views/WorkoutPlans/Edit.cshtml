@@ -52,7 +52,7 @@
     <div class="row mb-3">
         <div class="col-md-6">
             <label asp-for="WorkoutPlanImageFile" class="text-neon-pink">Workout Plan Picture</label>
-            <input asp-for="WorkoutPlanImageFile" type="file" class="form-control input-neon" />
+            <input asp-for="WorkoutPlanImageFile" type="file" class="form-control input-neon" id="workoutPictureUpload"/>
             <small class="form-text text-gray">Maximum file size: 2 MB</small>
             <span asp-validation-for="WorkoutPlanImageFile" class="text-warning"></span>
         </div>
@@ -75,7 +75,7 @@
                     </div>
                     <div class="card-body text-center">
                         <small class="specialization-title">@equipment.Text</small>
-                        <input type="checkbox" name="EquipmentsIds" value="@equipment.Value" class="form-check-input mt-1" id="equipment-@equipment.Value" style="display: none;" />
+                        <input type="checkbox" name="EquipmentIds" value="@equipment.Value" class="form-check-input mt-1" id="equipment-@equipment.Value" style="display: none;" />
                     </div>
                 </div>
             </div>
@@ -90,15 +90,12 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/formHelpers.js"></script>
+
     <script>
-        // Preview image on upload
-        document.getElementById('WorkoutPlanImageFile').addEventListener('change', function () {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                document.getElementById('imagePreview').src = e.target.result;
-            };
-            reader.readAsDataURL(this.files[0]);
-        });
+        setupImageUploadPreview("workoutPictureUpload", "imagePreview");
+        setupSweetAlertOnSubmit("editWorkoutPlanForm", "Workout updated successfully.", "Please correct the errors in the form.");
+        
 
         // Toggle selected state for equipments
         $(".specialization-card").on("click", function () {
