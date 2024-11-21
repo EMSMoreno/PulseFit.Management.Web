@@ -1,4 +1,10 @@
-﻿@model IEnumerable<PulseFit.Management.Web.Models.EmployeeViewModel>
+﻿@{
+    Layout = "_Dashboard";
+    ViewBag.PageTitle = "Employee";
+    ViewBag.SubPageTitle = "Index";
+}
+
+@model IEnumerable<PulseFit.Management.Web.Models.EmployeeViewModel>
 @using Newtonsoft.Json
 
 @{

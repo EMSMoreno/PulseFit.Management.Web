@@ -9,5 +9,8 @@ namespace PulseFit.Management.Web.Data.Repositories
         Task<List<Employee>> GetAllWithUsersAsync();
         Task<Employee> GetByIdWithUserAsync(int id); // Novo método para obter Employee com User incluído
 
+        Task<Employee> GetEmployeeByUserIdAsync(string userId);
+
+
     }
 }

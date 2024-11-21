@@ -71,6 +71,12 @@ namespace PulseFit.Management.Web.Helpers
             // Lê o template de email a partir do caminho fornecido
             string templateContent = System.IO.File.ReadAllText(templatePath);
 
+            // Adiciona o ano atual aos placeholders, caso não esteja definido
+            if (!placeholders.ContainsKey("Year"))
+            {
+                placeholders["Year"] = DateTime.UtcNow.Year.ToString();
+            }
+
             // Substitui os placeholders no template
             foreach (var placeholder in placeholders)
             {
@@ -79,6 +85,7 @@ namespace PulseFit.Management.Web.Helpers
 
             return templateContent;
         }
+
 
 
     }

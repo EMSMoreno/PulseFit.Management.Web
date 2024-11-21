@@ -50,8 +50,5 @@ namespace PulseFit.Management.Web.Helpers
 
         Task<WorkoutPlan> ToWorkoutPlanAsync(WorkoutPlanViewModel model, Guid imageId, bool isNew);
         WorkoutPlanViewModel ToWorkoutPlanViewModel(WorkoutPlan workoutPlan);
-
-        OnlineClass ToOnlineClass(OnlineClassViewModel model, Guid imageId, bool isNew);
-        OnlineClassViewModel ToOnlineClassViewModel(OnlineClass onlineClass);
     }
 }

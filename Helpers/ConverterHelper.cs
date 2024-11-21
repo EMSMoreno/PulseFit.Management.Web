@@ -185,7 +185,8 @@ namespace PulseFit.Management.Web.Helpers
                 LastName = model.LastName,
                 Email = model.Email,
                 UserName = model.Email,
-                PhoneNumber = model.PhoneNumber
+                PhoneNumber = model.PhoneNumber,
+                Address = model.Address
             };
 
             if (imageId != Guid.Empty)
@@ -197,7 +198,6 @@ namespace PulseFit.Management.Web.Helpers
             {
                 Id = isNew ? 0 : model.Id,
                 Birthdate = model.Birthdate,
-                Address = model.Address,
                 RegistrationDate = model.RegistrationDate,
                 Status = model.Status,
                 Gender = model.Gender,
@@ -216,7 +216,7 @@ namespace PulseFit.Management.Web.Helpers
                 Email = client.User.Email,
                 PhoneNumber = client.User.PhoneNumber,
                 Birthdate = client.Birthdate,
-                Address = client.Address,
+                Address = client.User.Address,
                 RegistrationDate = client.RegistrationDate,
                 Status = client.Status,
                 Gender = client.Gender,
@@ -251,8 +251,8 @@ namespace PulseFit.Management.Web.Helpers
             subscription.IsAllGymsAccessible = model.IsAllGymsAccessible;
             subscription.IncludedGyms = gyms;
             subscription.IncludedWorkouts = workouts;
-            subscription.IncludedNutritionPlans = nutritionPlans;
-            subscription.IncludedOnlineClasses = onlineClasses;
+            subscription.IncludeNutritionPlans = model.IncludeNutritionPlans;
+            subscription.IncludeOnlineClasses = model.IncludeOnlineClasses;
             subscription.MaxPersonalTrainerSessions = model.MaxPersonalTrainerSessions;
             subscription.Has24HourAccess = model.Has24HourAccess;
             subscription.HasVIPAccess = model.HasVIPAccess;
@@ -286,8 +286,8 @@ namespace PulseFit.Management.Web.Helpers
                 IsAllGymsAccessible = subscription.IsAllGymsAccessible,
                 SelectedGymIds = subscription.IncludedGyms.Select(g => g.Id).ToList(),
                 SelectedWorkoutIds = subscription.IncludedWorkouts.Select(w => w.Id).ToList(),
-                SelectedNutritionPlanIds = subscription.IncludedNutritionPlans.Select(np => np.Id).ToList(),
-                SelectedOnlineClassIds = subscription.IncludedOnlineClasses.Select(oc => oc.Id).ToList(),
+                IncludeNutritionPlans = subscription.IncludeNutritionPlans,
+                IncludeOnlineClasses = subscription.IncludeOnlineClasses,
                 MaxPersonalTrainerSessions = subscription.MaxPersonalTrainerSessions,
                 Has24HourAccess = subscription.Has24HourAccess,
                 HasVIPAccess = subscription.HasVIPAccess,
@@ -589,32 +589,6 @@ namespace PulseFit.Management.Web.Helpers
                     ImageUrl = e.EquipmentImageUrl
                 }).ToList(),
                 WorkoutPlanImageId = workoutPlan.WorkoutPlanImageId ?? Guid.Empty,
-            };
-        }
-
-        public OnlineClass ToOnlineClass(OnlineClassViewModel model, Guid imageId, bool isNew)
-        {
-            return new OnlineClass
-            {
-                Id = isNew ? 0 : model.Id,
-                Title = model.Title,
-                Description = model.Description,
-                VideoUrl = model.VideoUrl,
-                Category = model.Category,
-                ClassImageId = imageId,
-            };
-        }
-
-        public OnlineClassViewModel ToOnlineClassViewModel(OnlineClass onlineClass)
-        {
-            return new OnlineClassViewModel
-            {
-                Id = onlineClass.Id,
-                Title = onlineClass.Title,
-                Description = onlineClass.Description,
-                VideoUrl = onlineClass.VideoUrl,
-                Category = onlineClass.Category,
-                ClassImageId = onlineClass.ClassImageId ?? Guid.Empty,
             };
         }
     }

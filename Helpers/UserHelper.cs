@@ -13,10 +13,11 @@ namespace PulseFit.Management.Web.Helpers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IAlertRepository _alertRepository;
         private readonly IPaymentRepository _paymentRepository;
+        private readonly IEmployeeRepository _employeeRepository;
         private readonly ILogger<UserHelper> _logger;
 
         public UserHelper(UserManager<User> userManager, SignInManager<User> signInManager,
-            RoleManager<IdentityRole> roleManager, IAlertRepository alertRepository, IPaymentRepository paymentRepository,
+            RoleManager<IdentityRole> roleManager, IAlertRepository alertRepository, IPaymentRepository paymentRepository,IEmployeeRepository employeeRepository,
             ILogger<UserHelper> logger)
         {
             _userManager = userManager;
@@ -24,6 +25,7 @@ namespace PulseFit.Management.Web.Helpers
             _roleManager = roleManager;
             _alertRepository = alertRepository;
             _paymentRepository = paymentRepository;
+            _employeeRepository = employeeRepository;
             _logger = logger;
         }
 
@@ -120,11 +122,18 @@ namespace PulseFit.Management.Web.Helpers
             return _userManager.GetUserId(user);  // Get the user Id from claims
         }
 
-        // This method is used to get the UserId directly from the current logged-in user
-        public string GetUserId()
+        public async Task<string> GetRoleAsync(User user)
         {
-            var userId = _userManager.GetUserId(ClaimsPrincipal.Current);
-            return userId;
+            var roles = await _userManager.GetRolesAsync(user);
+            return roles.FirstOrDefault(); // Returns the first role associated with the user
+        }
+
+        public async Task<Employee> GetEmployeeByUserAsync(string userEmail)
+        {
+            var user = await GetUserByEmailAsync(userEmail);  // Search for the user by email
+            if (user == null) return null;
+
+            return await _employeeRepository.GetEmployeeByUserIdAsync(user.Id); // Search for the employee by UserId
         }
 
         // Optional: Uncomment if needed for specific notifications

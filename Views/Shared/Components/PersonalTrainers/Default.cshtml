@@ -1,0 +1,40 @@
+﻿@model IEnumerable<PulseFit.Management.Web.Models.PersonalTrainerViewModel>
+
+<section class="team-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="team-title">
+                    <div class="section-title">
+                        <span>Our Team</span>
+                        <h2>TRAIN WITH EXPERTS</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var trainer in Model)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="ts-item set-bg" data-setbg="@trainer.ProfilePictureUrl">
+                        <div class="ts_text">
+                            <h4>@trainer.FirstName @trainer.LastName</h4>
+                            <span>Personal Trainer</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.set-bg').each(function () {
+                var bg = $(this).data('setbg');
+                $(this).css('background-image', 'url(' + bg + ')');
+            });
+        });
+    </script>
+}

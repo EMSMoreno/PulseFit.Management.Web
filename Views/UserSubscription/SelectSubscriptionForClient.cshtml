@@ -4,33 +4,35 @@
 }
 
 <div class="container my-5">
-    <h2 class="text-center text-primary mb-4">Choose Your Subscription</h2>
+    <h2 class="text-center text-neon-blue fw-bold mb-4">Choose Your Subscription</h2>
 
     <div class="row row-cols-1 row-cols-md-3 g-4">
         @foreach (var subscription in Model)
         {
             <div class="col">
-                <div class="card subscription-card shadow border-0">
+                <div class="card subscription-card border-neon shadow-neon">
                     <img src="@subscription.ImageUrl" class="card-img-top rounded-top" alt="Subscription Image">
-                    <div class="card-body">
+                    <div class="card-body text-light">
                         <h5 class="card-title">@subscription.Name</h5>
                         <p class="card-text">@subscription.Description</p>
 
                         @if (subscription.DiscountPercentage > 0)
                         {
-                            <p class="price h5 text-primary">
-                                <span class="original-price">€@subscription.Price.ToString("F2")</span>
+                            <p class="price h5 text-neon-green">
+                                <span class="original-price text-muted text-decoration-line-through">
+                                    €@subscription.Price.ToString("F2")
+                                </span>
                                 <span class="discounted-price">€@subscription.CalculatedPrice.ToString("F2")</span>
                             </p>
-                            <p class="discount text-success">Discount: @subscription.DiscountPercentage%</p>
+                            <p class="discount text-neon-pink">Discount: @subscription.DiscountPercentage%</p>
                         }
                         else
                         {
-                            <p class="price h5 text-primary">€@subscription.Price.ToString("F2")</p>
+                            <p class="price h5 text-neon-green">€@subscription.Price.ToString("F2")</p>
                         }
 
                         <a asp-action="ProceedToPayment" asp-route-subscriptionId="@subscription.Id"
-                           class="btn btn-primary w-100 mt-3 animate-fade">Select Subscription</a>
+                           class="btn btn-neon-blue w-100 mt-3 animate-fade">Select Subscription</a>
                     </div>
                 </div>
             </div>
@@ -39,46 +41,69 @@
 </div>
 
 <style>
+    /* Cyberpunk Styles */
+    .text-neon-blue {
+        color: var(--neon-blue);
+    }
+
     .subscription-card {
-        transition: transform 0.3s, box-shadow 0.3s;
+        background-color: var(--light-bg);
+        border: 2px solid var(--neon-blue);
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
         .subscription-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+            box-shadow: none;
         }
 
     .price {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
         font-weight: bold;
-        color: #007bff;
+        margin-top: 10px;
     }
 
     .original-price {
-        text-decoration: line-through;
-        color: #888;
+        font-size: 1rem;
+        color: var(--neon-purple);
         margin-right: 0.5rem;
     }
 
     .discounted-price {
-        color: #e74c3c;
+        color: var(--neon-green);
         font-weight: bold;
     }
 
     .discount {
-        color: #27ae60;
-        font-size: 0.9em;
+        color: var(--neon-pink);
+        font-size: 0.9rem;
     }
 
-    .btn-primary {
-        transition: background-color 0.3s ease;
+    .btn-neon-blue {
+        background-color: var(--neon-blue);
+        color: var(--dark-bg);
+        border: none;
+        font-size: 1rem;
+        padding: 0.7rem 1.5rem;
+        transition: box-shadow 0.3s, transform 0.3s;
     }
 
-        .btn-primary:hover {
-            background-color: #0b5ed7;
+        .btn-neon-blue:hover {
+            box-shadow: none;
+            transform: scale(1.05);
         }
 
     .animate-fade {
         transition: all 0.4s ease;
+    }
+
+    .shadow-neon {
+        box-shadow: none;
+    }
+
+    .border-neon {
+        border: 2px solid rgba(0, 255, 255, 0.7);
     }
 </style>

@@ -1,0 +1,30 @@
+﻿@{
+    Layout = "_Dashboard";
+    ViewBag.PageTitle = "Alerts";
+    ViewBag.SubPageTitle = "Unresolved Alerts";
+}
+
+@model IEnumerable<PulseFit.Management.Web.Data.Entities.Alert>
+
+<h2>Unresolved Alerts</h2>
+
+@if (Model.Any())
+{
+    <ul class="list-group">
+        @foreach (var alert in Model)
+        {
+            <li class="list-group-item">
+                <strong>@alert.Message</strong> <br />
+                Created by: @alert.Employee.User.FirstName @alert.Employee.User.LastName on @alert.CreatedAt.ToString("g")
+                <form asp-action="MarkAsResolved" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@alert.Id" />
+                    <button type="submit" class="btn btn-sm btn-success">Mark as Resolved</button>
+                </form>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No unresolved alerts.</p>
+}

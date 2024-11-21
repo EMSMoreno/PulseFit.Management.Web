@@ -274,6 +274,11 @@ namespace PulseFit.Management.Web.Controllers
             }
             catch (DbUpdateException ex)
             {
+                var errorModel = new ErrorViewModel
+                {
+                    RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+                };
+
                 if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
                 {
                     ViewBag.ErrorTitle = $"Employee ID {employee.Id} is currently in use.";
@@ -284,7 +289,7 @@ namespace PulseFit.Management.Web.Controllers
                     ViewBag.ErrorTitle = "Deletion Error";
                     ViewBag.ErrorMessage = "An unexpected error occurred during deletion. Please try again later.";
                 }
-                return View("Error");
+                return View("Error", errorModel);
             }
         }
 

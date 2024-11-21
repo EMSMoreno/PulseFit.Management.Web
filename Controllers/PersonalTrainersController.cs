@@ -11,6 +11,7 @@ using PulseFit.Management.Web.Data.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Diagnostics;
 
 namespace PulseFit.Management.Web.Controllers
 {
@@ -303,6 +304,11 @@ namespace PulseFit.Management.Web.Controllers
             }
             catch (DbUpdateException ex)
             {
+                var errorModel = new ErrorViewModel
+                {
+                    RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+                };
+
                 if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
                 {
                     ViewBag.ErrorTitle = $"Trainer ID {trainer.Id} is currently in use.";
@@ -313,7 +319,7 @@ namespace PulseFit.Management.Web.Controllers
                     ViewBag.ErrorTitle = "Deletion Error";
                     ViewBag.ErrorMessage = "An unexpected error occurred during deletion. Please try again later.";
                 }
-                return View("Error");
+                return View("Error", errorModel);
             }
         }
 

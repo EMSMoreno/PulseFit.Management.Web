@@ -259,4 +259,32 @@
     .text-success-dark {
         color: #AAFF1F !important;
     }
+
+    /* Botão normal */
+    .btn {
+        cursor: pointer;
+        background-color: var(--neon-blue);
+        color: var(--btn-text-blue);
+        border: 1px solid var(--neon-blue);
+        border-radius: 6px;
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+        /* Hover para botões habilitados */
+        .btn:not(:disabled):hover {
+            background-color: var(--dark-bg);
+            color: var(--neon-blue);
+            box-shadow: none;
+        }
+
+        .btn:disabled {
+            cursor: not-allowed; 
+            background-color: #cccccc;
+            color: #666666; 
+        }
+
+            .btn:disabled:hover {
+                background-color: #cccccc;
+            }
+
 </style>

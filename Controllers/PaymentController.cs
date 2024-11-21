@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using PulseFit.Management.Web.Data.Entities;
@@ -14,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace PulseFit.Management.Web.Controllers
 {
+    [Authorize]
     public class PaymentController : Controller
     {
         private readonly IPaymentRepository _paymentRepository;

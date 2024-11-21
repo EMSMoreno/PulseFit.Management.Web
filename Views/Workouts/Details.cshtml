@@ -4,65 +4,124 @@
     ViewData["Title"] = "Workout Details";
 }
 
-<div class="container mt-4">
-    <h2>Workout Details</h2>
+<div class="container mt-5">
+    <h2 class="title-neon mb-4">Workout Details</h2>
 
-    <div class="card shadow-lg p-4">
+    <div class="card-neon p-4">
         <div class="row align-items-center mb-4">
             <div class="col-md-4 d-flex justify-content-center">
-                <img src="@Model.WorkoutImageUrl" alt="Workout Image" class="rounded-circle shadow-sm" style="width: 180px; height: 180px;" />
+                <img src="@Model.WorkoutImageUrl" alt="Workout Image" class="rounded neon-outline"
+                     style="width: 180px; height: 180px; border-radius: 15px;" />
             </div>
             <div class="col-md-8">
-                <h3 class="text-primary">@Model.Name | @Model.Popularity</h3>
-                <hr class="my-3" />
+                <h3 class="text-neon-blue">@Model.Name | Popularity: @Model.Popularity</h3>
+                <hr class="my-3 neon-divider" />
                 <dl class="row">
-                    <dt class="col-sm-4 fw-semibold text-muted">Description:</dt>
+                    <dt class="col-sm-4 text-neon-green">Description:</dt>
                     <dd class="col-sm-8">@Model.Description</dd>
 
-                    <dt class="col-sm-4 fw-semibold text-muted">Difficulty:</dt>
+                    <dt class="col-sm-4 text-neon-green">Difficulty:</dt>
                     <dd class="col-sm-8">@Model.DifficultyLevel</dd>
 
-                    <dt class="col-sm-4 fw-semibold text-muted">Start:</dt>
+                    <dt class="col-sm-4 text-neon-green">Start:</dt>
                     <dd class="col-sm-8">@Model.StartDate.ToString("dd/MM HH:mm") (@Model.Duration Min.)</dd>
 
-                    <dt class="col-sm-4 fw-semibold text-muted">Bookings:</dt>
+                    <dt class="col-sm-4 text-neon-green">Bookings:</dt>
                     <dd class="col-sm-8">@Model.Bookings</dd>
 
-                    <dt class="col-sm-4 fw-semibold text-muted">Available Spots:</dt>
+                    <dt class="col-sm-4 text-neon-green">Available Spots:</dt>
                     <dd class="col-sm-8">@ViewBag.Spots</dd>
-
-                    
                 </dl>
             </div>
         </div>
+
         <hr />
+
         <div class="row">
+<<<<<<< HEAD
             <!-- Gym Card -->
             <div class="col-md-6">
                 <div class="card shadow-sm mb-3" style="max-width: 200px; margin: 0 auto;">
                     <img src="@ViewBag.GymImage" alt="Gym Image" class="card-img-top" style="height: 150px; object-fit: cover;" />
+=======
+            <div class="col-md-6 text-center">
+                <h4 class="text-neon-pink">Gym</h4>
+                <div class="card-neon-mini mx-auto">
+                    <img src="@ViewBag.GymImage" alt="Gym Image" class="card-img-top rounded" />
+>>>>>>> 01480a8cf9c0e377a3843d05d7ea986d1506b72b
                     <div class="card-body p-2">
-                        <h6 class="card-title text-center">@Model.GymName</h6>
+                        <h6 class="text-light">@Model.GymName</h6>
                     </div>
                 </div>
             </div>
-
-            <!-- Card do Personal Trainer -->
-            <div class="col-md-6">
-                <div class="card shadow-sm mb-3" style="max-width: 200px; margin: 0 auto;">
-                    <img src="@ViewBag.PtProfilePic" alt="Instructor Image" class="card-img-top" style="height: 150px; object-fit: cover;" />
+            <div class="col-md-6 text-center">
+                <h4 class="text-neon-pink">Instructor</h4>
+                <div class="card-neon-mini mx-auto">
+                    <img src="@ViewBag.PtProfilePic" alt="Instructor Image" class="card-img-top rounded" />
                     <div class="card-body p-2">
-                        <h6 class="card-title text-center">@Model.InstructorName</h6>
+                        <h6 class="text-light">@Model.InstructorName</h6>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="d-flex justify-content-end mt-3">
-            <a asp-action="CreateBooking" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2" id="bookingButton">Reserve</a>
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Edit</a>
-            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger me-2">Delete</a>
-            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            <a asp-action="CreateBooking" asp-route-id="@Model.Id" class="btn btn-neon-green neon-hover-shadow me-2" id="bookingButton">Reserve</a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-neon-blue neon-hover-shadow me-2">Edit</a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-neon-pink neon-hover-shadow me-2">Delete</a>
+            <a asp-action="Index" class="btn btn-neon-secondary neon-hover-shadow">Back to List</a>
         </div>
     </div>
 </div>
+
+<style>
+    .card-neon {
+        background-color: var(--light-bg);
+        border: 1px solid var(--neon-pink);
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .card-neon:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-color: var(--neon-blue);
+        }
+
+    .card-neon-mini {
+        background-color: var(--light-bg);
+        border: 1px solid var(--neon-green);
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        max-width: 200px;
+    }
+
+        .card-neon-mini img {
+            height: 150px;
+            object-fit: cover;
+        }
+
+    .neon-divider {
+        border-top: 2px solid var(--neon-blue);
+    }
+
+    .text-neon-green {
+        color: var(--neon-green);
+    }
+
+    .text-neon-blue {
+        font-size: 1.75rem;
+        font-weight: bold;
+        color: var(--neon-blue);
+    }
+
+    .text-neon-pink {
+        color: var(--neon-pink);
+        font-weight: bold;
+    }
+
+    .neon-outline {
+        box-shadow: 0 0 10px var(--neon-pink);
+    }
+</style>

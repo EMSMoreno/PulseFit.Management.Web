@@ -1,0 +1,29 @@
+﻿@{
+    Layout = "_Dashboard";
+    ViewBag.PageTitle = "Alerts";
+    ViewBag.SubPageTitle = "Notifications";
+}
+
+@model IEnumerable<PulseFit.Management.Web.Data.Entities.Alert>
+
+<h2>Pending Notifications</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Message</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var alert in Model)
+        {
+            <tr>
+                <td>@alert.Message</td>
+                <td>@alert.CreatedAt</td>
+                <td><button class="btn btn-success">Mark as Resolved</button></td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,33 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using PulseFit.Management.Web.Data.Repositories;
+using PulseFit.Management.Web.Models;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace PulseFit.Management.Web.ViewComponents
+{
+    public class PersonalTrainersViewComponent : ViewComponent
+    {
+        private readonly IPersonalTrainerRepository _personalTrainerRepository;
+
+        public PersonalTrainersViewComponent(IPersonalTrainerRepository personalTrainerRepository)
+        {
+            _personalTrainerRepository = personalTrainerRepository;
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            var trainers = await _personalTrainerRepository.GetAllWithUsersAsync();
+            var trainerViewModels = trainers.Select(t => new PersonalTrainerViewModel
+            {
+                FirstName = t.User.FirstName,
+                LastName = t.User.LastName,
+                ImageId = t.User.ProfilePictureId ?? Guid.Empty // Caso não exista, será vazio
+            })
+            .Take(6) // Limitar a 6 personal trainers, ajustável
+            .ToList();
+
+            return View(trainerViewModels);
+        }
+    }
+}

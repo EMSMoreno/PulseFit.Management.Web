@@ -2,7 +2,26 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- Hero Section -->
+@await Html.PartialAsync("_Hero")
+
+<!-- ChoseUs Section -->
+@await Html.PartialAsync("_ChoseUs")
+
+<!-- Classes Section -->
+@await Html.PartialAsync("_Classes")
+
+<!-- Banner Section -->
+@await Html.PartialAsync("_Banner")
+
+<!-- Pricing Section -->
+@await Component.InvokeAsync("Pricing")
+
+<!-- Gallery Section -->
+@await Html.PartialAsync("_Gallery")
+
+<!-- Team Section -->
+@await Component.InvokeAsync("PersonalTrainers")
+
+<!-- Get In Touch Section -->
+@await Html.PartialAsync("_GetInTouch")

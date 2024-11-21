@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = "Services";
+}
+
+@await Html.PartialAsync("_Services")
+
+<!-- Get In Touch Section -->
+@await Html.PartialAsync("_Banner")
+
+@await Component.InvokeAsync("Pricing")
+
+@await Html.PartialAsync("_GetInTouch")

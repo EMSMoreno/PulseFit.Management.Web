@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create Workout Plan";
 }
 
-<h2>Create Workout Plan</h2>
+<h2 class="title-neon">Create Workout Plan</h2>
 
 @if (!ViewData.ModelState.IsValid)
 {
@@ -18,76 +18,72 @@
     </div>
 }
 
-
-<form id="createWorkoutPlanForm" asp-action="Create" method="post" enctype="multipart/form-data">
+<hr />
+<form id="createWorkoutPlanForm" asp-action="Create" method="post" enctype="multipart/form-data" class="p-4 card-neon">
     <div class="row mb-3">
         <div class="col-md-6">
-            <label asp-for="Name" class="form-label">Name <span class="text-danger">*</span></label>
-            <input asp-for="Name" class="form-control" required />
-            <span asp-validation-for="Name" class="text-danger"></span>
+            <label asp-for="Name" class="text-neon-pink">Name <span class="text-danger">*</span></label>
+            <input asp-for="Name" class="form-control input-neon" required />
+            <span asp-validation-for="Name" class="text-warning"></span>
         </div>
         <div class="col-md-6">
-            <label asp-for="Description" class="form-label">Description <span class="text-danger">*</span></label>
-            <input asp-for="Description" class="form-control" required />
-            <span asp-validation-for="Description" class="text-danger"></span>
+            <label asp-for="Description" class="text-neon-pink">Description <span class="text-danger">*</span></label>
+            <textarea asp-for="Description" class="form-control input-neon" rows="3" required></textarea>
+            <span asp-validation-for="Description" class="text-warning"></span>
         </div>
     </div>
 
     <div class="row mb-3">
         <div class="col-md-6">
-            <label asp-for="WorkoutPlanType" class="form-label">Workout Type <span class="text-danger">*</span></label>
-            <select asp-for="WorkoutPlanType" class="form-select" asp-items="ViewBag.Type">
+            <label asp-for="WorkoutPlanType" class="text-neon-pink">Workout Type <span class="text-danger">*</span></label>
+            <select asp-for="WorkoutPlanType" class="form-control input-neon" asp-items="ViewBag.Type">
                 <option value="">Select a Type ...</option>
             </select>
-            <span asp-validation-for="WorkoutPlanType" class="text-danger"></span>
+            <span asp-validation-for="WorkoutPlanType" class="text-warning"></span>
         </div>
         <div class="col-md-6">
-            <label asp-for="Difficulty" class="form-label">Difficulty <span class="text-danger">*</span></label>
-            <select asp-for="Difficulty" class="form-select" asp-items="ViewBag.Difficulty">
+            <label asp-for="Difficulty" class="text-neon-pink">Difficulty <span class="text-danger">*</span></label>
+            <select asp-for="Difficulty" class="form-control input-neon" asp-items="ViewBag.Difficulty">
                 <option value="">Select a Difficulty ...</option>
             </select>
-            <span asp-validation-for="Difficulty" class="text-danger"></span>
+            <span asp-validation-for="Difficulty" class="text-warning"></span>
         </div>
     </div>
 
-    <!-- Profile Picture and Preview -->
     <div class="row mb-3">
         <div class="col-md-6">
-            <label asp-for="WorkoutPlanImageFile" class="form-label">Workout Plan Picture</label>
-            <input asp-for="WorkoutPlanImageFile" type="file" class="form-control" id="workoutPlanPictureUpload" />
-            <small class="form-text text-muted">Maximum file size: 2 MB</small>
-            <span asp-validation-for="WorkoutPlanImageFile" class="text-danger"></span>
+            <label asp-for="WorkoutPlanImageFile" class="text-neon-pink">Workout Plan Picture</label>
+            <input asp-for="WorkoutPlanImageFile" type="file" class="form-control input-neon" id="workoutPlanPictureUpload" />
+            <small class="form-text text-gray">Maximum file size: 2 MB</small>
+            <span asp-validation-for="WorkoutPlanImageFile" class="text-warning"></span>
         </div>
-        <div class="col-md-6">
-            <label>Image Preview</label>
-            <img id="imagePreview" src="@Model.WorkoutPlanImageFile" alt="Image Preview" style="max-width: 150px; max-height: 150px; border-radius: 10px;" />
+        <div class="col-md-6 d-flex align-items-center">
+            <label class="text-neon-pink me-3">Image Preview:</label>
+            <img id="imagePreview" src="@Model.WorkoutPlanImageFile" alt="Image Preview" class="rounded neon-outline" style="max-width: 150px; max-height: 150px;" />
         </div>
     </div>
 
-    <!-- Specialization Selection -->
-    <h4>Select Equipments</h4>
-    <div class="row mb-1">
+    <h4 class="text-neon-green mt-4">Select Equipments</h4>
+    <div class="row">
         @foreach (var equipment in Model.Equipments)
         {
-            <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-1">
-                <div class="card specialization-card p-1" style="cursor: pointer; min-height: 180px;">
-                    <div class="card-img-wrapper d-flex align-items-center justify-content-center" style="height: 120px;">
-                        <img src="@equipment.ImageUrl" class="card-img-top" alt="@equipment.Text" style="max-height: 100%; width: auto; object-fit: contain; margin: 0 auto;">
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+                <div class="card card-neon-specialization p-2" style="cursor: pointer;">
+                    <div class="card-img-wrapper d-flex align-items-center justify-content-center">
+                        <img src="@equipment.ImageUrl" class="card-img-top" alt="@equipment.Text">
                     </div>
-                    <!-- Ajuste no template do card -->
-                    <div class="card-body p-1 text-center">
-                        <small class="card-title specialization-title d-block" style="margin-top: auto;">@equipment.Text</small>
-                        <input type="checkbox" name="EquipmentsIds" value="@equipment.Value" class="form-check-input mt-1" id="specialization-@equipment.Value" style="display: none;" />
+                    <div class="card-body text-center">
+                        <small class="text-light">@equipment.Text</small>
+                        <input type="checkbox" name="EquipmentsIds" value="@equipment.Value" class="form-check-input mt-2 d-none" id="equipment-@equipment.Value" />
                     </div>
-
                 </div>
             </div>
         }
     </div>
 
     <div class="mt-3 d-flex justify-content-between">
-        <button type="submit" class="btn btn-primary">Create Workout Plan</button>
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <button type="submit" class="btn btn-neon-pink neon-hover-shadow">Create Workout Plan</button>
+        <a asp-action="Index" class="btn btn-neon-secondary neon-hover-shadow">Back to List</a>
     </div>
 </form>
 
@@ -97,55 +93,30 @@
 
     <script>
         setupImageUploadPreview("workoutPlanPictureUpload", "imagePreview");
-        setupSweetAlertOnSubmit("createWorkoutPlanForm", "Workout Plan created successfully.", "Please correct the errors in the form.");
 
-        // Configuração da seleção visual dos cards
-        $(document).ready(function () {
-            $(".specialization-card").on("click", function () {
-                var checkbox = $(this).find("input[type='checkbox']");
-                checkbox.prop("checked", !checkbox.prop("checked"));
-                $(this).toggleClass("selected-card");
-            });
+        // Interactive card selection for equipments
+        $(".card-neon-specialization").on("click", function () {
+            var checkbox = $(this).find("input[type='checkbox']");
+            checkbox.prop("checked", !checkbox.prop("checked"));
+            $(this).toggleClass("selected-card");
         });
     </script>
 }
 
 <style>
-    .specialization-card {
-        transition: border 0.3s, box-shadow 0.3s;
-        border-radius: 5px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        margin: 2px;
+    .card-neon-specialization {
+        border: 1px solid var(--neon-pink);
+        transition: border-color 0.3s, box-shadow 0.3s;
+        border-radius: 10px;
     }
 
-    .selected-card {
-        border: 2px solid #007bff;
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
-    }
-
-    .card-body {
-        padding: 0.2rem;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-end;
-    }
-
-    .specialization-title {
-        max-height: 40px;
-        overflow: hidden;
-        white-space: normal; /* Permite que o texto seja quebrado */
-        text-overflow: ellipsis;
-    }
+        .card-neon-specialization.selected-card {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
 
     .card-img-wrapper {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 120px;
+        height: 100px;
         overflow: hidden;
     }
 
@@ -153,6 +124,9 @@
         max-height: 100%;
         width: auto;
         object-fit: contain;
-        margin: 0 auto;
+    }
+
+    .neon-outline {
+        box-shadow: 0 0 10px var(--neon-pink);
     }
 </style>

@@ -2,11 +2,7 @@ html {
   font-size: 14px;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
+
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
     box-shadow: 0 0 0 0.05rem white, 0 0 0 0.15rem #258cfb; 
@@ -244,7 +240,7 @@ a.more-link {
 
 .loader {
     border: 8px solid #f3f3f3;
-    border-top: 8px solid #3498db;
+    border-top: 8px solid #E93571;
     border-radius: 50%;
     width: 60px;
     height: 60px;
@@ -279,6 +275,7 @@ a.more-link {
     --btn-text-blue: #000000; /* Ajuste para legibilidade */
     --btn-text-green: #000000; /* Ajuste para legibilidade */
     --btn-text-purple: #FFFFFF;
+    --default-glow: none;
 }
 
 /* Base Styles */
@@ -330,7 +327,7 @@ h4, h5, h6 {
 
 .btn-neon-blue {
     background-color: var(--neon-blue);
-    color: var(--btn-text-blue); /* Usa a variável para cor do texto */
+    color: var(--btn-text-blue); 
     border: 1px solid var(--neon-blue);
     border-radius: 6px;
     transition: box-shadow 0.2s ease, transform 0.2s ease;
@@ -356,25 +353,25 @@ h4, h5, h6 {
 .btn-neon-pink:hover {
     background-color: var(--dark-bg);
     color: var(--neon-pink);
-    box-shadow: 0px 0px 10px rgba(233, 53, 113, 0.5);
+    box-shadow: none;
 }
 
 .btn-neon-blue:hover {
     background-color: var(--dark-bg);
     color: var(--neon-blue);
-    box-shadow: 0px 0px 10px rgba(141, 250, 255, 0.5);
+    box-shadow: none;
 }
 
 .btn-neon-green:hover {
     background-color: var(--dark-bg);
     color: var(--neon-green);
-    box-shadow: 0px 0px 10px rgba(170, 255, 31, 0.5);
+    box-shadow: none;
 }
 
 .btn-neon-secondary:hover {
     background-color: var(--dark-bg);
     color: var(--neon-purple);
-    box-shadow: 0px 0px 10px rgba(226, 0, 254, 0.5);
+    box-shadow: none;
 }
 
 
@@ -393,7 +390,7 @@ h4, h5, h6 {
         background-color: #444; /* Slightly brighter for focus */
         border-color: var(--neon-blue);
         color: var(--light-text); /* Ensures text contrast on focus */
-        box-shadow: 0px 0px 5px rgba(141, 250, 255, 0.1);
+        box-shadow: none;
     }
 
 /* Link Hover Effect */
@@ -437,7 +434,7 @@ a.neon-hover {
 
     .card-neon:hover {
         border-color: var(--neon-blue);
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+        box-shadow: none;
     }
 
 /* Base font settings */
@@ -487,5 +484,42 @@ h4, h5, h6 {
     100% {
         transform: scale(1);
         color: var(--neon-green);
+    }
+}
+
+* {
+    box-shadow: var(--default-glow);
+}
+
+/* Search Icon */
+.to-search i {
+    color: #fff; /* Branco */
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+    .to-search i:hover {
+        color: var(--neon-pink, #E93571); /* Cor de destaque ao passar o mouse */
+    }
+
+
+@media (max-width: 992px) {
+    .nav-menu {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+
+    header {
+        font-size: 14px; /* Ajuste específico para o texto do header */
+    }
+
+    nav.menu-items {
+        font-size: 12; /* Ajuste para os itens do menu */
     }
 }

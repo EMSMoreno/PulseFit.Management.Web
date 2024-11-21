@@ -4,87 +4,105 @@
     ViewData["Title"] = "Equipments List";
 }
 
-<h2 class="text-center my-4">Equipments List</h2>
+<h2 class="title-neon mt-4">Equipments List</h2>
 
-<div>
-    <a asp-action="Create" class="btn btn-primary mb-3">Add New Equipment</a>
+<div class="text-center mb-4">
+    <a asp-action="Create" class="btn btn-neon-pink">Add New Equipment</a>
 </div>
 
-<div class="container">
-    @foreach (var group in Model)
-    {
-        <hr />
-        <h3 class="text-center mt-4">@group.Key</h3>
-        <div id="carousel-@group.Key" class="carousel slide mt-3" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                @if (group.Any())
-                {
-                    var first = true;
-                    foreach (var equipment in group)
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No equipments found.</div>
+
+}
+else
+{
+    <div class="container">
+        @foreach (var group in Model)
+        {
+            <hr class="border-neon" />
+            <h3 class="text-gray mt-4">@group.Key</h3>
+            <div id="carousel-@group.Key" class="carousel slide mt-3" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @if (group.Any())
                     {
-                        <div class="carousel-item @(first ? "active" : "")">
-                            <a href="@Url.Action("Details", "Equipments", new { id = equipment.Id })">
-                                <img src="@equipment.EquipmentImageUrl" class="d-block w-100 rounded" alt="@equipment.Name">
-                            </a>
-                            <div class="carousel-caption d-none d-md-block">
-                                <h5>@equipment.Name</h5>
-                                <p>Status: @equipment.Status</p>
+                        var first = true;
+                        foreach (var equipment in group)
+                        {
+                            <div class="carousel-item @(first ? "active" : "")">
+                                <a href="@Url.Action("Details", "Equipments", new { id = equipment.Id })">
+                                    <img src="@equipment.EquipmentImageUrl" class="d-block w-100 rounded neon-outline" alt="@equipment.Name">
+                                </a>
+                                <div class="carousel-caption bg-dark-neon">
+                                    <h5 class="text-neon">@equipment.Name</h5>
+                                    <p>Status: @equipment.Status</p>
+                                </div>
+                            </div>
+                            first = false;
+                        }
+                    }
+                    else
+                    {
+                        <div class="carousel-item active">
+                            <img src="/images/noimage.png" class="d-block w-100 rounded neon-outline" alt="Image">
+                            <div class="carousel-caption bg-dark-neon">
+                                <p class="text-neon">No equipment available.</p>
                             </div>
                         </div>
-                        first = false;
                     }
-                }
-                else
-                {
-                    <div class="carousel-item active">
-                        <img src="/images/noimage.png" class="d-block w-100 rounded" alt="Image">
-                        <div class="carousel-caption d-none d-md-block">
-                            <p>No equipment available.</p>
-                        </div>
-                    </div>
-                }
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@group.Key" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel-@group.Key" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@group.Key" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Anterior</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carousel-@group.Key" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Próximo</span>
-            </button>
-        </div>
-    }
-</div>
+        }
+    </div>
+}
+
 
 <style>
     .carousel-item img {
-        max-width: 35%;
-        max-height: 35%;
+        max-width: 40%;
+        max-height: 40%;
         object-fit: cover;
         margin: 0 auto;
+        border: 2px solid var(--neon-blue);
+        box-shadow: 0 0 10px var(--neon-pink);
     }
 
-    .carousel-control-prev-icon,
-    .carousel-control-next-icon {
-        background-color: rgba(0, 0, 0, 0.5); 
-        border-radius: 50%; 
-        padding: 10px; 
-        transition: background-color 0.3s; 
+    .carousel-caption.bg-dark-neon {
+        background-color: rgba(28, 28, 28, 0.8);
+        border: 1px solid var(--neon-purple);
+        border-radius: 10px;
+        padding: 10px;
     }
 
-        .carousel-control-prev-icon:hover,
-        .carousel-control-next-icon:hover {
-            background-color: rgba(0, 0, 0, 0.8);
+    .text-neon {
+        color: var(--neon-blue);
+    }
+
+    .border-neon {
+        border-color: var(--neon-green);
+        border-width: 2px;
+    }
+
+    .btn-neon-pink {
+        transition: box-shadow 0.3s ease;
+        font-size: 1.1rem;
+    }
+
+        .btn-neon-pink:hover {
+            box-shadow: 0 0 10px var(--neon-pink);
         }
 
     h3 {
+        font-family: 'Montserrat', sans-serif;
         font-weight: bold;
-        text-transform: capitalize;
-    }
-
-    .carousel-caption {
-        background-color: rgba(0, 0, 0, 0.6);
-        border-radius: 10px;
-        padding: 10px;
+        color: var(--neon-green);
     }
 </style>

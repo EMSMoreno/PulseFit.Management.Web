@@ -1,0 +1,213 @@
+﻿<header class="header-section">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <!-- Logo -->
+            <div class="col-lg-3">
+                <div class="logo">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">
+                        <img src="~/img/logo.png" alt="PulseFit Logo" style="height: 30px;">
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navegação Principal -->
+            <div class="col-lg-6">
+                <nav class="nav-menu">
+                    <ul class="d-flex align-items-center">
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link active">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Home" asp-action="AboutUs" class="nav-link">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Home" asp-action="Services" class="nav-link">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Home" asp-action="Bmi" class="nav-link">BMI</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Subscription" asp-action="Index" class="nav-link">Subscriptions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Home" asp-action="Contact" class="nav-link">Contact</a>
+                        </li>
+
+                        <!-- Link to Dashboard based on User Role -->
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a asp-area="" asp-controller="Dashboard" asp-action="AdminDashboard" class="nav-link">Dashboard</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Employee"))
+                            {
+                                <li class="nav-item">
+                                    <a asp-area="" asp-controller="Dashboard" asp-action="EmployeeDashboard" class="nav-link">Dashboard</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("PersonalTrainer"))
+                            {
+                                <li class="nav-item">
+                                    <a asp-area="" asp-controller="Dashboard" asp-action="PersonalTrainerDashboard" class="nav-link">Dashboard</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Client"))
+                            {
+                                <li class="nav-item">
+                                    <a asp-area="" asp-controller="Dashboard" asp-action="ClientDashboard" class="nav-link">Dashboard</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Nutritionist"))
+                            {
+                                <li class="nav-item">
+                                    <a asp-area="" asp-controller="Dashboard" asp-action="NutritionistDashboard" class="nav-link">Dashboard</a>
+                                </li>
+                            }
+                        }
+
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- User Account Section and Search -->
+            <div class="col-lg-3 d-flex justify-content-end align-items-center">
+                <!-- Search Icon -->
+                <div class="to-search search-switch me-3">
+                    <i class="fa fa-search"></i>
+                </div>
+
+                <!-- Alert Notifications -->
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="alert-notifications me-3">
+                        @await Component.InvokeAsync("Notifications") <!-- Call to View Component -->
+                    </div>
+                }
+
+
+                <!-- User Menu -->
+                <div class="d-flex align-items-center">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <!-- Dropdown for User Options -->
+                        <div class="dropdown user-dropdown">
+                            <a class="nav-link dropdown-toggle user-name" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-user-circle me-2"></i> @User.Identity.Name
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangeUser">Profile</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangePassword">Change Password</a></li>
+                                <li><a class="dropdown-item logout-btn" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- Login and Register Buttons -->
+                        <a class="nav-link login-btn me-3" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                        <a class="nav-link register-btn btn btn-outline-primary px-3 py-1" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <div class="d-lg-none">
+        <button class="btn btn-secondary w-100" data-bs-toggle="collapse" data-bs-target="#mobileMenu" aria-expanded="false" aria-controls="mobileMenu">
+            <i class="fa fa-bars"></i> Menu
+        </button>
+        <div class="collapse mt-2" id="mobileMenu">
+            <ul class="list-unstyled text-center">
+                <li><a asp-area="" asp-controller="Home" asp-action="Index" class="text-white">Home</a></li>
+                <li><a asp-area="" asp-controller="Home" asp-action="AboutUs" class="text-white">About</a></li>
+                <li><a asp-area="" asp-controller="Home" asp-action="Services" class="text-white">Services</a></li>
+                <li><a asp-area="" asp-controller="Home" asp-action="Bmi" class="text-white">BMI</a></li>
+                <li><a asp-area="" asp-controller="Subscription" asp-action="Index" class="text-white">Subscriptions</a></li>
+                <li><a asp-area="" asp-controller="Home" asp-action="Contact" class="text-white">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+
+</header>
+
+
+
+
+<style>
+    .user-dropdown .dropdown-menu {
+        background-color: var(--dark-bg);
+        border: none;
+    }
+
+    .user-dropdown .dropdown-item {
+        color: #ffffff; 
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+        .user-dropdown .dropdown-item:hover {
+            background-color: var(--neon-blue);
+            color: #000000;
+        }
+
+    .user-dropdown .user-name {
+        color: var(--neon-green);
+    }
+
+        .user-dropdown .user-name i {
+            color: var(--neon-green);
+        }
+
+    .alert-notifications {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .alert-notifications i {
+            color: var(--neon-yellow);
+            font-size: 1.2rem;
+        }
+
+    #mobileMenu ul {
+        background-color: var(--dark-bg);
+        padding: 1rem;
+    }
+
+        #mobileMenu ul li {
+            margin-bottom: 0.5rem;
+        }
+
+            #mobileMenu ul li a {
+                color: var(--neon-blue);
+                text-decoration: none;
+                font-size: 1.2rem;
+                transition: color 0.3s ease;
+            }
+
+                #mobileMenu ul li a:hover {
+                    color: var(--neon-green);
+                }
+
+    #mobileMenu {
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    button[data-bs-toggle="collapse"] {
+        background-color: var(--neon-blue);
+        color: var(--dark-bg);
+        border: none;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+    }
+
+        button[data-bs-toggle="collapse"]:hover {
+            background-color: var(--neon-green);
+            color: #000;
+        }
+
+</style>

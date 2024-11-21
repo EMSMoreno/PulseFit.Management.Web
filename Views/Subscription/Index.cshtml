@@ -4,18 +4,18 @@
 }
 
 <div class="container my-5">
-    <h2 class="text-center mb-4">Available Subscriptions</h2>
+    <h2 class="title-neon mb-4">Available Subscriptions</h2>
 
     @if (User.IsInRole("Admin"))
     {
-        <div class="text-end mb-3">
-            <a asp-action="Create" class="btn btn-success btn-lg">Create New Subscription</a>
+        <div class="text-end mb-4">
+            <a asp-action="Create" class="btn-neon-pink btn-lg">Create New Subscription</a>
         </div>
     }
 
-    <div class="filter-bar mb-4 p-3 bg-light rounded shadow-sm">
-        <label for="gymFilter" class="form-label font-weight-bold">Select Gym:</label>
-        <select id="gymFilter" class="form-select" onchange="filterSubscriptions()">
+    <div class="filter-bar mb-4 card-neon p-3">
+        <label for="gymFilter" class="form-label">Select Gym:</label>
+        <select id="gymFilter" class="form-select input-neon" onchange="filterSubscriptions()">
             <option value="0">All Gyms</option>
             @foreach (var gym in ViewBag.GymOptions as SelectList)
             {
@@ -28,34 +28,34 @@
         @foreach (var subscription in Model)
         {
             <div class="col">
-                <div class="card subscription-card shadow border-0">
-                    <img src="@subscription.ImageUrl" class="card-img-top rounded-top" alt="Subscription Image">
-                    <div class="card-body">
-                        <h5 class="card-title">@subscription.Name</h5>
-                        <p class="card-text">@subscription.Description</p>
+                <div class="card card-neon subscription-card">
+                    <img src="@subscription.ImageUrl" alt="Subscription Image" class="card-img-top rounded-top">
+                    <div class="card-body d-flex flex-column align-items-center text-center">
+                        <h5 class="card-title text-neon">@subscription.Name</h5>
+                        <p class="card-text text-gray">@subscription.Description</p>
 
                         @if (subscription.DiscountPercentage > 0)
                         {
-                            <p class="price h5 text-primary">
-                                <span class="original-price">$@subscription.Price.ToString("C2")</span>
-                                <span class="discounted-price">$@subscription.CalculatedPrice.ToString("C2")</span>
+                            <p class="price">
+                                <span class="original-price">@subscription.Price.ToString("C2")</span>
+                                <span class="discounted-price">@subscription.CalculatedPrice.ToString("C2")</span>
                             </p>
-                            <p class="discount text-success">Discount: @subscription.DiscountPercentage%</p>
+                            <p class="discount">Discount: @subscription.DiscountPercentage%</p>
                         }
                         else
                         {
-                            <p class="price h5 text-primary">$@subscription.Price.ToString("C2")</p>
+                            <p class="price">@subscription.Price.ToString("C2")</p>
                         }
 
-                        <a href="@Url.Action("Details", new { id = subscription.Id })" class="btn btn-primary w-100 mb-2">View Details</a>
+                        <a href="@Url.Action("Details", new { id = subscription.Id })" class="btn-neon-blue btn-lg w-100 mb-3">View Details</a>
 
                         @if (User.IsInRole("Admin"))
                         {
-                            <div class="d-flex justify-content-around mt-3">
-                                <a asp-action="Edit" asp-route-id="@subscription.Id" class="btn btn-warning btn-sm px-3">
+                            <div class="d-flex justify-content-between w-100">
+                                <a asp-action="Edit" asp-route-id="@subscription.Id" class="btn-neon-green btn-sm px-4">
                                     <i class="bi bi-pencil-square"></i> Edit
                                 </a>
-                                <a asp-action="Delete" asp-route-id="@subscription.Id" class="btn btn-danger btn-sm px-3">
+                                <a asp-action="Delete" asp-route-id="@subscription.Id" class="btn-neon-secondary btn-sm px-4">
                                     <i class="bi bi-trash"></i> Delete
                                 </a>
                             </div>
@@ -77,32 +77,56 @@
 <style>
     .subscription-card {
         transition: transform 0.3s, box-shadow 0.3s;
+        background-color: var(--light-bg);
+        border: 1px solid var(--border-color);
+        padding: 20px;
     }
 
         .subscription-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transform: scale(1.03);
+            border-color: var(--neon-blue);
+            box-shadow: none;
         }
 
     .price {
         font-size: 1.4rem;
         font-weight: bold;
-        color: #007bff;
+        color: var(--neon-pink);
     }
 
     .original-price {
         text-decoration: line-through;
-        color: #888;
+        color: var(--neon-purple);
         margin-right: 0.5rem;
     }
 
     .discounted-price {
-        color: #e74c3c;
+        color: var(--neon-green);
         font-weight: bold;
     }
 
     .discount {
-        color: #27ae60;
+        color: var(--neon-yellow);
         font-size: 0.9em;
+    }
+
+    /* Botões ajustados */
+    .btn-lg {
+        padding: 0.7rem 1.5rem;
+        font-size: 1.1rem;
+    }
+
+    .btn-sm {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .filter-bar {
+        border: 1px solid var(--neon-yellow);
+    }
+
+    /* Espaçamento extra entre botões e conteúdo */
+    .card-body .btn {
+        margin-top: 0.5rem;
     }
 </style>

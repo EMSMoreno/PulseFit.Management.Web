@@ -1,32 +1,80 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using PulseFit.Management.Web.Models;
 using System.Diagnostics;
 
-namespace PulseFit.Management.Web.Controllers
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly ILogger<HomeController> _logger;
+
+    public HomeController(ILogger<HomeController> logger)
     {
-        private readonly ILogger<HomeController> _logger;
+        _logger = logger;
+    }
 
-        public HomeController(ILogger<HomeController> logger)
+    public IActionResult Index()
+    {
+        return View();
+    }
+
+    public IActionResult AboutUs()
+    {
+        return View();
+    }
+
+    public IActionResult Bmi()
+    {
+        return View(new BMICalculatorViewModel());
+    }
+
+    public IActionResult Services()
+    {
+        return View();
+    }
+
+    public IActionResult Contact()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult BmiCalculator(BMICalculatorViewModel model)
+    {
+        if (ModelState.IsValid)
         {
-            _logger = logger;
+            // Calcula o IMC
+            model.BMI = model.Weight / ((model.Height / 100) * (model.Height / 100));
+
+            // Determina o status baseado no IMC
+            if (model.Age < 18)
+            {
+                model.Status = "Consult a pediatrician for BMI evaluation.";
+            }
+            else if (model.Sex == Sex.Male)
+            {
+                if (model.BMI < 18.5) model.Status = "Underweight";
+                else if (model.BMI < 24.9) model.Status = "Healthy";
+                else if (model.BMI < 29.9) model.Status = "Overweight";
+                else model.Status = "Obese";
+            }
+            else if (model.Sex == Sex.Female)
+            {
+                if (model.BMI < 18.0) model.Status = "Underweight";
+                else if (model.BMI < 24.0) model.Status = "Healthy";
+                else if (model.BMI < 29.0) model.Status = "Overweight";
+                else model.Status = "Obese";
+            }
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        // Retorna a view com o modelo atualizado
+        return View("Bmi", model);
+    }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
