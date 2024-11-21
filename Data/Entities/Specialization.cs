@@ -12,11 +12,11 @@ namespace PulseFit.Management.Web.Data.Entities
 
         public string? Description { get; set; }
 
-        public string? ImageUrl { get; set; }  // URL para a imagem, como uma foto de referência para a especialização
+        public string? ImageUrl { get; set; }  // URL to the image, such as a reference photo for specialization
 
-        public string? ImageName { get; set; } // Nome do arquivo da imagem, se necessário
+        public string? ImageName { get; set; } // Image file name if necessary
 
-        // Lista de nutricionistas associados a esta especialização
+        // List of nutritionists associated with this specialization
         public List<Nutritionist> Nutritionists { get; set; } = new List<Nutritionist>();
     }
 }

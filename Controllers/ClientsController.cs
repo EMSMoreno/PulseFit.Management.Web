@@ -69,14 +69,14 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Verificar tamanho da imagem
-                if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 2 * 1024 * 1024) // Limite de 2 MB
+                // Image Size
+                if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 2 * 1024 * 1024) // 2 MB Limit
                 {
                     ModelState.AddModelError("ProfilePictureFile", "The file size should not exceed 2 MB.");
                     return View(model);
                 }
 
-                // Verificar se o usuário com o email já existe
+                // Check if User Email exists
                 var existingUser = await _userHelper.GetUserByEmailAsync(model.Email);
                 if (existingUser != null)
                 {
@@ -86,7 +86,7 @@ namespace PulseFit.Management.Web.Controllers
 
                 try
                 {
-                    // Criação do novo User
+                    // Create new User
                     var user = new User
                     {
                         FirstName = model.FirstName,
@@ -97,13 +97,13 @@ namespace PulseFit.Management.Web.Controllers
                         DateCreated = DateTime.UtcNow
                     };
 
-                    // Upload da imagem de perfil se uma imagem for enviada
+                    // Profile image upload if an image is uploaded
                     if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 0)
                     {
                         user.ProfilePictureId = await _blobHelper.UploadBlobAsync(model.ProfilePictureFile, "clients-pics");
                     }
 
-                    // Gerar senha temporária
+                    // Generate temporary password
                     string temporaryPassword = GenerateRandomPassword();
                     var createUserResult = await _userHelper.AddUserAsync(user, temporaryPassword);
 
@@ -113,19 +113,19 @@ namespace PulseFit.Management.Web.Controllers
                         return View(model);
                     }
 
-                    // Atribuir o papel de "Client"
+                    // Assign the role of "Client"
                     await _userHelper.AddUserToRoleAsync(user, "Client");
 
-                    // Gera e envia o e-mail de boas-vindas
+                    // Generate and send the welcome email
                     string token = await _userHelper.GeneratePasswordResetTokenAsync(user);
                     string resetLink = Url.Action("ChangeFirstPassword", "Account", new { email = user.Email, token = token }, protocol: HttpContext.Request.Scheme);
 
                     var placeholders = new Dictionary<string, string>
-            {
-                { "FirstName", user.FirstName },
-                { "TemporaryPassword", temporaryPassword },
-                { "ResetLink", resetLink }
-            };
+                    {
+                        { "FirstName", user.FirstName },
+                        { "TemporaryPassword", temporaryPassword },
+                        { "ResetLink", resetLink }
+                    };
 
                     string emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Views/Emails/WelcomeEmailTemplate.html");
                     string emailBody = _mailHelper.LoadAndProcessEmailTemplate(emailTemplatePath, placeholders);
@@ -136,18 +136,18 @@ namespace PulseFit.Management.Web.Controllers
                         ModelState.AddModelError(string.Empty, "Error sending email. Please check email settings.");
                     }
 
-                    // Associa o User ao novo Client, utilizando o UserId do user criado
+                    // Associates the User with the new Client, using the UserId of the created user
                     var client = new Client
                     {
                         Birthdate = model.Birthdate,
                         Address = model.Address,
                         Gender = model.Gender,
-                        UserId = user.Id,  // Atribui o UserId ao Client
+                        UserId = user.Id,  // Assigns the UserId to the Client
                         Status = Status.Active,
                         RegistrationDate = DateTime.UtcNow
                     };
 
-                    // Salva o novo Client no repositório
+                    // Save the new Client to the repository
                     await _clientRepository.CreateAsync(client);
 
                     TempData["SuccessMessage"] = "Client created successfully and email sent with login instructions.";
@@ -162,8 +162,6 @@ namespace PulseFit.Management.Web.Controllers
 
             return View(model);
         }
-
-
 
         // GET: Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -188,7 +186,7 @@ namespace PulseFit.Management.Web.Controllers
             {
                 try
                 {
-                    if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 2 * 1024 * 1024) // Limite de 2 MB
+                    if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 2 * 1024 * 1024) // 2 MB Limit
                     {
                         ModelState.AddModelError("ProfilePictureFile", "The file size should not exceed 2 MB.");
                         return View(model);
@@ -299,11 +297,11 @@ namespace PulseFit.Management.Web.Controllers
 
             string password = new string(new[]
             {
-        upperChars[random.Next(upperChars.Length)],
-        lowerChars[random.Next(lowerChars.Length)],
-        digitChars[random.Next(digitChars.Length)],
-        specialChars[random.Next(specialChars.Length)]
-    });
+            upperChars[random.Next(upperChars.Length)],
+            lowerChars[random.Next(lowerChars.Length)],
+            digitChars[random.Next(digitChars.Length)],
+            specialChars[random.Next(specialChars.Length)]
+        });
 
             string allChars = upperChars + lowerChars + digitChars + specialChars;
             password += new string(Enumerable.Repeat(allChars, length - 4) 

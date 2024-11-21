@@ -76,8 +76,6 @@ namespace PulseFit.Management.Web.Controllers
                 
                 return RedirectToAction(nameof(Index));
             }
-
-
             return View(model);
         }
 
@@ -134,7 +132,6 @@ namespace PulseFit.Management.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            
             return View(model);
         }
 

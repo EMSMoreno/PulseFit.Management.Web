@@ -8,24 +8,24 @@ namespace PulseFit.Management.Web.Data.Entities
     {
         public int Id { get; set; }
 
-        public List<Specialty> Specialties { get; set; } = new List<Specialty>(); // Inicializando lista
+        public List<Specialty> Specialties { get; set; } = new List<Specialty>(); // Initializing list
 
-        public CertificationType? Certification { get; set; } // Usando enum para certificações
+        public CertificationType? Certification { get; set; } // Usando enum for Certifications
 
-        public List<Client> Clients { get; set; } = new List<Client>(); // Inicializando lista
+        public List<Client> Clients { get; set; } = new List<Client>(); // Initializing list
 
         public DateTime? HireDate { get; set; }
 
         public Status Status { get; set; } = Status.Active;
 
-        // FK para User
+        // FK to User
         [Required]
         public string UserId { get; set; }
 
         public User User { get; set; }
     }
 
-    // Enum para as certificações do Personal Trainer
+    // Enum for Personal Trainer certifications
     public enum CertificationType
     {
         None,

@@ -8,36 +8,36 @@ namespace PulseFit.Management.Web.Data.Entities
     {
         public int Id { get; set; }
 
-        // Relação com User
+        // Relationship with User
         [Required]
         public string UserId { get; set; }
         public User User { get; set; }
 
-        // Relação com Subscription
+        // Relationship with Subscription
         [Required]
         public int SubscriptionId { get; set; }
         public Subscription Subscription { get; set; }
 
         public bool IsPaid { get; set; }
 
-        // Relação com Client
+        // Relationship with Client
         [Required]
         public int ClientId { get; set; }
         public Client Client { get; set; }
 
-        // Data de início da subscrição
+        // Subscription start date
         public DateTime StartDate { get; set; }
 
-        // Propriedades de pagamento
+        // Payment Properties
         public string TransactionId { get; set; }
         public decimal AmountPaid { get; set; }
 
-        // Data de término calculada dinamicamente com base na Subscription
+        // End date dynamically calculated based on Subscription
         public DateTime EndDate { get; set; }
 
         public SubscriptionStatus Status { get; set; }
 
-        // Calcula a data de término com base na duração da Subscription
+        // Calculates the end date based on the Subscription duration
         public void CalculateEndDate()
         {
             DateTime endDate = StartDate;

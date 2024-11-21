@@ -84,7 +84,6 @@ namespace PulseFit.Management.Web.Controllers
             return View(model);
         }
 
-
         // Logs out the user
         public async Task<IActionResult> Logout()
         {
@@ -191,8 +190,8 @@ namespace PulseFit.Management.Web.Controllers
         }
 
 
-    // Displays the change user details page
-    public async Task<IActionResult> ChangeUser()
+        // Displays the change user details page
+        public async Task<IActionResult> ChangeUser()
         {
             var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
 
@@ -421,8 +420,5 @@ namespace PulseFit.Management.Web.Controllers
 
             return View(model);
         }
-
-
-
     }
 }

@@ -1076,7 +1076,7 @@ namespace PulseFit.Management.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Popularity")
+                    b.Property<int?>("Popularity")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")

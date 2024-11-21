@@ -312,7 +312,7 @@ namespace PulseFit.Management.Web.Controllers
             ViewBag.Status = new SelectList(Enum.GetValues(typeof(Workout.WorkoutStatus)).Cast<Workout.WorkoutStatus>());
         }
 
-        // Rate Workout (Implementação do método)
+        // Rate Workout
         public IActionResult RateWorkout(int workoutId)
         {
             var workout = _context.Workouts.Find(workoutId);
@@ -321,23 +321,19 @@ namespace PulseFit.Management.Web.Controllers
                 return NotFound();
             }
 
-            // Get userId via HttpContext.User inside the action method
-            var userId = _userHelper.GetUserId(HttpContext.User);  // Ensure to pass ClaimsPrincipal
+            var userId = _userHelper.GetUserId(HttpContext.User);
 
-            // Convert userId to int (assuming it's stored as a numeric ID in your claims)
             int userIdInt;
             if (!int.TryParse(userId, out userIdInt))
             {
-                return Unauthorized(); // or handle as needed
+                return Unauthorized();
             }
 
-            // Check if the user has already evaluated this training
             var existingRating = _context.WorkoutRatings
-                .FirstOrDefault(r => r.WorkoutId == workoutId && r.UserId == userIdInt);  // Now comparing with int
+                .FirstOrDefault(r => r.WorkoutId == workoutId && r.UserId == userIdInt);
 
             if (existingRating != null)
             {
-                // If the user has already reviewed, you can redirect them or show a message
                 return RedirectToAction("Details", new { id = workoutId });
             }
 

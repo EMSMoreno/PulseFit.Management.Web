@@ -50,19 +50,19 @@ namespace PulseFit.Management.Web.Data
                 .WithMany(s => s.PersonalTrainers)
                 .UsingEntity(j => j.ToTable("PersonalTrainerSpecialties"));
 
-            // Configuração many-to-many para Nutritionist e Specialization
+            // Many-to-many configuration for Nutritionist and Specialization
             modelBuilder.Entity<Nutritionist>()
                 .HasMany(n => n.Specializations)
                 .WithMany(s => s.Nutritionists)
                 .UsingEntity(j => j.ToTable("NutritionistSpecializations"));
 
-            // Configuração one-to-many entre Client e UserSubscription
+            // One-to-many configuration between Client and UserSubscription
             modelBuilder.Entity<Client>()
                 .HasMany(c => c.UserSubscriptions)
                 .WithOne(us => us.Client)
                 .HasForeignKey(us => us.ClientId);
 
-            // Configuração many-to-one entre UserSubscription e Subscription
+            // Many-to-one configuration between UserSubscription and Subscription
             modelBuilder.Entity<UserSubscription>()
                 .HasOne(us => us.Subscription)
                 .WithMany(s => s.UserSubscriptions)

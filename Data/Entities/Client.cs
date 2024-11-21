@@ -27,7 +27,6 @@ namespace PulseFit.Management.Web.Data.Entities
 
         public ICollection<UserSubscription> UserSubscriptions { get; set; } = new List<UserSubscription>();
 
-
     }
 
     public enum Gender

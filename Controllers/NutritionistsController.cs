@@ -75,10 +75,10 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 2 * 1024 * 1024) // Limite de 2 MB
+                if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 2 * 1024 * 1024) // 2 MB Limit
                 {
                     ModelState.AddModelError("ProfilePictureFile", "The file size should not exceed 2 MB.");
-                    model.Specializations = await GetSpecializationSelectListAsync(); // Recarregar especializações em caso de erro
+                    model.Specializations = await GetSpecializationSelectListAsync(); // Reload specializations in case of error
                     return View(model);
                 }
 
@@ -315,11 +315,11 @@ namespace PulseFit.Management.Web.Controllers
 
             string password = new string(new[]
             {
-        upperChars[random.Next(upperChars.Length)],
-        lowerChars[random.Next(lowerChars.Length)],
-        digitChars[random.Next(digitChars.Length)],
-        specialChars[random.Next(specialChars.Length)]
-    });
+                upperChars[random.Next(upperChars.Length)],
+                lowerChars[random.Next(lowerChars.Length)],
+                digitChars[random.Next(digitChars.Length)],
+                specialChars[random.Next(specialChars.Length)]
+            });
 
             string allChars = upperChars + lowerChars + digitChars + specialChars;
             password += new string(Enumerable.Repeat(allChars, length - 4)

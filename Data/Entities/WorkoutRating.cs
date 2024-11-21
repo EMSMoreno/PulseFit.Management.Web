@@ -4,10 +4,10 @@
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public virtual User User { get; set; } // Relacionamento com a entidade User
-        public int WorkoutId { get; set; } // Workout sendo avaliado
-        public int RatingValue { get; set; } // Valor da classificação (1 a 5 estrelas)
-        public string Comment { get; set; } // Comentário opcional
+        public virtual User User { get; set; } // Relationship with the User entity
+        public int WorkoutId { get; set; } // Workout being evaluated
+        public int RatingValue { get; set; } // Rating value (1 to 5 stars)
+        public string Comment { get; set; } // Opcional Comment
         public DateTime DateCreated { get; set; }
     }
 }

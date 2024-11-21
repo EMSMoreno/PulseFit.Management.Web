@@ -76,15 +76,15 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Verificar tamanho da imagem
-                if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 2 * 1024 * 1024) // Limite de 2 MB
+                // Chech image size
+                if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 2 * 1024 * 1024) // 2 MB Limit
                 {
                     ModelState.AddModelError("ProfilePictureFile", "The file size should not exceed 2 MB.");
-                    model.Specialties = await GetSpecialtySelectListAsync(); // Recarregar especialidades em caso de erro
+                    model.Specialties = await GetSpecialtySelectListAsync(); // Reload specialties in case of error
                     return View(model);
                 }
 
-                // Verificar se o usuário com o email já existe
+                // Check if the user with email already exists
                 var existingUser = await _userHelper.GetUserByEmailAsync(model.Email);
                 if (existingUser != null)
                 {
@@ -94,7 +94,7 @@ namespace PulseFit.Management.Web.Controllers
 
                 try
                 {
-                    // Criação do novo User
+                    // Creation of new User
                     var user = new User
                     {
                         FirstName = model.FirstName,
@@ -105,13 +105,13 @@ namespace PulseFit.Management.Web.Controllers
                         DateCreated = DateTime.UtcNow
                     };
 
-                    // Upload da imagem de perfil se uma imagem for enviada
+                    // Profile image upload if an image is uploaded
                     if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 0)
                     {
                         user.ProfilePictureId = await _blobHelper.UploadBlobAsync(model.ProfilePictureFile, "personaltrainers-pics");
                     }
 
-                    // Gerar senha temporária
+                    // Generate temporary password
                     string temporaryPassword = GenerateRandomPassword();
                     var createUserResult = await _userHelper.AddUserAsync(user, temporaryPassword);
 
@@ -124,16 +124,16 @@ namespace PulseFit.Management.Web.Controllers
 
                     await _userHelper.AddUserToRoleAsync(user, "PersonalTrainer");
 
-                    // Gera e envia o e-mail de boas-vindas
+                    // Generate and send the welcome email
                     string token = await _userHelper.GeneratePasswordResetTokenAsync(user);
                     string resetLink = Url.Action("ChangeFirstPassword", "Account", new { email = user.Email, token = token }, protocol: HttpContext.Request.Scheme);
 
                     var placeholders = new Dictionary<string, string>
-            {
-                { "FirstName", user.FirstName },
-                { "TemporaryPassword", temporaryPassword },
-                { "ResetLink", resetLink }
-            };
+                    {
+                        { "FirstName", user.FirstName },
+                        { "TemporaryPassword", temporaryPassword },
+                        { "ResetLink", resetLink }
+                    };
 
                     string emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Views/Emails/WelcomeEmailTemplate.html");
                     string emailBody = _mailHelper.LoadAndProcessEmailTemplate(emailTemplatePath, placeholders);
@@ -144,7 +144,7 @@ namespace PulseFit.Management.Web.Controllers
                         ModelState.AddModelError(string.Empty, "Error sending email. Please check email settings.");
                     }
 
-                    // Verificar se o usuário foi salvo antes de associá-lo ao Personal Trainer
+                    // Check if the user has been saved before associating it with the Personal Trainer
                     var userFromDb = await _userHelper.GetUserByEmailAsync(user.Email);
                     if (userFromDb == null)
                     {
@@ -152,7 +152,7 @@ namespace PulseFit.Management.Web.Controllers
                         return View(model);
                     }
 
-                    // Criação do Personal Trainer e associação ao User já salvo
+                    // Creation of the Personal Trainer and association with the already saved User
                     var trainer = new PersonalTrainer
                     {
                         UserId = userFromDb.Id,
@@ -179,7 +179,6 @@ namespace PulseFit.Management.Web.Controllers
             return View(model);
         }
 
-
         // GET: PersonalTrainers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -204,11 +203,11 @@ namespace PulseFit.Management.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                // Verificar tamanho da imagem
-                if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 2 * 1024 * 1024) // Limite de 2 MB
+                // Check image size
+                if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 2 * 1024 * 1024) // 2 MB Limit
                 {
                     ModelState.AddModelError("ProfilePictureFile", "The file size should not exceed 2 MB.");
-                    model.Specialties = await GetSpecialtySelectListAsync(); // Recarregar especialidades em caso de erro
+                    model.Specialties = await GetSpecialtySelectListAsync(); // Reload specialties in case of error
                     return View(model);
                 }
 
@@ -221,23 +220,23 @@ namespace PulseFit.Management.Web.Controllers
                         return new NotFoundViewResult("TrainerNotFound");
                     }
 
-                    // Atualizar dados do User sem modificar Email e UserName
+                    // Update User data without modifying Email and UserName
                     trainer.User.FirstName = model.FirstName;
                     trainer.User.LastName = model.LastName;
                     trainer.User.PhoneNumber = model.PhoneNumber;
 
-                    // Atualizar a imagem do perfil se uma nova imagem for enviada
+                    // Update profile picture if a new image is uploaded
                     if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 0)
                     {
                         trainer.User.ProfilePictureId = await _blobHelper.UploadBlobAsync(model.ProfilePictureFile, "personaltrainers-pics");
                     }
 
-                    // Atualizar especialidades
+                    // Update specialties
                     var selectedSpecialties = await _specialtyRepository.GetSpecialtiesByIdsAsync(model.SpecialtyIds);
                     trainer.Specialties.Clear();
                     trainer.Specialties.AddRange(selectedSpecialties);
 
-                    // Atualizar os campos específicos do Personal Trainer
+                    // Update Personal Trainer-specific fields
                     trainer.Certification = model.Certification;
                     trainer.HireDate = model.HireDate;
                     trainer.Status = model.Status;
@@ -280,7 +279,7 @@ namespace PulseFit.Management.Web.Controllers
 
             try
             {
-                // Apaga todas as associações do Personal Trainer, como Specialties e Clients, se necessário
+                // Deletes all Personal Trainer memberships such as Specials and Clients if necessary
                 if (trainer.Specialties != null && trainer.Specialties.Any())
                 {
                     trainer.Specialties.Clear();
@@ -291,10 +290,10 @@ namespace PulseFit.Management.Web.Controllers
                     trainer.Clients.Clear();
                 }
 
-                // Remover o Personal Trainer
+                // Remove Personal Trainer
                 await _personalTrainerRepository.DeleteAsync(trainer);
 
-                // Apagar o usuário associado ao Personal Trainer
+                // Delete the user associated with the Personal Trainer
                 if (trainer.User != null)
                 {
                     await _userHelper.DeleteUserAsync(trainer.User);
@@ -318,8 +317,6 @@ namespace PulseFit.Management.Web.Controllers
             }
         }
 
-
-
         private async Task<List<SpecialtyItemViewModel>> GetSpecialtySelectListAsync()
         {
             var specialties = await _specialtyRepository.GetAllAsync();
@@ -330,7 +327,6 @@ namespace PulseFit.Management.Web.Controllers
                 ImageUrl = !string.IsNullOrEmpty(s.ImageName) ? $"/images/specialties/{s.ImageName}" : "/images/default-image.jpg"
             }).ToList();
         }
-
 
         private string GenerateRandomPassword(int length = 8)
         {
@@ -344,11 +340,11 @@ namespace PulseFit.Management.Web.Controllers
 
             string password = new string(new[]
             {
-        upperChars[random.Next(upperChars.Length)],
-        lowerChars[random.Next(lowerChars.Length)],
-        digitChars[random.Next(digitChars.Length)],
-        specialChars[random.Next(specialChars.Length)]
-    });
+                upperChars[random.Next(upperChars.Length)],
+                lowerChars[random.Next(lowerChars.Length)],
+                digitChars[random.Next(digitChars.Length)],
+                specialChars[random.Next(specialChars.Length)]
+            });
 
             string allChars = upperChars + lowerChars + digitChars + specialChars;
             password += new string(Enumerable.Repeat(allChars, length - 4)

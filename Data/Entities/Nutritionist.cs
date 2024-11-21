@@ -8,14 +8,14 @@ namespace PulseFit.Management.Web.Data.Entities
     {
         public int Id { get; set; }
 
-        // Relacionamento com Specializations, semelhante a como os Personal Trainers têm Specialties
+        // Relationship with Specializations, similar to how Personal Trainers have Specialties
         public List<Specialization> Specializations { get; set; } = new List<Specialization>();
 
         public int ExperienceYears { get; set; }
 
         public Status Status { get; set; } = Status.Active;
 
-        // FK para User
+        // FK to User
         [Required]
         public string UserId { get; set; }
 

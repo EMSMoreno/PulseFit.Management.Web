@@ -43,9 +43,9 @@ namespace PulseFit.Management.Web.Controllers
             _pdfConverter = pdfConverter;
         }
 
-        #region Métodos de Admin
+        #region Admin Methods
 
-        // Exibe a lista de clientes para o Admin com opção de adicionar/visualizar subscrições
+        // Displays client list to Admin with option to add/view subscriptions
         public async Task<IActionResult> Index()
         {
             if (!User.IsInRole("Admin")) return Unauthorized();
@@ -76,8 +76,7 @@ namespace PulseFit.Management.Web.Controllers
             return View(viewModels);
         }
 
-
-        // Exibe todas as subscrições de um cliente específico
+        // Displays all subscriptions for a specific client
         public async Task<IActionResult> Details(int clientId)
         {
             if (!User.IsInRole("Admin")) return Unauthorized();
@@ -89,7 +88,7 @@ namespace PulseFit.Management.Web.Controllers
                 return NotFound();
             }
 
-            // Para cada subscrição, inclui os pagamentos
+            // For each subscription, includes payments
             var viewModels = userSubscriptions.Select(us =>
             {
                 var subscriptionVm = _converterHelper.ToUserSubscriptionViewModel(us);
@@ -110,8 +109,7 @@ namespace PulseFit.Management.Web.Controllers
             return View(viewModels);
         }
 
-
-        // Redireciona o Admin para o fluxo de subscrição do cliente
+        // Redirects the Admin to the customer subscription flow
         public async Task<IActionResult> SelectSubscriptionForClient(int clientId)
         {
             if (!User.IsInRole("Admin")) return Unauthorized();
@@ -127,7 +125,7 @@ namespace PulseFit.Management.Web.Controllers
             return RedirectToAction("Index", "Subscription");
         }
 
-        // Redireciona para a seleção de método de pagamento
+        // Redirects to payment method selection
         public async Task<IActionResult> ProceedToPayment(int subscriptionId, int clientId)
         {
             if (!User.IsInRole("Admin")) return Unauthorized();
@@ -146,14 +144,13 @@ namespace PulseFit.Management.Web.Controllers
                 return RedirectToAction("SelectSubscriptionForClient", new { clientId });
             }
 
-            // Redireciona para o método de pagamento do cliente com o ClientId especificado
+            // Redirects to the customer's payment method with the specified ClientId
             return RedirectToAction("SelectPaymentMethod", "Payment", new { subscriptionId, clientId });
         }
 
-
         #endregion
 
-        #region Métodos de Cliente (Inalterados)
+        #region Client Methods (Inalterados)
 
         public async Task<IActionResult> ClientSubscriptions()
         {
@@ -163,11 +160,11 @@ namespace PulseFit.Management.Web.Controllers
             var client = await _clientRepository.GetClientIdByUserIdAsync(userId);
             if (client == null) return Unauthorized();
 
-            // Busca subscrições do cliente logado e seus pagamentos
+            // Search for signed-in customer signatures and payments
             var userSubscriptions = await _userSubscriptionRepository.GetUserSubscriptionsAsync(client.Value);
             var viewModels = userSubscriptions.Select(us =>
             {
-                // Filtra os pagamentos pelo UserId
+                // Filter payments by UserId
                 var payments = _paymentRepository.GetPaymentsBySubscriptionIdAsync(us.SubscriptionId)
                                                   .Result
                                                   .Where(p => p.UserId == userId)
@@ -189,7 +186,6 @@ namespace PulseFit.Management.Web.Controllers
 
             return View(viewModels);
         }
-
 
         public async Task<IActionResult> GenerateInvoicePdf(int paymentId)
         {
@@ -227,7 +223,7 @@ namespace PulseFit.Management.Web.Controllers
 
         #endregion
 
-        #region Métodos Auxiliares
+        #region Auxiliary Methods
 
         private async Task<List<SelectListItem>> LoadSubscriptionOptionsAsync()
         {

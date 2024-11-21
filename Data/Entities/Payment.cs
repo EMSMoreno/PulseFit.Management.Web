@@ -33,7 +33,7 @@ namespace PulseFit.Management.Web.Data.Entities
             CreditCard,
             PayPal,
             Crypto,
-            Cash // Disponível apenas para administradores e funcionários
+            Cash // Available to admins and employees only
         }
 
         public enum PaymentStatus

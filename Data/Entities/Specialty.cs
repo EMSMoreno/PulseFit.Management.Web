@@ -11,9 +11,9 @@ namespace PulseFit.Management.Web.Data.Entities
 
         public string? Description { get; set; }
 
-        public string? ImageUrl { get; set; } // URL completa da imagem
+        public string? ImageUrl { get; set; } // Image Complete URL
 
-        public string? ImageName { get; set; } // Nome do arquivo da imagem, caso necessário
+        public string? ImageName { get; set; } // Image file name if necessary
 
         public List<PersonalTrainer> PersonalTrainers { get; set; } = new List<PersonalTrainer>();
     }

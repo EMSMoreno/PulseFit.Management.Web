@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using PulseFit.Management.Web.Data.Entities;
@@ -47,11 +48,11 @@ namespace PulseFit.Management.Web.Controllers
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Se o admin estiver atribuindo a subscrição a um cliente específico, use o ClientId fornecido
+            // If the administrator is assigning the subscription to a specific client, use the provided ClientId
             if (clientId.HasValue && User.IsInRole("Admin"))
             {
                 TempData["ClientId"] = clientId.Value;
-                userId = null; // Para garantir que não utilizaremos o ID do admin
+                userId = null; //To ensure we don't use the Admin ID
             }
 
             var existingSubscription = await _userSubscriptionRepository.GetActiveUserSubscriptionAsync(userId, subscriptionId);
@@ -98,7 +99,7 @@ namespace PulseFit.Management.Web.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            // Se houver um ClientId em TempData, use-o para atribuir a assinatura
+            // If there is a ClientId in TempData, use it to assign the subscription
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             int? clientId = TempData["ClientId"] as int?;
 
@@ -111,7 +112,7 @@ namespace PulseFit.Management.Web.Controllers
                     ModelState.AddModelError("", "Client not found for this User.");
                     return View("SelectPaymentMethod", model);
                 }
-                userId = client.UserId; // Use o ID do cliente
+                userId = client.UserId; // Use Client ID
             }
             else
             {
@@ -193,8 +194,6 @@ namespace PulseFit.Management.Web.Controllers
             return View("SelectPaymentMethod", model);
         }
 
-
-
         public async Task<IActionResult> Confirmation(int paymentId)
         {
             _logger.LogInformation("Loading Confirmation page for Payment ID: {PaymentId}", paymentId);
@@ -228,20 +227,20 @@ namespace PulseFit.Management.Web.Controllers
                 Amount = effectivePrice,
             };
 
-            // Construir placeholders para o e-mail
+            // Build email placeholders
             var placeholders = new Dictionary<string, string>
-    {
-        { "TransactionId", payment.TransactionId },
-        { "SubscriptionName", subscription.Name },
-        { "Amount", effectivePrice.ToString("C2") },
-        { "ExpirationDate", userSubscription.EndDate.ToShortDateString() },
-        { "PaymentDate", payment.PaymentDate.ToString("f") }
-    };
+            {
+                { "TransactionId", payment.TransactionId },
+                { "SubscriptionName", subscription.Name },
+                { "Amount", effectivePrice.ToString("C2") },
+                { "ExpirationDate", userSubscription.EndDate.ToShortDateString() },
+                { "PaymentDate", payment.PaymentDate.ToString("f") }
+            };
 
             string emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Views/Emails/PaymentConfirmationTemplate.html");
             string emailBody = _mailHelper.LoadAndProcessEmailTemplate(emailTemplatePath, placeholders);
 
-            // Obter o e-mail do usuário usando o novo método
+            // Get user email using new method
             var userEmail = await _userHelper.GetUserEmailByPaymentIdAsync(paymentId);
             if (string.IsNullOrEmpty(userEmail))
             {
@@ -250,7 +249,7 @@ namespace PulseFit.Management.Web.Controllers
                 return View(confirmationViewModel);
             }
 
-            // Enviar o e-mail de confirmação
+            // Send confirmation email
             var emailResponse = _mailHelper.SendEmail(userEmail, "Payment Confirmation", emailBody);
             if (!emailResponse.IsSuccess)
             {
@@ -260,8 +259,5 @@ namespace PulseFit.Management.Web.Controllers
 
             return View(confirmationViewModel);
         }
-
-
-
     }
 }

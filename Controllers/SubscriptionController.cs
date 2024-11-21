@@ -65,11 +65,11 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (!User.Identity.IsAuthenticated)
             {
-                // Redireciona para login, preservando o retorno
+                // Redirects to login, preserving return
                 return RedirectToAction("Login", "Account", new { returnUrl = Url.Action("SubscribeNow", new { id }) });
             }
 
-            // Redireciona para seleção de método de pagamento para o cliente logado
+            // Redirects to payment method selection for logged in customer
             return RedirectToAction("SelectPaymentMethod", "Payment", new { subscriptionId = id });
         }
 
@@ -154,7 +154,7 @@ namespace PulseFit.Management.Web.Controllers
                     return View(model);
                 }
 
-                // Use o ID da imagem existente se uma nova não for carregada
+                // Use the existing image ID if a new one is not uploaded
                 var imageId = model.SubscriptionImageFile != null
                     ? await _blobHelper.UploadBlobAsync(model.SubscriptionImageFile, "subscription-images")
                     : model.ImageId;
@@ -217,7 +217,7 @@ namespace PulseFit.Management.Web.Controllers
         private async Task PopulateOptions(SubscriptionViewModel model)
         {
             model.GymOptions = await GetSelectListItems(_gymRepository.GetAllAsync(), "Id", "Name");
-            // Você pode adicionar outras opções aqui, se necessário, como Workouts ou NutritionPlans
+            // You can add other options here if needed, like Workouts or NutritionPlans
         }
 
         private async Task<List<SelectListItem>> GetSelectListItems<T>(Task<IEnumerable<T>> items, string dataValueField, string dataTextField)

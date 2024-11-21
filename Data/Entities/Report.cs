@@ -12,13 +12,13 @@ namespace PulseFit.Management.Web.Data.Entities
 
         public string Description { get; set; }
 
-        public string Data { get; set; } // Armazena o conteúdo do relatório
+        public string Data { get; set; } // Stores report content
 
-        // Identificador do utilizador. É obrigatório e serve como chave estrangeira.
+        // User identifier. It is mandatory and serves as a foreign key.
         [Required]
         public string UserId { get; set; }
 
-        // Navegação para a entidade `User`. Representa o utilizador.
+        // Navigation to the `User` entity. Represents the user.
         public User User { get; set; }
     }
 }

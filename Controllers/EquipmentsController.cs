@@ -36,14 +36,12 @@ namespace PulseFit.Management.Web.Controllers
         // GET: Equipments
         public IActionResult Index()
         {
-            var equipments = _equipmentRepository.GetAll().ToList() // Carrega todos os equipamentos na memória
-                .GroupBy(e => e.Type) // Agrupa os equipamentos por tipo em memória
-                .OrderBy(g => g.Key); // Ordena os grupos por tipo
+            var equipments = _equipmentRepository.GetAll().ToList() // Loads all devices into memory
+                .GroupBy(e => e.Type) // Group equipment by type in memory
+                .OrderBy(g => g.Key); // Sort groups by type
 
             return View(equipments);
         }
-
-
 
         // GET: Equipments/Details/5
         public async Task<IActionResult> Details(int? id)

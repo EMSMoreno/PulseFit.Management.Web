@@ -12,11 +12,11 @@ namespace PulseFit.Management.Web.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        //Esta action vai ser executada quando entrar por este caminho error/404
+        // This action will be executed when you enter this path error/404
         [Route("error/404")]
-        //Este action é só para mostrar a página do Error404
-        //Depois de elaborado este metodo temos que criar a respectiva View para o Error404 para isso
-        //clicamos com o botao direito sobre Error404() e fazemos Add View - Razor View - Add
+        //This action is just to show the Error404 page
+        //After creating this method, we have to create the respective View for Error404 for this
+        //right click on Error404() and do Add View - Razor View - Add
         public IActionResult Error404()
         {
             return View();

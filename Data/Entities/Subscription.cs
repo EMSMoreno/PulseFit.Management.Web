@@ -20,23 +20,23 @@ namespace PulseFit.Management.Web.Data.Entities
 
         public int MaxWorkouts { get; set; }
 
-        // Propriedades para definir a duração personalizada da subscrição
+        // Properties to set custom subscription duration
         [Required]
         public int DurationValue { get; set; } = 1; // Ex: 1, 7, 30, etc.
 
         [Required]
-        public DurationType DurationType { get; set; } = DurationType.Months; // Dias, Semanas, Meses ou Anos
+        public DurationType DurationType { get; set; } = DurationType.Months; // Days, Weeks, Months or Years
 
         public SubscriptionType SubscriptionType { get; set; }
 
-        // Exclusividade, limitando o usuário a uma única subscrição ativa deste tipo
+        // Exclusivity, limiting the user to a single active subscription of that type
         public bool IsExclusive { get; set; } = false;
 
         public SubscriptionStatus Status { get; set; } = SubscriptionStatus.Active;
 
         public ICollection<UserSubscription> UserSubscriptions { get; set; } = new List<UserSubscription>();
 
-        // Benefícios específicos
+        // Specific benefits
         public bool IsAllGymsAccessible { get; set; } = false;
         public List<Gym> IncludedGyms { get; set; } = new List<Gym>();
         public List<Workout> IncludedWorkouts { get; set; } = new List<Workout>();
@@ -54,7 +54,7 @@ namespace PulseFit.Management.Web.Data.Entities
         [NotMapped]
         public decimal CalculatedPrice => Price * (1 - DiscountPercentage / 100m);
 
-        // Propriedades de Imagem
+        // Image Properties
         public Guid ImageId { get; set; } = Guid.Empty;
 
         [NotMapped]
@@ -80,7 +80,7 @@ namespace PulseFit.Management.Web.Data.Entities
         OnlineClasses
     }
 
-    // Enum para definir o tipo de duração (dias, semanas, meses ou anos)
+    // Enum to define duration type (days, weeks, months or years)
     public enum DurationType
     {
         Days,

@@ -218,7 +218,6 @@ namespace PulseFit.Management.Web.Controllers
             }).ToList();
         }
 
-
         private void LoadViewBags()
         {
             ViewBag.Type = new SelectList(Enum.GetValues(typeof(WorkoutPlan.WorkoutPlanTypeList)).Cast<WorkoutPlan.WorkoutPlanTypeList>());

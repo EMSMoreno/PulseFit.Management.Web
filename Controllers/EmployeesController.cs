@@ -70,14 +70,14 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Verificar tamanho da imagem
+                // Check image size
                 if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 2 * 1024 * 1024) // Limite de 2 MB
                 {
                     ModelState.AddModelError("ProfilePictureFile", "The file size should not exceed 2 MB.");
                     return View(model);
                 }
 
-                // Verificar se o usuário com o email já existe
+                // Check if the user with email already exists
                 var existingUser = await _userHelper.GetUserByEmailAsync(model.Email);
 
                 if (existingUser != null)
@@ -88,7 +88,7 @@ namespace PulseFit.Management.Web.Controllers
 
                 try
                 {
-                    // Criação do novo User
+                    // Creation of new User
                     var user = new User
                     {
                         FirstName = model.FirstName,
@@ -99,13 +99,13 @@ namespace PulseFit.Management.Web.Controllers
                         DateCreated = DateTime.UtcNow
                     };
 
-                    // Upload da imagem de perfil se uma imagem for enviada
+                    // Profile image upload if an image is uploaded
                     if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 0)
                     {
                         user.ProfilePictureId = await _blobHelper.UploadBlobAsync(model.ProfilePictureFile, "employees-pics");
                     }
 
-                    // Gerar senha temporária
+                    // Generate temporary password
                     string temporaryPassword = GenerateRandomPassword();
                     var createUserResult = await _userHelper.AddUserAsync(user, temporaryPassword);
 
@@ -117,16 +117,16 @@ namespace PulseFit.Management.Web.Controllers
 
                     await _userHelper.AddUserToRoleAsync(user, "Employee");
 
-                    // Gera e envia o e-mail de boas-vindas
+                    // Generate and send the welcome email
                     string token = await _userHelper.GeneratePasswordResetTokenAsync(user);
                     string resetLink = Url.Action("ChangeFirstPassword", "Account", new { email = user.Email, token = token }, protocol: HttpContext.Request.Scheme);
 
                     var placeholders = new Dictionary<string, string>
-            {
-                { "FirstName", user.FirstName },
-                { "TemporaryPassword", temporaryPassword },
-                { "ResetLink", resetLink }
-            };
+                    {
+                        { "FirstName", user.FirstName },
+                        { "TemporaryPassword", temporaryPassword },
+                        { "ResetLink", resetLink }
+                    };
 
                     string emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Views/Emails/WelcomeEmailTemplate.html");
                     string emailBody = _mailHelper.LoadAndProcessEmailTemplate(emailTemplatePath, placeholders);
@@ -137,7 +137,7 @@ namespace PulseFit.Management.Web.Controllers
                         ModelState.AddModelError(string.Empty, "Error sending email. Please check email settings.");
                     }
 
-                    // Verificar se o usuário foi salvo antes de associá-lo ao Employee
+                    // Check if the user was saved before associating it with the Employee
                     var userFromDb = await _userHelper.GetUserByEmailAsync(user.Email);
                     if (userFromDb == null)
                     {
@@ -145,7 +145,7 @@ namespace PulseFit.Management.Web.Controllers
                         return View(model);
                     }
 
-                    // Criação do Employee e associação ao User já salvo
+                    // Creation of the Employee and association with the already saved User
                     var employee = new Employee
                     {
                         EmployeeType = model.EmployeeType,
@@ -171,8 +171,6 @@ namespace PulseFit.Management.Web.Controllers
             return View(model);
         }
 
-
-
         // GET: Employees/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -196,7 +194,7 @@ namespace PulseFit.Management.Web.Controllers
             {
                 try
                 {
-                    // Verificar tamanho da imagem
+                    // Check image size
                     if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 2 * 1024 * 1024) // Limite de 2 MB
                     {
                         ModelState.AddModelError("ProfilePictureFile", "The file size should not exceed 2 MB.");
@@ -210,20 +208,20 @@ namespace PulseFit.Management.Web.Controllers
                         return new NotFoundViewResult("EmployeeNotFound");
                     }
 
-                    // Atualizar dados do User (exceto Email e UserName)
+                    // Update User data (except Email and UserName)
                     employee.User.FirstName = model.FirstName;
                     employee.User.LastName = model.LastName;
                     employee.User.PhoneNumber = model.PhoneNumber;
 
-                    // Atualizar a imagem do perfil se uma nova imagem for enviada
+                    // Update profile picture if a new image is uploaded
                     if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 0)
                     {
                         employee.User.ProfilePictureId = await _blobHelper.UploadBlobAsync(model.ProfilePictureFile, "employees-pics");
                     }
 
-                    // Atualiza o Employee específico com enum Shift e HireDate opcional
+                    // Update specific Employee with enum Shift and optional HireDate
                     employee.EmployeeType = model.EmployeeType;
-                    employee.HireDate = model.HireDate;  // Aceita nulo
+                    employee.HireDate = model.HireDate;  // Accepts NULL
                     employee.Shift = model.Shift;        // Enum ShiftType
                     employee.Status = model.Status;
 
@@ -263,12 +261,10 @@ namespace PulseFit.Management.Web.Controllers
 
             try
             {
-   
-
-                // Remover o Employee
+                // Remove Employee
                 await _employeeRepository.DeleteAsync(employee);
 
-                // Apagar o usuário associado ao Employee
+                // Delete the user associated with Employee
                 if (employee.User != null)
                 {
                     await _userHelper.DeleteUserAsync(employee.User);
@@ -292,11 +288,6 @@ namespace PulseFit.Management.Web.Controllers
             }
         }
 
-
-
-
-
-
         private async Task<bool> EmployeeExists(int id)
         {
             return await _employeeRepository.ExistAsync(id);
@@ -319,11 +310,11 @@ namespace PulseFit.Management.Web.Controllers
 
             string password = new string(new[]
             {
-        upperChars[random.Next(upperChars.Length)],
-        lowerChars[random.Next(lowerChars.Length)],
-        digitChars[random.Next(digitChars.Length)],
-        specialChars[random.Next(specialChars.Length)]
-    });
+                upperChars[random.Next(upperChars.Length)],
+                lowerChars[random.Next(lowerChars.Length)],
+                digitChars[random.Next(digitChars.Length)],
+                specialChars[random.Next(specialChars.Length)]
+            });
 
             string allChars = upperChars + lowerChars + digitChars + specialChars;
             password += new string(Enumerable.Repeat(allChars, length - 4)

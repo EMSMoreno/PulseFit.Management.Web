@@ -8,16 +8,16 @@ namespace PulseFit.Management.Web.Data.Entities
         public int Id { get; set; }
 
         [Required]
-        public EmployeeType EmployeeType { get; set; } // Define o tipo de funcionário
+        public EmployeeType EmployeeType { get; set; } // Defines the Type of Employee
 
-        public DateTime? HireDate { get; set; } // Data de contratação opcional
+        public DateTime? HireDate { get; set; } // Optional Hire Date
 
         public Status Status { get; set; } = Status.Active;
 
-        public ShiftType Shift { get; set; } // Usa o enum ShiftType
+        public ShiftType Shift { get; set; } // Use enum ShiftType
 
         [Required]
-        public string UserId { get; set; } // FK para User
+        public string UserId { get; set; } // FK for User
 
         public User User { get; set; }
     }
