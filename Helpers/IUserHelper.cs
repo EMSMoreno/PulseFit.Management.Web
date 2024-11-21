@@ -103,5 +103,9 @@ namespace PulseFit.Management.Web.Helpers
 
         Task<Employee> GetEmployeeByUserAsync(string userEmail);
 
+        string GetUserId(ClaimsPrincipal user);  // Method that accepts ClaimsPrincipal
+
+        string GetUserId();
+
     }
 }

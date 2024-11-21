@@ -1,4 +1,5 @@
-﻿using PulseFit.Management.Web.Data.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PulseFit.Management.Web.Data.Entities;
 
 namespace PulseFit.Management.Web.Data.Repositories
 {
@@ -23,6 +24,11 @@ namespace PulseFit.Management.Web.Data.Repositories
 
             _context.Workouts.Update(workout);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Workout>> GetAllAsync()
+        {
+            return await _context.Workouts.ToListAsync();
         }
     }
 }

@@ -122,6 +122,13 @@ namespace PulseFit.Management.Web.Helpers
             return _userManager.GetUserId(user);  // Get the user Id from claims
         }
 
+        // This method is used to get the UserId directly from the current logged-in user
+        public string GetUserId()
+        {
+            var userId = _userManager.GetUserId(ClaimsPrincipal.Current);
+            return userId;
+        }
+
         public async Task<string> GetRoleAsync(User user)
         {
             var roles = await _userManager.GetRolesAsync(user);
