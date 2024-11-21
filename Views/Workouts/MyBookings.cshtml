@@ -2,6 +2,7 @@
 @using Newtonsoft.Json
 
 @{
+    Layout = "_Dashboard";
     ViewData["Title"] = "My Bookings";
 
     var jsonSerializerSettings = new JsonSerializerSettings
@@ -26,14 +27,17 @@
     }
 </div>
 
+
 @section Scripts {
     <script id="actionTemplate" type="text/x-template">
         <a href="/Workouts/MyBookingsDetails/${Id}" class="btn btn-neon-blue neon-hover-shadow me-2">
             <i class="fas fa-info-circle"></i> Details
         </a>
-        <a href="/Workouts/CancelBooking/${Id}" class="btn btn-neon-pink neon-hover-shadow me-2">
+
+        <button class="btn btn-neon-pink neon-hover-shadow me-2 cancel-booking-btn"
+                data-id="${Id}" data-training-date="${TrainingDate}">
             <i class="fas fa-times"></i> Cancel
-        </a>
+        </button>
     </script>
 
     <script>
@@ -76,7 +80,63 @@
                 }
             });
             grid.appendTo("#Grid");
+
+            // Handle Cancel Booking
+            $(document).on("click", ".cancel-booking-btn", function () {
+                var bookingId = $(this).data("id");
+                var trainingDate = new Date($(this).data("training-date"));
+                var now = new Date();
+                var diffInHours = (trainingDate - now) / (1000 * 60 * 60);
+
+                if (diffInHours < 24) {
+                    Swal.fire({
+                        title: 'Attention!',
+                        text: 'This booking is less than 24 hours away. Canceling now may result in penalties.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Cancel Anyway',
+                        cancelButtonText: 'Keep Booking'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            cancelBooking(bookingId);
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Confirm Cancellation',
+                        text: 'Are you sure you want to cancel this booking?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, Cancel it',
+                        cancelButtonText: 'No, Keep it'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            cancelBooking(bookingId);
+                        }
+                    });
+                }
+            });
+
+            // Function to handle booking cancellation
+            function cancelBooking(bookingId) {
+                $.ajax({
+                    url: `/Workouts/CancelBooking/${bookingId}`,
+                    method: "POST",
+                    success: function () {
+                        Swal.fire('Cancelled!', 'Your booking has been cancelled.', 'success')
+                            .then(() => location.reload());
+                    },
+                    error: function () {
+                        Swal.fire('Error!', 'There was an issue cancelling your booking.', 'error');
+                    }
+                });
+            }
         });
+
     </script>
 }
 
