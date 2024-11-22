@@ -6,24 +6,38 @@
 
 @model IEnumerable<PulseFit.Management.Web.Data.Entities.Alert>
 
-<h2>Pending Notifications</h2>
+<h2 class="title-neon">Pending Notifications</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Message</th>
-            <th>Created At</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var alert in Model)
-        {
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center mt-4">
+        <strong>No pending notifications at the moment.</strong>
+    </div>
+}
+else
+{
+    <table class="table table-hover table-striped table-neon">
+        <thead class="thead-dark">
             <tr>
-                <td>@alert.Message</td>
-                <td>@alert.CreatedAt</td>
-                <td><button class="btn btn-success">Mark as Resolved</button></td>
+                <th>Message</th>
+                <th>Created At</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var alert in Model)
+            {
+                <tr>
+                    <td>@alert.Message</td>
+                    <td>@alert.CreatedAt.ToString("g")</td>
+                    <td>
+                        <form asp-action="MarkAsResolved" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@alert.Id" />
+                            <button type="submit" class="btn btn-sm btn-neon-green">Mark as Resolved</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

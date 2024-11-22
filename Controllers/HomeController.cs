@@ -65,11 +65,22 @@ public class HomeController : Controller
                 else if (model.BMI < 29.0) model.Status = "Overweight";
                 else model.Status = "Obese";
             }
+
+            // Log para verificar os valores calculados
+            _logger.LogInformation($"BMI Calculation: Height = {model.Height}, Weight = {model.Weight}, BMI = {model.BMI}, Status = {model.Status}");
+        }
+        else
+        {
+            // Log para saber porque o modelo não é válido
+            var validationErrors = ModelState.Values.SelectMany(v => v.Errors)
+                                                      .Select(e => e.ErrorMessage)
+                                                      .ToList();
+            _logger.LogWarning($"ModelState is invalid. Validation errors: {string.Join(", ", validationErrors)}");
         }
 
-        // Retorna a view com o modelo atualizado
         return View("Bmi", model);
     }
+
 
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

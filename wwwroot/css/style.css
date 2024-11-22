@@ -32,7 +32,7 @@
 /* Template default CSS
 /*----------------------------------------*/
 
-/*html,
+html,
 body {
 	height: 100%;
 	font-family: var(--font-primary, "Muli"), sans-serif;
@@ -107,7 +107,7 @@ ul,
 ol {
 	padding: 0;
 	margin: 0;
-}*/
+}
 
 /*---------------------
   Helper CSS
@@ -1985,13 +1985,12 @@ ol {
 
 .chart-calculate-form form button {
 	font-size: 14px;
-	color: #ffffff;
+	color: black;
 	text-transform: uppercase;
 	font-weight: 700;
 	width: 100%;
 	border: none;
 	padding: 15px 0;
-	background: #f36100;
 }
 
 /*---------------------

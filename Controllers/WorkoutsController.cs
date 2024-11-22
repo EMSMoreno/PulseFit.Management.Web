@@ -388,13 +388,13 @@ namespace PulseFit.Management.Web.Controllers
                 return RedirectToAction("Details", new { id = workoutId });
             }
 
-            var ratingViewModel = new RatingViewModel
-            {
-                WorkoutId = workoutId
-            };
+        //    var ratingViewModel = new RatingViewModel
+        //    {
+        //        WorkoutId = workoutId
+        //    };
 
-            return View(ratingViewModel);
-        }
+        //    return View(ratingViewModel);
+        //}
 
         // Average Ratings
         public IActionResult GetAverageRating(int workoutId)
