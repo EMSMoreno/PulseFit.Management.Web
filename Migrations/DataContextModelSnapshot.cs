@@ -22,6 +22,21 @@ namespace PulseFit.Management.Web.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("EquipmentWorkoutPlan", b =>
+                {
+                    b.Property<int>("EquipmentsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkoutPlansId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EquipmentsId", "WorkoutPlansId");
+
+                    b.HasIndex("WorkoutPlansId");
+
+                    b.ToTable("WorkoutPlanEquipments", (string)null);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -394,7 +409,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid?>("EquipmentImageId")
+                    b.Property<Guid>("EquipmentImageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("GymId")
@@ -416,12 +431,7 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.Property<int?>("WorkoutPlanId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("WorkoutPlanId");
 
                     b.ToTable("Equipments");
                 });
@@ -1075,7 +1085,7 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("WorkoutImageId")
+                    b.Property<Guid>("WorkoutImageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -1104,7 +1114,7 @@ namespace PulseFit.Management.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("WorkoutPlanImageId")
+                    b.Property<Guid>("WorkoutPlanImageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("WorkoutPlanType")
@@ -1148,6 +1158,21 @@ namespace PulseFit.Management.Web.Migrations
                     b.HasIndex("UserId1");
 
                     b.ToTable("WorkoutRatings");
+                });
+
+            modelBuilder.Entity("EquipmentWorkoutPlan", b =>
+                {
+                    b.HasOne("PulseFit.Management.Web.Data.Entities.Equipment", null)
+                        .WithMany()
+                        .HasForeignKey("EquipmentsId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PulseFit.Management.Web.Data.Entities.WorkoutPlan", null)
+                        .WithMany()
+                        .HasForeignKey("WorkoutPlansId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1286,14 +1311,6 @@ namespace PulseFit.Management.Web.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Equipment", b =>
-                {
-                    b.HasOne("PulseFit.Management.Web.Data.Entities.WorkoutPlan", null)
-                        .WithMany("Equipments")
-                        .HasForeignKey("WorkoutPlanId")
-                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.Feedback", b =>
@@ -1475,11 +1492,6 @@ namespace PulseFit.Management.Web.Migrations
                     b.Navigation("IncludedWorkouts");
 
                     b.Navigation("UserSubscriptions");
-                });
-
-            modelBuilder.Entity("PulseFit.Management.Web.Data.Entities.WorkoutPlan", b =>
-                {
-                    b.Navigation("Equipments");
                 });
 #pragma warning restore 612, 618
         }

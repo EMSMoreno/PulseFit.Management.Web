@@ -50,6 +50,11 @@ namespace PulseFit.Management.Web.Data
                 .WithMany(s => s.PersonalTrainers)
                 .UsingEntity(j => j.ToTable("PersonalTrainerSpecialties"));
 
+            modelBuilder.Entity<WorkoutPlan>()
+                .HasMany(pt => pt.Equipments)
+                .WithMany(s => s.WorkoutPlans)
+                .UsingEntity(j => j.ToTable("WorkoutPlanEquipments"));
+
             // Many-to-many configuration for Nutritionist and Specialization
             modelBuilder.Entity<Nutritionist>()
                 .HasMany(n => n.Specializations)

@@ -38,10 +38,12 @@
 
         public string? GymName { get; set; }
 
-        public Guid? EquipmentImageId { get; set; }
+        public Guid EquipmentImageId { get; set; }
 
-        public string EquipmentImageUrl => EquipmentImageId == null
+        public string EquipmentImageUrl => EquipmentImageId == Guid.Empty
             ? "/images/noimage.png"
             : $"/uploads/equipments-pics/{EquipmentImageId}.jpg";
+
+        public List<WorkoutPlan> WorkoutPlans { get; set; } = new List<WorkoutPlan>();
     }
 }

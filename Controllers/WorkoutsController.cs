@@ -67,7 +67,7 @@ namespace PulseFit.Management.Web.Controllers
 
             ViewBag.Spots = workout.MaxCapacity - workout.Bookings;
             ViewBag.GymImage = await _gymRepository.GetGymImageAsync(workout.GymId);
-            ViewBag.PtProfilePic = await _personalTrainerRepository.GetPtProfilePicAsync(workout.InstructorId);
+            ViewBag.PtProfilePic = await _userHelper.GetUserPicAsync(workout.InstructorId);
 
 
             return View(workout);
@@ -91,6 +91,12 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (model.WorkoutImageFile != null && model.WorkoutImageFile.Length > 2 * 1024 * 1024) 
+                {
+                    ModelState.AddModelError("WorkoutImageFile", "The file size should not exceed 2 MB.");
+                    return View(model);
+                }
+
                 var imageId = model.WorkoutImageFile != null
                     ? await _blobHelper.UploadBlobAsync(model.WorkoutImageFile, "workouts-pics")
                     : Guid.Empty;
@@ -150,11 +156,23 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (model.WorkoutImageFile != null && model.WorkoutImageFile.Length > 2 * 1024 * 1024) 
+                {
+                    ModelState.AddModelError("WorkoutImageFile", "The file size should not exceed 2 MB.");
+                    return View(model);
+                }
+
                 try
                 {
-                    var imageId = model.WorkoutImageFile != null
-                    ? await _blobHelper.UploadBlobAsync(model.WorkoutImageFile, "workouts-pics")
-                    : Guid.Empty;
+                    Guid imageId;
+                    if (model.WorkoutImageFile != null)
+                    {
+                        imageId = await _blobHelper.UploadBlobAsync(model.WorkoutImageFile, "workouts-pics");
+                    }
+                    else
+                    {
+                        imageId = model.WorkoutImageId;
+                    }
 
                     var workout = _converterHelper.ToWorkout(model, imageId, false);
 
@@ -230,7 +248,8 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Workout not found.";
+                return RedirectToAction("Details", new { id });
             }
 
             var userLoged = User.Identity.Name;
@@ -239,18 +258,24 @@ namespace PulseFit.Management.Web.Controllers
                 string userId = await _userHelper.GetUserIdByEmailAsync(userLoged);
                 var workout = await _workoutRepository.GetByIdAsync(id.Value);
 
+                if (workout == null)
+                {
+                    TempData["ErrorMessage"] = "Workout not found.";
+                    return RedirectToAction("Details", new { id });
+                }
+
                 var existingBooking = await _bookingRepository.GetBookingByUserAndWorkoutAsync(userId, workout.Id);
                 if (existingBooking != null)
                 {
-                    ViewBag.ErrorMessage = "You have already booked this workout.";
-                    return RedirectToAction("Details", new { id = workout.Id });
+                    TempData["ErrorMessage"] = "You have already booked this workout.";
+                    return RedirectToAction("Details", new { id });
                 }
 
                 var maximumCapacityReached = await _bookingRepository.WorkoutMaximumCapacityReachedAsync(workout.Id);
                 if (maximumCapacityReached)
                 {
-                    ViewBag.ErrorMessage = "Workout Maximum Capacity Reached!";
-                    return RedirectToAction("Details", new { id = workout.Id });
+                    TempData["ErrorMessage"] = "Workout maximum capacity reached!";
+                    return RedirectToAction("Details", new { id });
                 }
 
                 try
@@ -268,18 +293,19 @@ namespace PulseFit.Management.Web.Controllers
                     await _bookingRepository.CreateBookingAsync(booking);
                     await _workoutRepository.IncrementBookingsAsync(workout.Id);
 
-                    TempData["SuccessMessage"] = "Booking Confirmed!";
+                    TempData["SuccessMessage"] = "Booking confirmed!";
                 }
                 catch (Exception ex)
                 {
-                    TempData["ErrorMessage"] = ex.Message;
+                    TempData["ErrorMessage"] = "An unexpected error occurred: " + ex.Message;
                 }
 
-                return RedirectToAction("MyBookings");
+                return RedirectToAction("Details", new { id });
             }
 
             return RedirectToAction("Login", "Account");
         }
+
 
         public async Task<IActionResult> MyBookingsDetails(int? id)
         {
@@ -297,7 +323,7 @@ namespace PulseFit.Management.Web.Controllers
 
             ViewBag.Spots = workout.MaxCapacity - workout.Bookings;
             ViewBag.GymImage = await _gymRepository.GetGymImageAsync(workout.GymId);
-            ViewBag.PtProfilePic = await _personalTrainerRepository.GetPtProfilePicAsync(workout.InstructorId);
+            ViewBag.PtProfilePic = await _userHelper.GetUserPicAsync(workout.InstructorId);
 
 
             return View(workout);
@@ -362,13 +388,13 @@ namespace PulseFit.Management.Web.Controllers
                 return RedirectToAction("Details", new { id = workoutId });
             }
 
-            var ratingViewModel = new RatingViewModel
-            {
-                WorkoutId = workoutId
-            };
+        //    var ratingViewModel = new RatingViewModel
+        //    {
+        //        WorkoutId = workoutId
+        //    };
 
-            return View(ratingViewModel);
-        }
+        //    return View(ratingViewModel);
+        //}
 
         // Average Ratings
         public IActionResult GetAverageRating(int workoutId)

@@ -105,5 +105,7 @@ namespace PulseFit.Management.Web.Helpers
 
         string GetUserId();
 
+        Task<string> GetUserPicAsync(string userId);
+
     }
 }

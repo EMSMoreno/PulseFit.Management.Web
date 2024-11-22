@@ -11,15 +11,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;800&family=Montserrat:wght@400;700&family=Roboto:wght@300;500&display=swap" rel="stylesheet">
 
     <!-- Favicon -->
-    <link rel="icon" href="@Url.Content("~/images/favicon.ico")" type="image/x-icon">
+    <link rel="icon" href="@Url.Content("~/favicon.ico")" type="image/x-icon">
 
     <!-- Ícones do Bootstrap para tooltips e ajuda visual -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
 
     <!-- CSS Frameworks & Libraries -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
 
     <!-- Syncfusion CSS -->
     <link href="https://cdn.syncfusion.com/ej2/material.css" rel="stylesheet" />
@@ -33,9 +35,9 @@
     <div class="container-fluid vh-100">
         <div class="row h-100">
             <!-- Sidebar -->
-            <aside class="col-md-3 col-lg-2 bg-dark text-white h-100">
+            <aside class="col-md-3 col-lg-2 bg-dark text-white h-100 sidebar-scrollable">
                 <div class="sidebar-logo text-center py-3">
-                    <img src="@Url.Content("~/images/logo.png")" alt="PulseFit Logo" class="img-fluid" loading="lazy">
+                    <img src="@Url.Content("~/images/pulsefitlogo.png")" alt="PulseFit Logo" class="img-fluid" loading="lazy">
                 </div>
                 <nav>
                     <ul class="nav flex-column sidebar-menu">
@@ -153,6 +155,36 @@
                             </li>
                         }
 
+                        <!-- Equipments, Online Classes, and Workout Plans -->
+                        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                        {
+                            <li class="nav-item">
+                                <a href="#" class="nav-link text-white" data-toggle="submenu" aria-label="Equipments">
+                                    <i class="fas fa-cogs me-2"></i>Equipments
+                                </a>
+                                <ul class="submenu list-unstyled ms-4">
+                                    <li><a href="/Equipments/Index" class="nav-link text-white" aria-label="View Equipments">View Equipments</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link text-white" data-toggle="submenu" aria-label="Online Classes">
+                                    <i class="fas fa-video me-2"></i>Online Classes
+                                </a>
+                                <ul class="submenu list-unstyled ms-4">
+                                    <li><a href="/OnlineClasses/Index" class="nav-link text-white" aria-label="View Online Classes">View Online Classes</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link text-white" data-toggle="submenu" aria-label="Workout Plans">
+                                    <i class="fas fa-dumbbell me-2"></i>Workout Plans
+                                </a>
+                                <ul class="submenu list-unstyled ms-4">
+                                    <li><a href="/WorkoutPlans/Index" class="nav-link text-white" aria-label="View Workout Plans">View Workout Plans</a></li>
+                                </ul>
+                            </li>
+                        }
+
+
                         <!-- My Workouts for Clients -->
                         @if (User.IsInRole("Client"))
                         {
@@ -221,6 +253,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- JavaScript Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

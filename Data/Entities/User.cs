@@ -19,7 +19,7 @@ namespace PulseFit.Management.Web.Data.Entities
 
         public string ProfilePictureUrl => ProfilePictureId == null
             ? "/images/noimage.png"
-            : $"/uploads/profile-pics/{ProfilePictureId}.jpg";
+            : $"/uploads/personaltrainers-pics/{ProfilePictureId}.jpg";
 
         [Display(Name = "Date Created")]
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;

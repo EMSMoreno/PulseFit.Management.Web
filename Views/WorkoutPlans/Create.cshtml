@@ -1,6 +1,7 @@
 ﻿@model PulseFit.Management.Web.Models.WorkoutPlanViewModel
 
 @{
+    Layout = "_Dashboard";
     ViewData["Title"] = "Create Workout Plan";
 }
 
@@ -36,14 +37,14 @@
     <div class="row mb-3">
         <div class="col-md-6">
             <label asp-for="WorkoutPlanType" class="text-neon-pink">Workout Type <span class="text-danger">*</span></label>
-            <select asp-for="WorkoutPlanType" class="form-control input-neon" asp-items="ViewBag.Type">
+            <select asp-for="WorkoutPlanType" class="form-control input-neon" asp-items="ViewBag.Type" required>
                 <option value="">Select a Type ...</option>
             </select>
             <span asp-validation-for="WorkoutPlanType" class="text-warning"></span>
         </div>
         <div class="col-md-6">
             <label asp-for="Difficulty" class="text-neon-pink">Difficulty <span class="text-danger">*</span></label>
-            <select asp-for="Difficulty" class="form-control input-neon" asp-items="ViewBag.Difficulty">
+            <select asp-for="Difficulty" class="form-control input-neon" asp-items="ViewBag.Difficulty" required>
                 <option value="">Select a Difficulty ...</option>
             </select>
             <span asp-validation-for="Difficulty" class="text-warning"></span>
@@ -63,19 +64,17 @@
         </div>
     </div>
 
-    <h4 class="text-neon-green mt-4">Select Equipments</h4>
-    <div class="row">
+    <h4 class="text-neon-pink">Select Equipments</h4>
+    <div class="row mb-4">
         @foreach (var equipment in Model.Equipments)
         {
-            <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
-                <div class="card card-neon-specialization p-2" style="cursor: pointer;">
-                    <div class="card-img-wrapper d-flex align-items-center justify-content-center">
-                        <img src="@equipment.ImageUrl" class="card-img-top" alt="@equipment.Text">
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-2">
+                <div class="card-neon specialty-card p-2 text-center" style="cursor: pointer;">
+                    <div class="card-img-wrapper d-flex align-items-center justify-content-center mb-2" style="height: 120px;">
+                        <img src="@equipment.ImageUrl" alt="@equipment.Text" class="img-fluid" style="max-height: 100%; object-fit: contain;" />
                     </div>
-                    <div class="card-body text-center">
-                        <small class="text-light">@equipment.Text</small>
-                        <input type="checkbox" name="EquipmentsIds" value="@equipment.Value" class="form-check-input mt-2 d-none" id="equipment-@equipment.Value" />
-                    </div>
+                    <small class="text-truncate">@equipment.Text</small>
+                    <input type="checkbox" name="EquipmentIds" value="@equipment.Value" class="form-check-input mt-2" id="specialty-@equipment.Value" style="display: none;" />
                 </div>
             </div>
         }
@@ -93,9 +92,10 @@
 
     <script>
         setupImageUploadPreview("workoutPlanPictureUpload", "imagePreview");
+        setupSweetAlertOnSubmit("createWorkoutPlanForm", "Workout Plan created successfully.", "Please correct the errors in the form.");
 
         // Interactive card selection for equipments
-        $(".card-neon-specialization").on("click", function () {
+        $(".specialty-card").on("click", function () {
             var checkbox = $(this).find("input[type='checkbox']");
             checkbox.prop("checked", !checkbox.prop("checked"));
             $(this).toggleClass("selected-card");
@@ -104,16 +104,18 @@
 }
 
 <style>
-    .card-neon-specialization {
-        border: 1px solid var(--neon-pink);
-        transition: border-color 0.3s, box-shadow 0.3s;
-        border-radius: 10px;
+    .specialty-card {
+        transition: border 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 5px;
+        background-color: var(--light-bg);
+        border: 1px solid var(--neon-blue);
     }
 
-        .card-neon-specialization.selected-card {
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 10px var(--neon-blue);
-        }
+    .specialty-card.selected-card {
+        border-color: var(--neon-pink);
+        box-shadow: 0 0 10px rgba(233, 53, 113, 0.5);
+    }
+
 
     .card-img-wrapper {
         height: 100px;
@@ -129,4 +131,5 @@
     .neon-outline {
         box-shadow: 0 0 10px var(--neon-pink);
     }
+
 </style>

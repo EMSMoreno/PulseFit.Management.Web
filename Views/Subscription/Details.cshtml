@@ -85,14 +85,14 @@
                     {
                         <li class="list-group-item">Included Workouts: @string.Join(", ", Model.SelectedWorkoutIds)</li>
                     }
-                    @if (Model.SelectedNutritionPlanIds?.Count > 0)
-                    {
-                        <li class="list-group-item">Nutrition Plans: @string.Join(", ", Model.SelectedNutritionPlanIds)</li>
-                    }
-                    @if (Model.SelectedOnlineClassIds?.Count > 0)
-                    {
-                        <li class="list-group-item">Online Classes: @string.Join(", ", Model.SelectedOnlineClassIds)</li>
-                    }
+                    <li class="list-group-item">
+                        Online Classes:
+                        <strong class="text-neon-green ms-auto">@((Model.IncludeOnlineClasses ? "Yes" : "No"))</strong>
+                    </li>
+                    <li class="list-group-item">
+                        Nutrition Plans:
+                        <strong class="text-neon-green ms-auto">@((Model.IncludeNutritionPlans ? "Yes" : "No"))</strong>
+                    </li>
                 </ul>
 
                 <!-- Subscribe Now Button -->
@@ -130,6 +130,57 @@
     .text-neon-yellow {
         color: var(--neon-yellow);
     }
+
+    /* Ajustes de Alinhamento */
+    .ms-auto {
+        margin-left: auto;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    /* Melhorando o alinhamento de itens na lista */
+    .list-group-item {
+        display: flex;
+        justify-content: space-between; /* Garante que o texto e o valor fiquem nas extremidades */
+        align-items: center; /* Alinha verticalmente */
+    }
+
+        /* Alinha as labels de "Nutrition Plans" e "Online Classes" à esquerda e os valores à direita */
+        .list-group-item strong {
+            text-align: right;
+        }
+
+    /* Para os ícones de info, manter eles alinhados corretamente */
+    .bi-info-circle {
+        vertical-align: middle;
+    }
+
+    /* Ajuste nas margens e padding para uma aparência mais limpa */
+    .list-group-item i {
+        margin-left: 5px;
+    }
+
+    h3.price {
+        font-size: 2.5rem;
+        color: var(--neon-green);
+        font-weight: 700;
+        margin-bottom: 1rem; /* Espaço extra abaixo do preço */
+    }
+
+    h4.text-neon-yellow {
+        margin-top: 1.5rem;
+        font-size: 1.4rem; /* Ajuste do tamanho das fontes */
+    }
+
+    /* Adiciona alguma margem nos itens da lista */
+    .list-group-item:not(:last-child) {
+        margin-bottom: 10px;
+    }
+
+
+
 </style>
 
 <script>

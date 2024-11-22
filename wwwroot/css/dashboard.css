@@ -17,7 +17,10 @@ body {
     min-height: 100vh;
 }
 
-
+.container, .container-fluid {
+    width: 100% !important; 
+    max-width: 100% !important; 
+}
 
 /* Sidebar */
 .sidebar {
@@ -34,7 +37,7 @@ body {
 }
 
     .sidebar::-webkit-scrollbar {
-        display: none; /* Oculta a barra de rolagem no WebKit */
+        display: none; 
     }
 
 .sidebar-logo {
@@ -71,8 +74,19 @@ body {
                 background-color: var(--neon-pink, #E93571);
                 color: #00e0ff;
                 border-radius: 5px;
-                transform: translateX(5px); /* Movimento leve à direita */
+                transform: translateX(5px); 
             }
+
+.sidebar-scrollable {
+    overflow-y: auto;
+    overflow-x: hidden; 
+    max-height: 100vh; 
+    scrollbar-width: none;
+}
+
+    .sidebar-scrollable::-webkit-scrollbar {
+        display: none; 
+    }
 
 
 /* Breadcrumb */

@@ -64,6 +64,44 @@
         @await Html.PartialAsync("_Search")
     </footer>
 
+    <!-- Modal -->
+    <div id="blackFridaySpecial" class="modal fade black-friday-modal" tabindex="-1" aria-labelledby="blackFridayModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Close Icon -->
+                <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+                <div class="modal-body text-center">
+                    <!-- Title -->
+                    <div class="modal-title">
+                        <h1 class="black-friday-title">
+                            <span class="black-text">BLACK</span><br>
+                            <span class="friday-text">FridaY</span>
+                        </h1>
+                    </div>
+
+                    <!-- Animated Banner -->
+                    <div class="black-friday-banner">
+                        <p class="neon-highlight">BIGGEST SALE OF THE YEAR</p>
+                        <p class="black-friday-percentage">50% OFF</p>
+                    </div>
+
+                    <!-- Description -->
+                    <p class="black-friday-description">
+                        Don’t miss this exclusive offer! Upgrade your fitness journey with <strong>HALF PRICE</strong> subscription. Limited time only!
+                    </p>
+
+                    <!-- Button -->
+                    <a href="@Url.Action("Index", "Subscription")" class="btn black-friday-button">
+                        <i class="fas fa-bolt"></i> Grab the Deal Now!
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
     <!-- Template JS Plugins -->
     <script src="~/js/jquery-3.3.1.min.js"></script>
     <script src="~/js/bootstrap.min.js"></script>
@@ -104,6 +142,30 @@
         });
 
     </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const modalId = 'blackFridaySpecial';
+
+            // Check if the modal has already been shown in this session
+            const modalShown = sessionStorage.getItem('modalShown');
+
+            if (!modalShown) {
+                // Show the modal
+                var blackFridayModal = new bootstrap.Modal(document.getElementById(modalId), {
+                    backdrop: 'static', // Prevent close on backdrop click
+                    keyboard: true // Allow close with ESC
+                });
+                blackFridayModal.show();
+
+                // Mark the modal as shown
+                sessionStorage.setItem('modalShown', 'true');
+            }
+        });
+    </script>
+
+
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
@@ -134,4 +196,106 @@
     }
  */
 
+    /* Black Friday */
+    .black-friday-modal .modal-dialog {
+        max-width: 700px;
+    }
+
+    .black-friday-modal .modal-content {
+        background-color: var(--dark-bg); /* Dark background */
+        border: 4px solid var(--neon-pink); /* Neon border */
+        border-radius: 20px;
+        padding: 30px;
+        position: relative;
+    }
+
+    /* Close Button */
+    .btn-close-custom {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 30px;
+        color: var(--light-text);
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-close-custom:hover {
+        color: var(--neon-pink);
+    }
+
+    /* Title */
+    .black-friday-title {
+        font-family: 'Raleway', sans-serif;
+        font-weight: 900;
+        margin-bottom: 30px;
+    }
+
+    .black-text {
+        font-size: 4.5rem; /* Larger font for BLACK */
+        color: var(--neon-pink);
+        text-shadow: 0px 0px 20px var(--neon-pink);
+    }
+
+    .friday-text {
+        font-size: 4rem; /* Slightly smaller font for FridaY */
+        color: var(--neon-blue);
+        text-shadow: 0px 0px 20px var(--neon-blue);
+    }
+
+    /* Banner */
+    .black-friday-banner {
+        background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        animation: glow 3s infinite;
+    }
+
+    .neon-highlight {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--neon-green);
+        text-transform: uppercase;
+    }
+
+    .black-friday-percentage {
+        font-size: 3rem;
+        font-weight: 800;
+        color: var(--neon-yellow);
+        margin-top: 10px;
+    }
+
+
+
+    /* Description */
+    .black-friday-description {
+        font-size: 1.3rem;
+        color: var(--light-text);
+        margin-bottom: 30px;
+    }
+
+    /* Button */
+    .black-friday-button {
+        padding: 20px 40px;
+        font-size: 1.6rem;
+        font-weight: bold;
+        color: #000; /* Cor do texto preta */
+        -webkit-text-fill-color: #000; /* Define a cor do texto preto */
+        background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
+        border: none;
+        border-radius: 10px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+
+    .black-friday-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 30px var(--neon-pink), 0 0 30px var(--neon-blue);
+        color: var(--light-text);
+    }
     </style>

@@ -143,6 +143,13 @@ namespace PulseFit.Management.Web.Helpers
             return await _employeeRepository.GetEmployeeByUserIdAsync(user.Id); // Search for the employee by UserId
         }
 
+        public async Task<string> GetUserPicAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            return user.ProfilePictureUrl;
+        }
+
         // Optional: Uncomment if needed for specific notifications
         // public async Task NotifySecretaryPendingUserAsync(User user)
         // {

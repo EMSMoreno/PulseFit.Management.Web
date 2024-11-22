@@ -45,9 +45,9 @@ namespace PulseFit.Management.Web.Data.Entities
         public List<Equipment> Equipments { get; set; } = new List<Equipment>();
 
         [Display(Name = "Workout Image")]
-        public Guid? WorkoutPlanImageId { get; set; }
+        public Guid WorkoutPlanImageId { get; set; }
 
-        public string WorkoutPlanImageUrl => WorkoutPlanImageId == null
+        public string WorkoutPlanImageUrl => WorkoutPlanImageId == Guid.Empty
             ? "/images/noimage.png"
             : $"/uploads/workoutsPlans-pics/{WorkoutPlanImageId}.jpg";
     }

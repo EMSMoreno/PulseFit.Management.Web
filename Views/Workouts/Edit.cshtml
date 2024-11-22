@@ -1,6 +1,7 @@
 ﻿@model PulseFit.Management.Web.Models.WorkoutViewModel
 
 @{
+    Layout = "_Dashboard";
     ViewData["Title"] = "Edit Workout";
 }
 
@@ -64,7 +65,7 @@
     <div class="row mb-2">
         <div class="col-md-6">
             <label asp-for="InstructorId" class="text-neon-pink">Instructors</label>
-            <select asp-for="InstructorId" class="form-control input-neon" asp-items="ViewBag.Instructors">
+            <select asp-for="InstructorId" class="form-control input-neon" asp-items="ViewBag.Instructors" required>
                 <option value="">Select Instructor ...</option>
             </select>
             <span asp-validation-for="InstructorId" class="text-warning"></span>
@@ -79,15 +80,19 @@
     <div class="row mb-2">
         <div class="col-md-6">
             <label asp-for="GymId" class="text-neon-pink">Gyms</label>
-            <select asp-for="GymId" class="form-control input-neon" asp-items="ViewBag.GymId">
+            <select asp-for="GymId" class="form-control input-neon" asp-items="ViewBag.GymId" required>
                 <option value="">Select Gym ...</option>
             </select>
             <span asp-validation-for="GymId" class="text-warning"></span>
         </div>
         <div class="col-md-6">
             <label asp-for="Type" class="text-neon-pink">Workout Type <span class="text-danger">*</span></label>
-            <select asp-for="Type" class="form-select input-neon" asp-items="ViewBag.Type" id="TypeSelect">
-                <option value="">Select a Type ...</option>
+            <select asp-for="Type" class="form-select input-neon" id="TypeSelect" required>
+                <option value="">Select a Type...</option>
+                @foreach (var type in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.Workout.WorkoutType)))
+                {
+                    <option value="@type">@type</option>
+                }
             </select>
             <span asp-validation-for="Type" class="text-warning"></span>
         </div>
@@ -102,16 +107,24 @@
         </div>
         <div class="col-md-6" id="GroupTypeGroup" style="display:none;">
             <label asp-for="GroupType" class="text-neon-pink"></label>
-            <select asp-for="GroupType" class="form-control input-neon" asp-items="ViewBag.GroupType">
-                <option value="">Select Group Type ...</option>
+            <select asp-for="GroupType" class="form-select input-neon">
+                <option value="">Select a Group Type...</option>
+                @foreach (var grType in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.Workout.GroupWorkoutType)))
+                {
+                    <option value="@grType">@grType</option>
+                }
             </select>
             <span asp-validation-for="GroupType" class="text-warning"></span>
         </div>
 
         <div class="col-md-6" id="IndividualTypeGroup" style="display:none;">
             <label asp-for="IndividualType" class="text-neon-pink"></label>
-            <select asp-for="IndividualType" class="form-control input-neon" asp-items="ViewBag.IndividualType">
-                <option value="">Select Individual Type ...</option>
+            <select asp-for="IndividualType" class="form-select input-neon">
+                <option value="">Select a Individual Type...</option>
+                @foreach (var indType in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.Workout.IndividualWorkoutType)))
+                {
+                    <option value="@indType">@indType</option>
+                }
             </select>
             <span asp-validation-for="IndividualType" class="text-warning"></span>
         </div>
@@ -132,8 +145,6 @@
         setupImageUploadPreview("workoutPictureUpload", "imagePreview");
         setupSweetAlertOnSubmit("editWorkoutForm", "Workout edited successfully.", "Please correct the errors in the form.");
     </script>
-
-
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

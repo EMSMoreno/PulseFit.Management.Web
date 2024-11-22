@@ -17,6 +17,8 @@ body {
   margin-bottom: 60px;
 }
 
+
+
 /*Error Styles - Forbidden Page and 404 Not Found*/
 
 
@@ -521,5 +523,15 @@ h4, h5, h6 {
 
     nav.menu-items {
         font-size: 12; /* Ajuste para os itens do menu */
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 15px var(--neon-pink), 0 0 15px var(--neon-blue);
+    }
+
+    50% {
+        box-shadow: 0 0 30px var(--neon-pink), 0 0 30px var(--neon-blue);
     }
 }
