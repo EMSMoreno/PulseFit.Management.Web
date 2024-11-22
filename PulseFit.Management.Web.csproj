@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Errors\AccessDenied.cshtml" />
     <Content Remove="wwwroot\js\dashboard.js" />
     <Content Remove="wwwroot\js\formHelpers.js" />
     <Content Remove="wwwroot\uploads\employees-pics\9e83c348-5d91-4f69-9b85-6cbb17e1591c" />
@@ -19,7 +18,6 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="appsettings.json" />
-    <_ContentIncludedByDefault Remove="Views\Errors\AccessDenied.cshtml" />
     <_ContentIncludedByDefault Remove="wwwroot\css\variables.css" />
     <_ContentIncludedByDefault Remove="wwwroot\images\pulsefitlogo.png" />
     <_ContentIncludedByDefault Remove="wwwroot\js\dashboard.js" />
@@ -61,13 +59,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\Errors\AccessDenied.cshtml" />
     <None Include="wwwroot\js\dashboard.js" />
     <None Include="wwwroot\js\formHelpers.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Errors\AccessDenied.cshtml" />
   </ItemGroup>
 
 </Project>

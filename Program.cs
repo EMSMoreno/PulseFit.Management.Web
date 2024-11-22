@@ -92,10 +92,13 @@ Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQx
 // Configuração do pipeline de requisições HTTP
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Errors/Error"); // Rota para erros genéricos
-    app.UseStatusCodePagesWithReExecute("/Errors/{0}"); // Rota para erros específicos, ex: 404
+    // Redirects to general error page
+    app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
+
+// Configuration for specific HTTP status codes
+app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
 
 // Configuração de redirecionamento e arquivos estáticos

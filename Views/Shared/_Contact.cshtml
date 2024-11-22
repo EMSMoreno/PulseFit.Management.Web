@@ -31,7 +31,12 @@
                         <input type="text" placeholder="Email">
                         <input type="text" placeholder="Website">
                         <textarea placeholder="Comment"></textarea>
-                        <button type="submit">Submit</button>
+                        <button type="submit" class="btn-contact"
+                                style="background: #E200FE; color: #FFFFFF; border: none; padding: 10px 20px; border-radius: 6px; font-family: 'Montserrat', sans-serif; font-size: 16px; cursor: pointer; transition: background 0.3s ease, transform 0.2s ease;"
+                                onmouseover="this.style.background='#E93571'; this.style.transform='translateY(-2px)';"
+                                onmouseout="this.style.background='#E200FE'; this.style.transform='translateY(0)';">
+                            Submit
+                        </button>
                     </form>
                 </div>
             </div>
@@ -41,3 +46,25 @@
         </div>
     </div>
 </section>
+
+@* 
+<style>
+    .btn-contact {
+        background: var(--neon-purple); /* Cor de fundo principal */
+        color: var(--btn-text-purple); /* Cor do texto */
+        border: none;
+        padding: 10px 20px;
+        border-radius: var(--border-radius-md); /* Borda arredondada */
+        cursor: pointer;
+        font-family: var(--font-accent); /* Fonte consistente */
+        font-size: 16px;
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+        .btn-contact:hover {
+            background: var(--neon-pink); /* Cor ao passar o mouse */
+            transform: translateY(-2px); /* Efeito de elevação */
+        }
+
+
+</style> *@

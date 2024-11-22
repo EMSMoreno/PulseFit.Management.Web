@@ -988,12 +988,13 @@ ol {
 
 .gettouch-section {
 	background: var(--dark-bg);
-	padding: 30px 0 15px;
+	padding: 150px 0 15px;
 }
 
 .gt-text {
 	overflow: hidden;
-	margin-bottom: 30px;
+	margin-bottom: 10px;
+	margin-top:50px;
 }
 
 	.gt-text i {
@@ -1296,13 +1297,14 @@ ol {
 
 .testimonial-section {
 	background: #151515;
+	padding: 60px 0; /* Espaçamento externo */
 }
 
-.ts_slider.owl-carousel .owl-item img {
+.ts-slider.owl-carousel .owl-item img {
 	display: inline-block;
 }
 
-.ts_slider.owl-carousel .owl-nav button {
+.ts-slider.owl-carousel .owl-nav button {
 	height: 46px;
 	width: 46px;
 	color: #a9a9a9;
@@ -1313,43 +1315,102 @@ ol {
 	position: absolute;
 	left: 30px;
 	top: 50%;
-	-webkit-transform: translateY(-23px);
-	-ms-transform: translateY(-23px);
-	transform: translateY(-23px);
+	transform: translateY(-50%);
+	border-radius: 50%; /* Botões circulares */
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	cursor: pointer;
+	transition: all 0.3s;
 }
 
-.ts_slider.owl-carousel .owl-nav button.owl-next {
-	left: auto;
-	right: 30px;
+	.ts-slider.owl-carousel .owl-nav button:hover {
+		color: #ffffff;
+		background: rgba(255, 255, 255, 0.2);
+	}
+
+	.ts-slider.owl-carousel .owl-nav button.owl-next {
+		left: auto;
+		right: 30px;
+	}
+
+.ts-slider .ts-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	text-align: center;
+	margin: 20px;
+	padding: 0; /* Remove padding interno */
+	border: 1px solid rgba(255, 255, 255, 0.1); /* Contorno leve */
+	border-radius: 15px;
+	background: rgba(255, 255, 255, 0.05); /* Leve transparência */
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+	overflow: hidden; /* Esconde conteúdos fora do limite */
+	transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.ts_slider .ts_item .ti_pic {
-	margin-bottom: 32px;
+	.ts-slider .ts-item:hover {
+		transform: translateY(-5px); /* Animação hover */
+		box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+	}
+
+	.ts-slider .ts-item .ti-pic {
+		width: 100%;
+		height: 50%; /* Imagem ocupa metade do card */
+		overflow: hidden;
+	}
+
+		.ts-slider .ts-item .ti-pic img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover; /* Garante que a imagem cobre todo o espaço */
+		}
+
+	.ts-slider .ts-item .ti-text {
+		flex: 1;
+		padding: 20px 20px; /* Espaçamento interno para texto */
+	}
+
+		.ts-slider .ts-item .ti-text p {
+			color: #fefefe;
+			font-size: 14px;
+			line-height: 1.6;
+			margin-bottom: 20px;
+		}
+
+		.ts-slider .ts-item .ti-text h5 {
+			color: #ffffff;
+			font-weight: bold;
+			text-transform: uppercase;
+			font-size: 18px;
+			margin-bottom: 10px;
+		}
+
+		.ts-slider .ts-item .ti-text .tt-rating {
+			display: flex;
+			justify-content: center;
+			gap: 5px; /* Espaçamento entre estrelas */
+		}
+
+			.ts-slider .ts-item .ti-text .tt-rating i {
+				font-size: 16px;
+				color: #ffc107; /* Amarelo visível para estrelas */
+			}
+
+/* Responsividade */
+@media (max-width: 768px) {
+	.ts-slider .ts-item {
+		padding: 0;
+	}
+
+		.ts-slider .ts-item .ti-text p {
+			font-size: 13px;
+		}
+
+		.ts-slider .ts-item .ti-pic {
+			height: 40%; /* Ajusta proporção em telas menores */
+		}
 }
 
-.ts_slider .ts_item .ti_pic img {
-	height: 200px;
-	width: 200px;
-	border-radius: 50%;
-}
-
-.ts_slider .ts_item .ti_text p {
-	color: #fefefe;
-	letter-spacing: 1px;
-	margin-bottom: 20px;
-}
-
-.ts_slider .ts_item .ti_text h5 {
-	color: #ffffff;
-	font-weight: 600;
-	text-transform: uppercase;
-	margin-bottom: 8px;
-}
-
-.ts_slider .ts_item .ti_text .tt-rating i {
-	font-size: 12px;
-	color: #d49d09;
-}
 
 /*---------------------
   Services Section
@@ -2498,12 +2559,13 @@ ol {
 -----------------------*/
 
 .contact-section {
-	background: #151515;
+	background: var(--dark-bg);
 }
 
 .section-title.contact-title {
 	text-align: left;
 	margin-bottom: 35px;
+	color: var(--light-text);
 }
 
 .contact-widget .cw-text {
@@ -2511,69 +2573,71 @@ ol {
 	margin-bottom: 35px;
 }
 
-.contact-widget .cw-text i {
-	font-size: 30px;
-	color: #f36100;
-	display: inline-block;
-	height: 65px;
-	width: 65px;
-	background: #363636;
-	border-radius: 50%;
-	line-height: 65px;
-	text-align: center;
-	float: left;
-	margin-right: 20px;
-}
+	.contact-widget .cw-text i {
+		font-size: 30px;
+		color: var(--neon-purple);
+		display: inline-block;
+		height: 65px;
+		width: 65px;
+		background: var(--light-bg);
+		border-radius: 50%;
+		line-height: 65px;
+		text-align: center;
+		float: left;
+		margin-right: 20px;
+	}
 
-.contact-widget .cw-text p {
-	overflow: hidden;
-	color: #c4c4c4;
-	margin-bottom: 0;
-	padding-top: 10px;
-}
+	.contact-widget .cw-text p {
+		overflow: hidden;
+		color: var(--light-text);
+		margin-bottom: 0;
+		padding-top: 10px;
+	}
 
-.contact-widget .cw-text ul {
-	overflow: hidden;
-	padding-top: 20px;
-}
+	.contact-widget .cw-text ul {
+		overflow: hidden;
+		padding-top: 20px;
+	}
 
-.contact-widget .cw-text ul li {
-	list-style: none;
-	font-size: 14px;
-	color: #c4c4c4;
-	margin-right: 25px;
-	display: inline-block;
-	position: relative;
-}
+		.contact-widget .cw-text ul li {
+			list-style: none;
+			font-size: 14px;
+			color: var(--light-text);
+			margin-right: 25px;
+			display: inline-block;
+			position: relative;
+		}
 
-.contact-widget .cw-text ul li:after {
-	position: absolute;
-	right: -18px;
-	top: 0;
-	content: "|";
-	color: #545454;
-}
+			.contact-widget .cw-text ul li:after {
+				position: absolute;
+				right: -18px;
+				top: 0;
+				content: "|";
+				color: var(--border-color);
+			}
 
-.contact-widget .cw-text ul li:last-child {
-	margin-right: 0;
-}
+			.contact-widget .cw-text ul li:last-child {
+				margin-right: 0;
+			}
 
-.contact-widget .cw-text ul li:last-child:after {
-	display: none;
-}
+				.contact-widget .cw-text ul li:last-child:after {
+					display: none;
+				}
 
-.contact-widget .cw-text.email p {
-	padding-top: 20px;
-}
+	.contact-widget .cw-text.email p {
+		padding-top: 20px;
+	}
 
 .map {
 	height: 550px;
 	margin-top: 35px;
 }
 
-.map iframe {
-	width: 100%;
-}
+	.map iframe {
+		width: 100%;
+		border: none; /* Remove qualquer borda para um design mais limpo */
+	}
+
 
 /*---------------------
   404 Section

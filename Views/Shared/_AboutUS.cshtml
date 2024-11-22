@@ -4,9 +4,10 @@
             <!-- Video Section -->
             <div class="col-lg-6 p-0">
                 <div class="about-video set-bg" data-setbg="@Url.Content("~/img/about-pulsefit.jpg")">
-                    <a href="https://www.youtube.com/watch?v=EzKkl64rRbM" class="play-btn video-popup" aria-label="Watch PulseFit Introduction Video">
+                    <a href="https://www.youtube.com/watch?v=NyP_waVgL1w" class="play-btn video-popup" aria-label="Watch PulseFit Introduction Video">
                         <i class="fa fa-caret-right"></i>
                     </a>
+                    <img src="https://img.youtube.com/vi/NyP_waVgL1w/maxresdefault.jpg" alt="PulseFit Video Thumbnail" class="video-thumbnail">
                 </div>
             </div>
 
@@ -54,9 +55,112 @@
                             </div>
                         </div>
                     </div>
-                    <a href="@Url.Action("Memberships", "Home")" class="btn btn-primary mt-4" aria-label="Explore Membership Options">Explore Memberships</a>
+                    <a href="@Url.Action("Memberships", "Home")" class="btn btn-primary mt-4 explore-btn" aria-label="Explore Membership Options">Explore Memberships</a>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<style>
+    .aboutus-section {
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Evita que elementos saiam da seção */
+        background-color: black;
+    }
+
+    .about-video {
+        height: 640px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .about-video .play-btn {
+            display: inline-block;
+            height: 70px;
+            width: 70px;
+            background: #00ffff; /* Neon blue */
+            border-radius: 50%;
+            line-height: 70px;
+            text-align: center;
+            font-size: 36px;
+            color: #ffffff;
+            box-shadow: 0 0 15px #00ffff, 0 0 30px #00ffff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+            .about-video .play-btn:hover {
+                transform: scale(1.1);
+                box-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff;
+            }
+
+        .about-video .video-thumbnail {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+    .about-text {
+        background: #000000;
+        padding: 50px 40px;
+        color: #fff;
+        height: 100%; /* Garante altura consistente */
+    }
+
+        .about-text .section-title {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .about-text .at-desc p {
+            color: #c4c4c4;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+    .about-bar .ab-item {
+        margin-bottom: 34px;
+    }
+
+        .about-bar .ab-item p {
+            color: #ffffff;
+            margin-bottom: 13px;
+        }
+
+        .about-bar .ab-item .barfiller {
+            background: #2d2d2d;
+            height: 5px;
+            border: none;
+            margin-bottom: 0;
+        }
+
+    .explore-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        text-transform: uppercase;
+        font-weight: bold;
+        background-color: #00ffff;
+        color: #000;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .explore-btn:hover {
+            background-color: #008b8b;
+            color: #fff;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+        }
+</style>
