@@ -12,13 +12,8 @@ using PulseFit.Management.Web.Data;
 namespace PulseFit.Management.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-<<<<<<<< HEAD:Migrations/20241122134110_InitialCreate.Designer.cs
-    [Migration("20241122134110_InitialCreate")]
-    partial class InitialCreate
-========
-    [Migration("20241122000031_Teste2")]
-    partial class Teste2
->>>>>>>> a99b89ca75cf771344daa371c9bb918c63d53f91:Migrations/20241122000031_Teste2.Designer.cs
+    [Migration("20241122145159_UpdatedDb")]
+    partial class UpdatedDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

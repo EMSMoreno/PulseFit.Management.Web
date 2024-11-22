@@ -2,7 +2,8 @@
 
 @{
     Layout = "_Dashboard";
-    ViewData["Title"] = "Workout Plans List";
+    ViewBag.PageTitle = "Nutritionist";
+    ViewBag.SubPageTitle = "Index";
 }
 
 <h2 class="title-neon mt-4">Workout Plans List</h2>
@@ -13,7 +14,7 @@
 
 @if (!Model.Any())
 {
-    <div class="alert alert-neon text-center">No Workout Plans found.</div>
+    <div class="alert-neon text-center">No Workout Plans found.</div>
 }
 else
 {
@@ -81,41 +82,4 @@ else
         padding: 10px;
     }
 
-    .text-neon {
-        color: var(--neon-blue);
-    }
-
-    .border-neon {
-        border-color: var(--neon-green);
-        border-width: 2px;
-    }
-
-    .btn-neon-pink {
-        transition: box-shadow 0.3s ease;
-        font-size: 1.1rem;
-    }
-
-        .btn-neon-pink:hover {
-            box-shadow: 0 0 10px var(--neon-pink);
-        }
-
-    .neon-outline {
-        box-shadow: 0 0 10px var(--neon-pink);
-        border-radius: 15px;
-    }
-
-    h3 {
-        font-family: 'Montserrat', sans-serif;
-        font-weight: bold;
-        color: var(--neon-green);
-    }
-
-    .alert-neon {
-        background-color: rgba(28, 28, 28, 0.8);
-        border: 1px solid var(--neon-purple);
-        border-radius: 10px;
-        padding: 15px;
-        color: var(--neon-blue);
-        font-weight: bold;
-    }
 </style>

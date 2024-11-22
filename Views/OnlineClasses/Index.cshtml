@@ -2,7 +2,8 @@
 
 @{
     Layout = "_Dashboard";
-    ViewData["Title"] = "Online Classes";
+    ViewBag.PageTitle = "Online Class";
+    ViewBag.SubPageTitle = "Index";
 }
 
 <h2 class="title-neon mt-4">Online Classes</h2>
@@ -67,29 +68,5 @@
         border: 1px solid var(--neon-purple);
         border-radius: 10px;
         padding: 10px;
-    }
-
-    .text-neon {
-        color: var(--neon-blue);
-    }
-
-    .border-neon {
-        border-color: var(--neon-green);
-        border-width: 2px;
-    }
-
-    .btn-neon-pink {
-        transition: box-shadow 0.3s ease;
-        font-size: 1.1rem;
-    }
-
-        .btn-neon-pink:hover {
-            box-shadow: 0 0 10px var(--neon-pink);
-        }
-
-    h3 {
-        font-family: 'Montserrat', sans-serif;
-        font-weight: bold;
-        color: var(--neon-green);
     }
 </style>

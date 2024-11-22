@@ -2,7 +2,8 @@
 
 @{
     Layout = "_Dashboard";
-    ViewData["Title"] = "Workouts List";
+    ViewBag.PageTitle = "Workout";
+    ViewBag.SubPageTitle = "Index";
 }
 
 <h2 class="title-neon mt-4">Available Workouts</h2>
@@ -13,7 +14,7 @@
 
 @if (!Model.Any())
 {
-    <div class="alert alert-info">No workouts found.</div>
+    <div class="alert-neon text-center">No workouts found.</div>
 }
 else
 {
@@ -42,45 +43,3 @@ else
         </div>
     </div>
 }
-
-<style>
-    /* Card Styles */
-    .card-neon {
-        background-color: var(--light-bg);
-        border: 1px solid var(--neon-pink);
-        border-radius: 12px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-        .card-neon:hover {
-            transform: scale(1.03);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            border-color: var(--neon-blue);
-        }
-
-    .card-img-top {
-        border-bottom: 3px solid var(--neon-pink);
-    }
-
-    .text-neon {
-        color: var(--neon-blue);
-    }
-
-    /* Buttons */
-    .btn-neon-blue, .btn-neon-pink {
-        border-radius: 8px;
-        font-weight: bold;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-        .btn-neon-blue:hover {
-            background-color: var(--dark-bg);
-            color: var(--neon-blue);
-        }
-
-        .btn-neon-pink:hover {
-            background-color: var(--dark-bg);
-            color: var(--neon-pink);
-        }
-</style>

@@ -3,7 +3,8 @@
 
 @{
     Layout = "_Dashboard";
-    ViewData["Title"] = "Gyms List";
+    ViewBag.PageTitle = "Gym";
+    ViewBag.SubPageTitle = "Index";
 
     var formattedGyms = Model.Select(gym => new
     {

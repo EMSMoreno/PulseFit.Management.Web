@@ -5,16 +5,12 @@
             <div class="col-lg-3">
                 <div class="logo">
                     <a asp-area="" asp-controller="Home" asp-action="Index">
-<<<<<<< HEAD
-                        <img src="~/images/PulseFit Logo.png" alt="PulseFit Logo" style="max-width: 90px; height: auto;">>
-=======
                         <img src="~/images/pulsefitlogo.png" alt="PulseFit Logo" style="height: 50px;">
->>>>>>> a99b89ca75cf771344daa371c9bb918c63d53f91
                     </a>
                 </div>
             </div>
 
-            <!-- Main Navegation -->
+            <!-- Navegação Principal -->
             <div class="col-lg-6">
                 <nav class="nav-menu">
                     <ul class="d-flex align-items-center">
@@ -91,6 +87,7 @@
                     </div>
                 }
 
+
                 <!-- User Menu -->
                 <div class="d-flex align-items-center">
                     @if (User.Identity.IsAuthenticated)
@@ -137,6 +134,9 @@
 
 </header>
 
+
+
+
 <style>
     .user-dropdown .dropdown-menu {
         background-color: var(--dark-bg);
@@ -144,9 +144,10 @@
     }
 
     .user-dropdown .dropdown-item {
-        color: #ffffff; 
+        color: #ffffff;
         transition: background-color 0.3s ease, color 0.3s ease;
     }
+
         .user-dropdown .dropdown-item:hover {
             background-color: var(--neon-blue);
             color: #000000;
