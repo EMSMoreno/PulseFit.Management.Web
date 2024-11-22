@@ -1,0 +1,69 @@
+﻿@{
+    Layout = "_Dashboard";
+    ViewBag.PageTitle = "Employee";
+    ViewBag.SubPageTitle = "EmployeeNotFound";
+    ViewData["Title"] = "Employee Not Found";
+}
+
+<div class="entity-error-container">
+    <h2 class="entity-error-title">Employee Not Found</h2>
+    <p class="entity-error-message">
+        Sorry, the Employee you are looking for could not be found.
+    </p>
+
+    <a href="@Url.Action("Index", "Employees")" class="btn btn-entity-back-home">
+        Back to Employee List
+    </a>
+</div>
+
+<style>
+    .entity-error-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 70vh;
+        background-color: var(--dark-bg);
+        color: var(--light-text);
+        text-align: center;
+        padding: 20px;
+        border: 1px solid var(--light-border);
+        border-radius: 10px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .entity-error-title {
+        font-size: 2.5rem;
+        font-family: 'Raleway', sans-serif;
+        font-weight: 700;
+        color: var(--neon-pink);
+        text-shadow: 0px 0px 10px var(--neon-pink);
+        margin-bottom: 1.5rem;
+    }
+
+    .entity-error-message {
+        font-size: 1.5rem;
+        font-family: 'Roboto', sans-serif;
+        margin-bottom: 2rem;
+        color: var(--neon-blue);
+        text-shadow: 0px 0px 8px var(--neon-blue);
+    }
+
+    .btn-entity-back-home {
+        font-size: 1rem;
+        padding: 10px 25px;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background-color: var(--neon-blue);
+        color: var(--dark-bg);
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .btn-entity-back-home:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 0px 15px var(--neon-blue);
+        }
+</style>

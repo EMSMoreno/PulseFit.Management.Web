@@ -6,29 +6,31 @@
 
 @model IEnumerable<PulseFit.Management.Web.Data.Entities.Alert>
 
-<h2>Unresolved Alerts</h2>
+<h2 class="title-neon">Unresolved Alerts</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Message</th>
-            <th>Created At</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var alert in Model)
-        {
+<div class="card-neon">
+    <table class="table table-hover table-dark">
+        <thead class="thead-light">
             <tr>
-                <td>@alert.Message</td>
-                <td>@alert.CreatedAt</td>
-                <td>
-                    <button class="btn btn-success" onclick="markAsResolved(@alert.Id)">Mark as Resolved</button>
-                </td>
+                <th scope="col">Message</th>
+                <th scope="col">Created At</th>
+                <th scope="col">Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var alert in Model)
+            {
+                <tr>
+                    <td>@alert.Message</td>
+                    <td>@alert.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                        <button class="btn btn-neon-green" onclick="markAsResolved(@alert.Id)">Mark as Resolved</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -41,6 +43,11 @@
                 showCancelButton: true,
                 confirmButtonText: 'Yes, resolve it!',
                 cancelButtonText: 'No, cancel!',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-neon-green',
+                    cancelButton: 'btn btn-neon-secondary'
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({

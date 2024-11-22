@@ -9,9 +9,11 @@ using PulseFit.Management.Web.Models;
 using PulseFit.Management.Web.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PulseFit.Management.Web.Controllers
 {
+    [Authorize(Roles = "Admin,Employee")]
     public class ClientsController : Controller
     {
         private readonly IClientRepository _clientRepository;

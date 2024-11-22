@@ -12,9 +12,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PulseFit.Management.Web.Controllers
 {
+    [Authorize(Roles = "Admin,Employee")]
     public class PersonalTrainersController : Controller
     {
         private readonly IPersonalTrainerRepository _personalTrainerRepository;

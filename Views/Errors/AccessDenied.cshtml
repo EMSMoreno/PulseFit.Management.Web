@@ -1,0 +1,83 @@
+﻿@model PulseFit.Management.Web.Models.ErrorViewModel
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="error-container">
+    <h1 class="error-title">Access Denied</h1>
+    <p class="error-message">
+        @(string.IsNullOrEmpty(Model.ErrorMessage)
+            ? "You do not have permission to access this resource."
+            : Model.ErrorMessage)
+    </p>
+
+    @if (Model.ShowRequestId)
+    {
+        <p class="error-details">
+            Request ID: <span>@Model.RequestId</span>
+        </p>
+    }
+
+    <a href="/" class="btn btn-back-home" aria-label="Return to the home page">Back to Home</a>
+</div>
+
+<style>
+    /* General styling for the error page */
+    .error-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        text-align: center;
+        background-color: #1a1a2e;
+        color: #ffffff;
+        padding: 20px;
+    }
+
+    /* Title styling */
+    .error-title {
+        font-size: 3rem;
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+        color: #ff6f61;
+        margin-bottom: 1rem;
+    }
+
+    /* Error message styling */
+    .error-message {
+        font-size: 1.2rem;
+        font-family: 'Roboto', sans-serif;
+        margin-bottom: 2rem;
+    }
+
+    /* Request ID styling */
+    .error-details {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+        color: #a0a0a0;
+    }
+
+        .error-details span {
+            font-weight: bold;
+            color: #ffdd57;
+        }
+
+    /* Button styling */
+    .btn-back-home {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 1rem;
+        text-transform: uppercase;
+        text-decoration: none;
+        background-color: #4caf50;
+        color: #fff;
+        border-radius: 5px;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+        .btn-back-home:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+</style>

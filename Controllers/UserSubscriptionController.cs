@@ -203,18 +203,49 @@ namespace PulseFit.Management.Web.Controllers
             if (client == null) return NotFound("Client not found.");
 
             string htmlContent = $@"
-            <html>
-                <body>
-                    <h1>Invoice</h1>
-                    <p><strong>Client:</strong> {client.User.FirstName} {client.User.LastName}</p>
-                    <p><strong>Subscription:</strong> {subscription.Name}</p>
-                    <p><strong>Start Date:</strong> {payment.PaymentDate.ToShortDateString()}</p>
-                    <p><strong>End Date:</strong> {payment.PaymentDate.AddMonths(1).ToShortDateString()}</p>
-                    <p><strong>Amount Paid:</strong> {payment.Amount} €</p>
-                    <p><strong>Transaction ID:</strong> {payment.TransactionId}</p>
-                    <p><strong>Payment Date:</strong> {payment.PaymentDate.ToShortDateString()}</p>
-                </body>
-            </html>";
+<html>
+    <body style='font-family: Arial, sans-serif; background-color: #121212; color: #ffffff; padding: 20px;'>
+        <header style='text-align: center; margin-bottom: 20px;'>
+            <img src='pulsefitlogo.png' alt='PulseFit Logo' style='width: 150px; display: block; margin: 0 auto;'>
+            <hr style='border: 1px solid #00ffff;'>
+        </header>
+        <h1 style='color: #00ffff; text-align: center; margin-bottom: 20px;'>Invoice</h1>
+        <table style='width: 100%; border-collapse: collapse; margin: 20px 0;'>
+            <tr>
+                <th style='background-color: #222; color: #00ffff; border: 1px solid #444; padding: 8px; text-align: left;'>Client</th>
+                <td style='border: 1px solid #444; padding: 8px;'>{client.User.FirstName} {client.User.LastName}</td>
+            </tr>
+            <tr>
+                <th style='background-color: #222; color: #00ffff; border: 1px solid #444; padding: 8px; text-align: left;'>Subscription</th>
+                <td style='border: 1px solid #444; padding: 8px;'>{subscription.Name}</td>
+            </tr>
+            <tr>
+                <th style='background-color: #222; color: #00ffff; border: 1px solid #444; padding: 8px; text-align: left;'>Start Date</th>
+                <td style='border: 1px solid #444; padding: 8px;'>{payment.PaymentDate.ToShortDateString()}</td>
+            </tr>
+            <tr>
+                <th style='background-color: #222; color: #00ffff; border: 1px solid #444; padding: 8px; text-align: left;'>End Date</th>
+                <td style='border: 1px solid #444; padding: 8px;'>{payment.PaymentDate.AddMonths(1).ToShortDateString()}</td>
+            </tr>
+            <tr>
+                <th style='background-color: #222; color: #00ffff; border: 1px solid #444; padding: 8px; text-align: left;'>Amount Paid</th>
+                <td style='border: 1px solid #444; padding: 8px;'>{payment.Amount} €</td>
+            </tr>
+            <tr>
+                <th style='background-color: #222; color: #00ffff; border: 1px solid #444; padding: 8px; text-align: left;'>Transaction ID</th>
+                <td style='border: 1px solid #444; padding: 8px;'>{payment.TransactionId}</td>
+            </tr>
+            <tr>
+                <th style='background-color: #222; color: #00ffff; border: 1px solid #444; padding: 8px; text-align: left;'>Payment Date</th>
+                <td style='border: 1px solid #444; padding: 8px;'>{payment.PaymentDate.ToShortDateString()}</td>
+            </tr>
+        </table>
+        <footer style='text-align: center; font-size: 12px; margin-top: 20px;'>
+            <p>PulseFit - All Rights Reserved © 2024</p>
+        </footer>
+    </body>
+</html>";
+
 
             var pdf = _pdfConverter.Convert(new HtmlToPdfDocument
             {

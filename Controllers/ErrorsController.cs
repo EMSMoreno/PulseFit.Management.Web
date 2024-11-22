@@ -1,25 +1,46 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using PulseFit.Management.Web.Models;
-using System.Diagnostics;
- 
+
 namespace PulseFit.Management.Web.Controllers
 {
     public class ErrorsController : Controller
     {
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [Route("Error/{statusCode}")]
+        public IActionResult HttpStatusCodeHandler(int statusCode)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var errorViewModel = new ErrorViewModel
+            {
+                RequestId = HttpContext.TraceIdentifier
+            };
+
+            switch (statusCode)
+            {
+                case 403:
+                    errorViewModel.ErrorMessage = "You do not have permission to access this page.";
+                    return View("AccessDenied", errorViewModel);
+                case 404:
+                    errorViewModel.ErrorMessage = "The page you are looking for could not be found.";
+                    return View("NotFound", errorViewModel);
+                default:
+                    errorViewModel.ErrorMessage = "An unexpected error occurred.";
+                    return View("Error", errorViewModel);
+            }
         }
 
-        //Esta action vai ser executada quando entrar por este caminho error/404
-        [Route("error/404")]
-        //Este action é só para mostrar a página do Error404
-        //Depois de elaborado este metodo temos que criar a respectiva View para o Error404 para isso
-        //clicamos com o botao direito sobre Error404() e fazemos Add View - Razor View - Add
-        public IActionResult Error404()
+        [Route("Error")]
+        public IActionResult Error()
         {
-            return View();
+            var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+
+            var errorViewModel = new ErrorViewModel
+            {
+                RequestId = HttpContext.TraceIdentifier,
+                ErrorMessage = exceptionHandlerPathFeature?.Error.Message,
+                StackTrace = exceptionHandlerPathFeature?.Error.StackTrace
+            };
+
+            return View("InternalError", errorViewModel);
         }
     }
 }

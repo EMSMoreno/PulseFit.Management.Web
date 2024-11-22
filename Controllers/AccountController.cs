@@ -227,7 +227,7 @@ namespace PulseFit.Management.Web.Controllers
 
             if (user == null)
             {
-                return RedirectToAction("NotAuthorized");
+                return RedirectToAction("AccessDenied");
             }
 
             var model = new ChangeUserViewModel
@@ -268,7 +268,7 @@ namespace PulseFit.Management.Web.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("NotAuthorized");
+                    return RedirectToAction("AccessDenied");
                 }
             }
 
@@ -278,7 +278,7 @@ namespace PulseFit.Management.Web.Controllers
         // Displays the not authorized page
         public IActionResult NotAuthorized()
         {
-            return View();
+            return RedirectToAction("AccessDenied");
         }
 
         // Email confirmation

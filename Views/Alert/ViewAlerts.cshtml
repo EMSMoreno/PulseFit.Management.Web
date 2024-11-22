@@ -6,23 +6,32 @@
 
 @model IEnumerable<PulseFit.Management.Web.Data.Entities.Alert>
 
-<h2>Your Alerts</h2>
+<h2 class="title-neon">Your Alerts</h2>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
-            <th>Message</th>
-            <th>Created At</th>
-            <th>Status</th>
+            <th class="text-gray">Message</th>
+            <th class="text-gray">Created At</th>
+            <th class="text-gray">Status</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var alert in Model)
         {
             <tr>
-                <td>@alert.Message</td>
-                <td>@alert.CreatedAt</td>
-                <td>@(alert.IsResolved ? "Resolved" : "Unresolved")</td>
+                <td class="text-black">@alert.Message</td>
+                <td class="text-black">@alert.CreatedAt</td>
+                <td class="text-black">
+                    @if (alert.IsResolved)
+                    {
+                        <span class="btn-neon-green">Resolved</span>
+                    }
+                    else
+                    {
+                        <span class="btn-neon-red">Unresolved</span>
+                    }
+                </td>
             </tr>
         }
     </tbody>

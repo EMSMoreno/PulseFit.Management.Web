@@ -64,7 +64,6 @@ builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IUserSubscriptionRepository, UserSubscriptionRepository>();
 builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
-builder.Services.AddScoped<IGymRepository, GymRepository>();
 builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IGymRepository, GymRepository>();
@@ -93,9 +92,11 @@ Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQx
 // Configuração do pipeline de requisições HTTP
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Errors/Error");
+    app.UseExceptionHandler("/Errors/Error"); // Rota para erros genéricos
+    app.UseStatusCodePagesWithReExecute("/Errors/{0}"); // Rota para erros específicos, ex: 404
     app.UseHsts();
 }
+
 
 // Configuração de redirecionamento e arquivos estáticos
 app.UseHttpsRedirection();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -77,6 +78,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Subscription/Create (Admin Only)
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -90,6 +92,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // POST: Subscription/Create (Admin Only)
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SubscriptionViewModel model)
@@ -121,6 +124,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Subscription/Edit/5 (Admin Only)
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -140,6 +144,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // POST: Subscription/Edit
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, SubscriptionViewModel model)
@@ -174,6 +179,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Subscription/Delete/5 (Admin Only)
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
@@ -190,6 +196,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // POST: Subscription/Delete (Admin Only)
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
