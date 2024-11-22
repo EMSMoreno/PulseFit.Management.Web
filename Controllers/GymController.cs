@@ -10,6 +10,7 @@ using PulseFit.Management.Web.Models;
 
 namespace PulseFit.Management.Web.Controllers
 {
+    [Authorize]
     public class GymsController : Controller
     {
         private readonly IGymRepository _gymRepository;
@@ -24,6 +25,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Gyms
+        [Authorize]
         public IActionResult Index()
         {
             var gyms = _gymRepository.GetAll();
@@ -32,6 +34,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Gyms/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -49,6 +52,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Gyms/Create
+        [Authorize(Roles = "Admin, Employee")]
         public IActionResult Create()
         {
             return View();
@@ -60,6 +64,7 @@ namespace PulseFit.Management.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Employee")]
         public async Task<IActionResult> Create(GymViewModel model)
         {
             if (ModelState.IsValid)
@@ -87,6 +92,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Gyms/Edit/5
+        [Authorize(Roles = "Admin, Employee")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -110,6 +116,7 @@ namespace PulseFit.Management.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Employee")]
         public async Task<IActionResult> Edit(GymViewModel model)
         {
             if (ModelState.IsValid)
@@ -155,6 +162,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Gyms/Delete/5
+        [Authorize(Roles = "Admin, Employee")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -174,6 +182,7 @@ namespace PulseFit.Management.Web.Controllers
         // POST: Gyms/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Employee")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var gym = await _gymRepository.GetByIdAsync(id);

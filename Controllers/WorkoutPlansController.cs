@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PulseFit.Management.Web.Data.Entities;
@@ -8,6 +9,7 @@ using PulseFit.Management.Web.Models;
 
 namespace PulseFit.Management.Web.Controllers
 {
+    [Authorize]
     public class WorkoutPlansController : Controller
     {
         private readonly IWorkoutPlanRepository _workoutPlanRepository;
@@ -29,6 +31,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: WorkoutPlans
+        [Authorize]
         public IActionResult Index()
         {
             var workoutPlans = _workoutPlanRepository.GetAll().ToList()
@@ -39,6 +42,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: WorkoutPlans/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -58,6 +62,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: WorkoutPlans/Create
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public async Task<IActionResult> Create()
         {
             var model = new WorkoutPlanViewModel
@@ -76,6 +81,7 @@ namespace PulseFit.Management.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public async Task<IActionResult> Create(WorkoutPlanViewModel model)
         {
             if (ModelState.IsValid)
@@ -105,6 +111,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: WorkoutPlans/Edit/5
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -132,6 +139,7 @@ namespace PulseFit.Management.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public async Task<IActionResult> Edit(WorkoutPlanViewModel model)
         {
             if (ModelState.IsValid)
@@ -185,6 +193,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: WorkoutPlans/Delete/5
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -204,6 +213,7 @@ namespace PulseFit.Management.Web.Controllers
         // POST: WorkoutPlans/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var workoutPlan = await _workoutPlanRepository.GetByIdAsync(id);

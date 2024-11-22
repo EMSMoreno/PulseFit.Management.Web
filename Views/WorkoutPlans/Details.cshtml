@@ -78,6 +78,21 @@
 </div>
 
 <style>
+    /* Card Styles */
+    .card-neon {
+        background-color: var(--light-bg);
+        border: 1px solid var(--neon-pink);
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .card-neon:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-color: var(--neon-blue);
+        }
+
     /* Divider */
     .neon-divider {
         border-top: 2px solid var(--neon-blue);
