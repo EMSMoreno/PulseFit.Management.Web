@@ -37,14 +37,14 @@
     <div class="row mb-3">
         <div class="col-md-6">
             <label asp-for="WorkoutPlanType" class="text-neon-pink">Workout Type <span class="text-danger">*</span></label>
-            <select asp-for="WorkoutPlanType" class="form-control input-neon" asp-items="ViewBag.Type">
+            <select asp-for="WorkoutPlanType" class="form-control input-neon" asp-items="ViewBag.Type" required>
                 <option value="">Select a Type ...</option>
             </select>
             <span asp-validation-for="WorkoutPlanType" class="text-warning"></span>
         </div>
         <div class="col-md-6">
             <label asp-for="Difficulty" class="text-neon-pink">Difficulty <span class="text-danger">*</span></label>
-            <select asp-for="Difficulty" class="form-control input-neon" asp-items="ViewBag.Difficulty">
+            <select asp-for="Difficulty" class="form-control input-neon" asp-items="ViewBag.Difficulty" required>
                 <option value="">Select a Difficulty ...</option>
             </select>
             <span asp-validation-for="Difficulty" class="text-warning"></span>

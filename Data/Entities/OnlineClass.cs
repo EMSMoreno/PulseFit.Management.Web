@@ -16,7 +16,11 @@ namespace PulseFit.Management.Web.Data.Entities
         public enum ClassCategory
         {
             Yoga,
-            Pilates
+            Pilates,
+            Dance,
+            Mobility,
+            Meditation,
+            HIIT
         }
     }
 }

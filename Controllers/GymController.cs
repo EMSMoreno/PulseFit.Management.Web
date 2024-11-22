@@ -64,9 +64,16 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (model.GymImageFile != null && model.GymImageFile.Length > 2 * 1024 * 1024) 
+                {
+                    ModelState.AddModelError("GymImageFile", "The file size should not exceed 2 MB.");
+                    return View(model);
+                }
+
                 var imageId = model.GymImageFile != null
                     ? await _blobHelper.UploadBlobAsync(model.GymImageFile, "gyms-pics")
                     : Guid.Empty;
+
 
                 model.CreationDate = DateTime.Now.Date;
 
@@ -109,11 +116,23 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (model.GymImageFile != null && model.GymImageFile.Length > 2 * 1024 * 1024) 
+                {
+                    ModelState.AddModelError("GymImageFile", "The file size should not exceed 2 MB.");
+                    return View(model);
+                }
+
                 try
                 {
-                    var imageId = model.GymImageFile != null
-                    ? await _blobHelper.UploadBlobAsync(model.GymImageFile, "gyms-pics")
-                    : model.GymImageId;
+                    Guid imageId;
+                    if (model.GymImageFile != null)
+                    {
+                        imageId = await _blobHelper.UploadBlobAsync(model.GymImageFile, "gyms-pics");
+                    }
+                    else
+                    {
+                        imageId = model.GymImageId;
+                    }
 
                     var gym = _converterHelper.ToGym(model, imageId, false);
 

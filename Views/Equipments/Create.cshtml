@@ -37,15 +37,23 @@
     <div class="row mb-3">
         <div class="col-md-6">
             <label asp-for="Status" class="text-neon-pink">Status</label>
-            <select asp-for="Status" class="form-control input-neon" asp-items="ViewBag.Status">
-                <option value="">Select the Status ...</option>
+            <select asp-for="Status" class="form-select input-neon" required>
+                <option value="">Select a Status...</option>
+                @foreach (var status in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.Equipment.EquipmentStatus)))
+                {
+                    <option value="@status">@status</option>
+                }
             </select>
             <span asp-validation-for="Status" class="text-warning"></span>
         </div>
         <div class="col-md-6">
             <label asp-for="Type" class="text-neon-pink">Equipment Type</label>
-            <select asp-for="Type" class="form-control input-neon" asp-items="ViewBag.Type">
-                <option value="">Select the Type ...</option>
+            <select asp-for="Type" class="form-select input-neon" required>
+                <option value="">Select a Type...</option>
+                @foreach (var type in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.Equipment.EquipmentType)))
+                {
+                    <option value="@type">@type</option>
+                }
             </select>
             <span asp-validation-for="Type" class="text-warning"></span>
         </div>
@@ -75,8 +83,39 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script src="~/js/formHelpers.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         setupSweetAlertOnSubmit("createEquipmentForm", "Equipment added successfully.", "Please correct the errors in the form.");
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("createEquipmentForm");
+
+            form.addEventListener("submit", function (e) {
+                const gymId = document.querySelector("select[name='GymId']");
+
+                let isValid = true;
+
+                if (!gymId.value) {
+                    isValid = false;
+                    showSweetAlert("Error", "Please select a Gym.", "error");
+                }
+
+                if (!isValid) {
+                    e.preventDefault();
+                }
+            });
+
+            function showSweetAlert(title, message, icon) {
+                Swal.fire({
+                    title: title,
+                    text: message,
+                    icon: icon,
+                    confirmButtonColor: '#d33'
+                });
+            }
+        });
     </script>
 }

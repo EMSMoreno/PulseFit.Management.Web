@@ -79,10 +79,15 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var imageId = model.EquipmentImageFile != null
-                    ?await _blobHelper.UploadBlobAsync(model.EquipmentImageFile, "equipments-pics")
-                    : Guid.Empty;
+                if (model.EquipmentImageFile != null && model.EquipmentImageFile.Length > 2 * 1024 * 1024)
+                {
+                    ModelState.AddModelError("EquipmentImageFile", "The file size should not exceed 2 MB.");
+                    return View(model);
+                }
 
+                var imageId = model.EquipmentImageFile != null
+                    ? await _blobHelper.UploadBlobAsync(model.EquipmentImageFile, "equipments-pics")
+                    : Guid.Empty;
 
                 model.GymName = await _gymRepository.GetGymNameByIdAsync(model.GymId);
 
@@ -128,11 +133,24 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Valida tamanho do arquivo
+                if (model.EquipmentImageFile != null && model.EquipmentImageFile.Length > 2 * 1024 * 1024)
+                {
+                    ModelState.AddModelError("EquipmentImageFile", "The file size should not exceed 2 MB.");
+                    return View(model);
+                }
+
                 try
                 {
-                    var imageId = model.EquipmentImageFile != null
-                    ? await _blobHelper.UploadBlobAsync(model.EquipmentImageFile, "equipments-pics")
-                    : model.EquipmentImageId;
+                    Guid imageId;
+                    if (model.EquipmentImageFile != null)
+                    {
+                        imageId = await _blobHelper.UploadBlobAsync(model.EquipmentImageFile, "equipments-pics");
+                    }
+                    else
+                    {
+                        imageId = model.EquipmentImageId;
+                    }
 
                     model.GymName = await _gymRepository.GetGymNameByIdAsync(model.GymId);
 
@@ -151,6 +169,7 @@ namespace PulseFit.Management.Web.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -158,6 +177,7 @@ namespace PulseFit.Management.Web.Controllers
 
             return View(model);
         }
+
 
         // GET: Equipments/Delete/5
         public async Task<IActionResult> Delete(int? id)

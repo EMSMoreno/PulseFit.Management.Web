@@ -40,7 +40,7 @@
 
         public Guid EquipmentImageId { get; set; }
 
-        public string EquipmentImageUrl => EquipmentImageId == null
+        public string EquipmentImageUrl => EquipmentImageId == Guid.Empty
             ? "/images/noimage.png"
             : $"/uploads/equipments-pics/{EquipmentImageId}.jpg";
 

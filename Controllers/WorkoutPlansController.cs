@@ -91,7 +91,6 @@ namespace PulseFit.Management.Web.Controllers
                     ? await _blobHelper.UploadBlobAsync(model.WorkoutPlanImageFile, "workoutsPlans-pics")
                     : Guid.Empty;
 
-                
                 var workoutPlan = await _converterHelper.ToWorkoutPlanAsync(model, imageId, true);
 
                 workoutPlan.Equipments = await _equipmentRepository.GetEquipmentsListByIdsAsync(model.EquipmentIds);
@@ -146,9 +145,15 @@ namespace PulseFit.Management.Web.Controllers
 
                 try
                 {
-                    var imageId = model.WorkoutPlanImageFile != null
-                    ? await _blobHelper.UploadBlobAsync(model.WorkoutPlanImageFile, "workoutsPlans-pics")
-                    : model.WorkoutPlanImageId;
+                    Guid imageId;
+                    if (model.WorkoutPlanImageFile != null)
+                    {
+                        imageId = await _blobHelper.UploadBlobAsync(model.WorkoutPlanImageFile, "workoutsPlans-pics");
+                    }
+                    else
+                    {
+                        imageId = model.WorkoutPlanImageId;
+                    }
 
                     var workoutPlan = await _workoutPlanRepository.GetWorkoutPlanByIdWithEquipmentsAsync(model.Id);
                     var selectedEquipments = await _equipmentRepository.GetEquipmentsListByIdsAsync(model.EquipmentIds);

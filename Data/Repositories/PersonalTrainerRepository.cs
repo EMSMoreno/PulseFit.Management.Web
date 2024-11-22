@@ -40,15 +40,5 @@ namespace PulseFit.Management.Web.Data.Repositories
 
             return pt.User.FullName;
         }
-
-        public async Task<string> GetPtProfilePicAsync(string id)
-        {
-            var pt = await _context.PersonalTrainers
-                .Include(p => p.User)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(p => p.UserId == id);
-
-            return pt?.User?.ProfilePictureUrl ?? "/images/noimage.png";
-        }
     }
 }

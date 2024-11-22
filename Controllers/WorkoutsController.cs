@@ -67,7 +67,7 @@ namespace PulseFit.Management.Web.Controllers
 
             ViewBag.Spots = workout.MaxCapacity - workout.Bookings;
             ViewBag.GymImage = await _gymRepository.GetGymImageAsync(workout.GymId);
-            ViewBag.PtProfilePic = await _personalTrainerRepository.GetPtProfilePicAsync(workout.InstructorId);
+            ViewBag.PtProfilePic = await _userHelper.GetUserPicAsync(workout.InstructorId);
 
 
             return View(workout);
@@ -91,6 +91,12 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (model.WorkoutImageFile != null && model.WorkoutImageFile.Length > 2 * 1024 * 1024) 
+                {
+                    ModelState.AddModelError("WorkoutImageFile", "The file size should not exceed 2 MB.");
+                    return View(model);
+                }
+
                 var imageId = model.WorkoutImageFile != null
                     ? await _blobHelper.UploadBlobAsync(model.WorkoutImageFile, "workouts-pics")
                     : Guid.Empty;
@@ -150,11 +156,23 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (model.WorkoutImageFile != null && model.WorkoutImageFile.Length > 2 * 1024 * 1024) 
+                {
+                    ModelState.AddModelError("WorkoutImageFile", "The file size should not exceed 2 MB.");
+                    return View(model);
+                }
+
                 try
                 {
-                    var imageId = model.WorkoutImageFile != null
-                    ? await _blobHelper.UploadBlobAsync(model.WorkoutImageFile, "workouts-pics")
-                    : model.WorkoutImageId;
+                    Guid imageId;
+                    if (model.WorkoutImageFile != null)
+                    {
+                        imageId = await _blobHelper.UploadBlobAsync(model.WorkoutImageFile, "workouts-pics");
+                    }
+                    else
+                    {
+                        imageId = model.WorkoutImageId;
+                    }
 
                     var workout = _converterHelper.ToWorkout(model, imageId, false);
 
@@ -305,7 +323,7 @@ namespace PulseFit.Management.Web.Controllers
 
             ViewBag.Spots = workout.MaxCapacity - workout.Bookings;
             ViewBag.GymImage = await _gymRepository.GetGymImageAsync(workout.GymId);
-            ViewBag.PtProfilePic = await _personalTrainerRepository.GetPtProfilePicAsync(workout.InstructorId);
+            ViewBag.PtProfilePic = await _userHelper.GetUserPicAsync(workout.InstructorId);
 
 
             return View(workout);

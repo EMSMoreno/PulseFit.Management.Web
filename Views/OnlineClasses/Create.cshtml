@@ -29,8 +29,12 @@
         </div>
         <div class="col-md-6">
             <label asp-for="Category" class="text-neon-pink">Category <span class="text-danger">*</span></label>
-            <select asp-for="Category" class="form-control input-neon" asp-items="ViewBag.Categories">
-                <option value="">Select a Category ...</option>
+            <select asp-for="Category" class="form-select input-neon" required>
+                <option value="">Select Category...</option>
+                @foreach (var category in Enum.GetValues(typeof(PulseFit.Management.Web.Data.Entities.OnlineClass.ClassCategory)))
+                {
+                    <option value="@category">@category</option>
+                }
             </select>
             <span asp-validation-for="Category" class="text-warning"></span>
         </div>
@@ -38,7 +42,7 @@
 
     <div class="mt-3 d-flex justify-content-between">
         <button type="submit" class="btn btn-neon-pink neon-hover-shadow">Add Class</button>
-        <a asp-action="Index" class="btn btn-neon-secondary neon-hover-shadow">Back to List</a>
+        <a asp-action="ManageOnlineClasses" class="btn btn-neon-secondary neon-hover-shadow">Back to List</a>
     </div>
 </form>
 
