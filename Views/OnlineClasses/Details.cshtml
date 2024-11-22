@@ -1,6 +1,7 @@
 ﻿@model PulseFit.Management.Web.Data.Entities.OnlineClass
 
 @{
+    Layout = "_Dashboard";
     ViewData["Title"] = "Online Class Details";
 }
 
@@ -40,7 +41,7 @@
         <div class="d-flex justify-content-end mt-3">
             <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-neon-blue neon-hover-shadow me-2">Edit</a>
             <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-neon-pink neon-hover-shadow me-2">Delete</a>
-            <a asp-action="Index" class="btn btn-neon-secondary neon-hover-shadow">Back to List</a>
+            <a asp-action="ManageOnlineClasses" class="btn btn-neon-secondary neon-hover-shadow">Back to List</a>
         </div>
     </div>
 </div>

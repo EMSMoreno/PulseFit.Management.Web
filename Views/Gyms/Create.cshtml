@@ -1,6 +1,7 @@
 ﻿@model PulseFit.Management.Web.Models.GymViewModel
 
 @{
+    Layout = "_Dashboard";
     ViewData["Title"] = "Create Gym";
 }
 
@@ -19,6 +20,8 @@
 }
 
 <form id="createGymForm" asp-action="Create" method="post" enctype="multipart/form-data" class="p-4 card-neon">
+    <div asp-validation-summary="ModelOnly" class="text-warning mb-3"></div>
+
     <div class="row mb-3">
         <div class="col-md-6">
             <label asp-for="Name" class="text-neon-pink">Name <span class="text-danger">*</span></label>
@@ -35,7 +38,8 @@
     <div class="row mb-3">
         <div class="col-md-6">
             <label asp-for="PhoneNumber" class="text-neon-pink">Phone Number <span class="text-danger">*</span></label>
-            <input asp-for="PhoneNumber" class="form-control input-neon" required />
+            <input asp-for="PhoneNumber" type="tel" class="form-control input-neon" maxlength="9" required id="phoneField" pattern="^9[1236]\d{7}$" />
+            <small class="text-muted">Enter a 9-digit Portuguese number starting with 9, followed by 1, 2, 3, or 6.</small>
             <span asp-validation-for="PhoneNumber" class="text-warning"></span>
         </div>
         <div class="col-md-6">

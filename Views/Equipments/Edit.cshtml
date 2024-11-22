@@ -1,6 +1,7 @@
 ﻿@model PulseFit.Management.Web.Models.EquimentViewModel
 
 @{
+    Layout = "_Dashboard";
     ViewData["Title"] = "Edit Equipment";
 }
 
@@ -35,14 +36,14 @@
     <div class="row mb-3">
         <div class="col-md-6">
             <label asp-for="Status" class="text-neon-pink">Status</label>
-            <select asp-for="Status" class="form-control input-neon" asp-items="ViewBag.Status">
+            <select asp-for="Status" class="form-control input-neon" asp-items="ViewBag.Status" required>
                 <option value="">Select the Status ...</option>
             </select>
             <span asp-validation-for="Status" class="text-warning"></span>
         </div>
         <div class="col-md-6">
             <label asp-for="Type" class="text-neon-pink">Equipment Type</label>
-            <select asp-for="Type" class="form-control input-neon" asp-items="ViewBag.Type">
+            <select asp-for="Type" class="form-control input-neon" asp-items="ViewBag.Type" required>
                 <option value="">Select the Type ...</option>
             </select>
             <span asp-validation-for="Type" class="text-warning"></span>
@@ -51,7 +52,7 @@
     <div class="row mb-3">
         <div class="col-md-6">
             <label asp-for="GymId" class="text-neon-pink">Gym</label>
-            <select asp-for="GymId" class="form-control input-neon" asp-items="ViewBag.Gyms">
+            <select asp-for="GymId" class="form-control input-neon" asp-items="ViewBag.Gyms" required>
                 <option value="">Select a Gym ...</option>
             </select>
             <span asp-validation-for="GymId" class="text-warning"></span>

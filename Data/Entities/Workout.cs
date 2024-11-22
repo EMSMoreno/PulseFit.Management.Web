@@ -105,9 +105,9 @@ namespace PulseFit.Management.Web.Data.Entities
         public int Bookings { get; set; }
 
         [Display(Name = "Workout Image")]
-        public Guid? WorkoutImageId { get; set; }
+        public Guid WorkoutImageId { get; set; }
 
-        public string WorkoutImageUrl => WorkoutImageId == null
+        public string WorkoutImageUrl => WorkoutImageId == Guid.Empty
             ? "/images/noimage.png"
             : $"/uploads/workouts-pics/{WorkoutImageId}.jpg";
     }

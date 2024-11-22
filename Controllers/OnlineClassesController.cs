@@ -1,5 +1,6 @@
 ﻿using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,23 +17,68 @@ namespace PulseFit.Management.Web.Controllers
         private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
         private readonly DataContext _context;
+        private readonly UserManager<User> _userManager;
+        private readonly IClientRepository _clientRepository;
+        private readonly ISubscriptionRepository _subscriptionRepository;
 
         public OnlineClassesController(
             IOnlineClassRepository onlineClassRepository,
             IBlobHelper blobHelper,
             IConverterHelper converterHelper,
-            DataContext context
+            DataContext context,
+            UserManager<User> userManager,
+            IClientRepository clientRepository,
+            ISubscriptionRepository subscriptionRepository
             )
         {
             _onlineClassRepository = onlineClassRepository;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
             _context = context;
+            _userManager = userManager;
+            _clientRepository = clientRepository;
+            _subscriptionRepository = subscriptionRepository;
+        }
+
+        private async Task<bool> UserHasAccessToOnlineClasses()
+        {
+            // Obtém o usuário logado
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return false; 
+            }
+
+            if (await _userManager.IsInRoleAsync(user, "Admin") ||
+                await _userManager.IsInRoleAsync(user, "PersonalTrainer") ||
+                await _userManager.IsInRoleAsync(user, "Employee"))
+            {
+                return true;
+            }
+
+            var client = await _clientRepository.GetByUserIdAsync(user.Id);
+
+            if (client == null)
+            {
+                return false; 
+            }
+
+            var hasAccess = client.UserSubscriptions
+                .Where(us => us.Subscription.Status == SubscriptionStatus.Active)
+                .Any(us => us.Subscription.IncludeOnlineClasses);
+
+            return hasAccess;
         }
 
         // GET: OnlineClasses
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            if (!await UserHasAccessToOnlineClasses())
+            {
+                return RedirectToAction("AccessDenied", "Account"); // Ou outra lógica de redirecionamento
+            }
+
             var videos = _onlineClassRepository.GetAll().ToList()
                 .GroupBy(v => v.Category)
                 .OrderBy(g => g.Key);
@@ -167,6 +213,13 @@ namespace PulseFit.Management.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult ManageOnlineClasses()
+        {
+            var videos = _onlineClassRepository.GetAll().ToList()
+                .OrderBy(c => c.Category);
+
+            return View(videos);
+        }
 
         private async Task<(string Title, string ThumbnailUrl)> GetYouTubeVideoData(string url)
         {

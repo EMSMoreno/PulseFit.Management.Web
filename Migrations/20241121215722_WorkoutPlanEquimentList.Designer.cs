@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PulseFit.Management.Web.Data;
 
@@ -11,9 +12,11 @@ using PulseFit.Management.Web.Data;
 namespace PulseFit.Management.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241121215722_WorkoutPlanEquimentList")]
+    partial class WorkoutPlanEquimentList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -409,7 +412,7 @@ namespace PulseFit.Management.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("EquipmentImageId")
+                    b.Property<Guid?>("EquipmentImageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("GymId")
@@ -1085,7 +1088,7 @@ namespace PulseFit.Management.Web.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("WorkoutImageId")
+                    b.Property<Guid?>("WorkoutImageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -1114,7 +1117,7 @@ namespace PulseFit.Management.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("WorkoutPlanImageId")
+                    b.Property<Guid?>("WorkoutPlanImageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("WorkoutPlanType")

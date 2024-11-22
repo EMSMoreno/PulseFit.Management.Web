@@ -1,0 +1,80 @@
+﻿@model IEnumerable<PulseFit.Management.Web.Data.Entities.OnlineClass>
+@using Newtonsoft.Json
+
+@{
+    Layout = "_Dashboard";
+    ViewData["Title"] = "Online Classes List";
+
+    var jsonSerializerSettings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                Formatting = Formatting.Indented
+            };
+
+    var formattedData = Model.Select(onlineClass => new
+    {
+        onlineClass.Id,
+        onlineClass.Title,
+        onlineClass.ThumbnailUrl,
+        CategoryName = Enum.GetName(typeof(PulseFit.Management.Web.Data.Entities.OnlineClass.ClassCategory), onlineClass.Category)
+    });
+
+    var serializedData = JsonConvert.SerializeObject(formattedData, jsonSerializerSettings);
+}
+
+<div class="container my-5">
+    <h2 class="title-neon mb-4">Online Classes List</h2>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a asp-action="Create" class="btn btn-neon-pink neon-hover-shadow">Add Online Class</a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert-neon text-center">No Online Classes found.</div>
+    }
+    else
+    {
+        <div id="Grid"></div>
+    }
+</div>
+
+@section Scripts {
+    <script id="profilePictureTemplate" type="text/x-template">
+        <img src="${ThumbnailUrl}" alt="Class Thumbnail" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--neon-blue);" />
+    </script>
+
+    <script id="actionTemplate" type="text/x-template">
+        <a href="/OnlineClasses/Edit/${Id}" class="btn btn-neon-blue neon-hover-shadow me-2">Edit</a>
+        <a href="/OnlineClasses/Delete/${Id}" class="btn btn-neon-pink neon-hover-shadow me-2">Delete</a>
+        <a href="/OnlineClasses/Details/${Id}" class="btn btn-neon-green neon-hover-shadow">Details</a>
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            var serializedData = @Html.Raw(serializedData);
+
+            // Configuração do Grid
+            var grid = new ej.grids.Grid({
+                dataSource: serializedData,
+                allowPaging: true,
+                allowSorting: true,
+                allowFiltering: true,
+                pageSettings: { pageSize: 10 },
+                toolbar: ['Search'],
+                columns: [
+                    { field: "ThumbnailUrl", headerText: "Thumbnail", width: 120,textAlign: "Center", template: "#profilePictureTemplate" },
+                    { field: "Title", headerText: "Title", width: 270, textAlign: "Center"},
+                    { field: "CategoryName", headerText: "Category", width: 120 , textAlign: "Center"},
+                    { headerText: "Actions", width: 150, textAlign: "Center", template: "#actionTemplate" }
+                ],
+                rowHeight: 60,
+                gridLines: 'Horizontal',
+                queryCellInfo: function (args) {
+                    args.cell.style.fontSize = "1.1rem";
+                }
+            });
+            grid.appendTo("#Grid");
+        });
+    </script>
+}

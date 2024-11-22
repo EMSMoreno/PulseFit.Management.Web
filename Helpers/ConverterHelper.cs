@@ -588,7 +588,7 @@ namespace PulseFit.Management.Web.Helpers
                     Text = e.Name,
                     ImageUrl = e.EquipmentImageUrl
                 }).ToList(),
-                WorkoutPlanImageId = workoutPlan.WorkoutPlanImageId ?? Guid.Empty,
+                WorkoutPlanImageId = workoutPlan.WorkoutPlanImageId,
             };
         }
     }
