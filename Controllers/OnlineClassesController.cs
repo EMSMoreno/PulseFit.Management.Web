@@ -1,5 +1,6 @@
 ﻿using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +12,7 @@ using PulseFit.Management.Web.Helpers;
 
 namespace PulseFit.Management.Web.Controllers
 {
+    [Authorize]
     public class OnlineClassesController : Controller
     {
         private readonly IOnlineClassRepository _onlineClassRepository;
@@ -87,6 +89,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: OnlineClasses/Details/5
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -104,6 +107,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: OnlineClasses/Create
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public IActionResult Create()
         {
             ViewBag.Categories = new SelectList(Enum.GetValues(typeof(OnlineClass.ClassCategory)).Cast<OnlineClass.ClassCategory>());
@@ -113,6 +117,7 @@ namespace PulseFit.Management.Web.Controllers
         // POST: OnlineClasses/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public async Task<IActionResult> Create(OnlineClass onlineClass)
         {
             if (ModelState.IsValid)
@@ -132,6 +137,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: OnlineClasses/Edit/5
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -153,6 +159,7 @@ namespace PulseFit.Management.Web.Controllers
         // POST: OnlineClasses/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public async Task<IActionResult> Edit(OnlineClass onlineClass)
         {
             if (ModelState.IsValid)
@@ -186,6 +193,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: OnlineClasses/Delete/5
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -205,6 +213,7 @@ namespace PulseFit.Management.Web.Controllers
         // POST: OnlineClasses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var onlineClass = await _onlineClassRepository.GetByIdAsync(id);
@@ -213,6 +222,7 @@ namespace PulseFit.Management.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public IActionResult ManageOnlineClasses()
         {
             var videos = _onlineClassRepository.GetAll().ToList()

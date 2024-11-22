@@ -75,13 +75,13 @@
                 pageSettings: { pageSize: 10 },
                 toolbar: ['Search'],
                 columns: [
-                    { field: "GymImageUrl", headerText: "Gym Picture", width: 120, template: "#profilePictureTemplate" },
-                    { field: "Name", headerText: "Name", width: 140 },
-                    { field: "Location", headerText: "Location", width: 140 },
-                    { field: "OpeningTime", headerText: "Opening Time", width: 100 },
-                    { field: "ClosingTime", headerText: "Closing Time", width: 100 },
-                    { field: "StatusText", headerText: "Status", width: 120 },
-                    { headerText: "Actions", width: 220, template: "#actionTemplate" }
+                    { field: "GymImageUrl", headerText: "Gym Picture", width: 120, textAlign: "Center", template: "#profilePictureTemplate" },
+                    { field: "Name", headerText: "Name", width: 140, textAlign: "Center"},
+                    { field: "Location", headerText: "Location", width: 140, textAlign: "Center" },
+                    { field: "OpeningTime", headerText: "Opening Time", width: 100, textAlign: "Center" },
+                    { field: "ClosingTime", headerText: "Closing Time", width: 100, textAlign: "Center" },
+                    { field: "StatusText", headerText: "Status", width: 120, textAlign: "Center" },
+                    { headerText: "Actions", width: 220, textAlign: "Center", template: "#actionTemplate" }
                 ],
                 rowHeight: 60,
                 gridLines: 'Horizontal',

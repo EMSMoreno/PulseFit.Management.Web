@@ -8,50 +8,58 @@
 
 <h2 class="title-neon mt-4">Online Classes</h2>
 
-<div class="container">
-    @foreach (var group in Model)
-    {
-        <hr class="border-neon" />
-        <h3 class="text-gray mt-4">@group.Key</h3>
-        <div id="carousel-@group.Key" class="carousel slide mt-3" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                @if (group.Any())
-                {
-                    var first = true;
-                    foreach (var onlineClass in group)
+@if (!Model.Any())
+{
+    <div class="alert-neon text-center">No classes found.</div>
+}
+else
+{
+    <div class="container">
+        @foreach (var group in Model)
+        {
+            <hr class="border-neon" />
+            <h3 class="text-gray mt-4">@group.Key</h3>
+            <div id="carousel-@group.Key" class="carousel slide mt-3" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @if (group.Any())
                     {
-                        <div class="carousel-item @(first ? "active" : "")">
-                            <a href="@onlineClass.VideoUrl" target="_blank">
-                                <img src="@onlineClass.ThumbnailUrl" class="d-block w-100 rounded neon-outline" alt="@onlineClass.Title">
-                            </a>
+                        var first = true;
+                        foreach (var onlineClass in group)
+                        {
+                            <div class="carousel-item @(first ? "active" : "")">
+                                <a href="@onlineClass.VideoUrl" target="_blank">
+                                    <img src="@onlineClass.ThumbnailUrl" class="d-block w-100 rounded neon-outline" alt="@onlineClass.Title">
+                                </a>
+                                <div class="carousel-caption bg-dark-neon">
+                                    <h5 class="text-neon">@onlineClass.Title</h5>
+                                </div>
+                            </div>
+                            first = false;
+                        }
+                    }
+                    else
+                    {
+                        <div class="carousel-item active">
+                            <img src="/images/noimage.png" class="d-block w-100 rounded neon-outline" alt="No Classes">
                             <div class="carousel-caption bg-dark-neon">
-                                <h5 class="text-neon">@onlineClass.Title</h5>
+                                <p class="text-neon">No classes available.</p>
                             </div>
                         </div>
-                        first = false;
                     }
-                }
-                else
-                {
-                    <div class="carousel-item active">
-                        <img src="/images/noimage.png" class="d-block w-100 rounded neon-outline" alt="No Classes">
-                        <div class="carousel-caption bg-dark-neon">
-                            <p class="text-neon">No classes available.</p>
-                        </div>
-                    </div>
-                }
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@group.Key" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel-@group.Key" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@group.Key" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carousel-@group.Key" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-    }
-</div>
+        }
+    </div>
+}
+
 
 <style>
     .carousel-item img {
@@ -68,5 +76,29 @@
         border: 1px solid var(--neon-purple);
         border-radius: 10px;
         padding: 10px;
+    }
+
+    .text-neon {
+        color: var(--neon-blue);
+    }
+
+    .border-neon {
+        border-color: var(--neon-green);
+        border-width: 2px;
+    }
+
+    .btn-neon-pink {
+        transition: box-shadow 0.3s ease;
+        font-size: 1.1rem;
+    }
+
+        .btn-neon-pink:hover {
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
+
+    h3 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: bold;
+        color: var(--neon-green);
     }
 </style>

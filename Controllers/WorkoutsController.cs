@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using PulseFit.Management.Web.Models;
 
 namespace PulseFit.Management.Web.Controllers
 {
+    [Authorize]
     public class WorkoutsController : Controller
     {
         private readonly DataContext _context;
@@ -47,6 +49,18 @@ namespace PulseFit.Management.Web.Controllers
         {
             var workouts = _workoutRepository.GetAll();
 
+            var combinedTypes = Enum.GetValues(typeof(Workout.IndividualWorkoutType))
+                .Cast<Workout.IndividualWorkoutType>()
+                .Select(type => new { Value = type.ToString(), Text = type.ToString() })
+                .Concat(
+                    Enum.GetValues(typeof(Workout.GroupWorkoutType))
+                    .Cast<Workout.GroupWorkoutType>()
+                    .Select(type => new { Value = type.ToString(), Text = type.ToString() })
+                )
+                .ToList();
+
+            ViewBag.TypeOptions = new SelectList(combinedTypes, "Value", "Text");
+
             return View(workouts);
         }
 
@@ -74,6 +88,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Workouts/Create
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public async Task<IActionResult> Create()
         {
 
@@ -87,6 +102,7 @@ namespace PulseFit.Management.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public async Task<IActionResult> Create(WorkoutViewModel model)
         {
             if (ModelState.IsValid)
@@ -128,6 +144,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Workouts/Edit/5
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -152,6 +169,7 @@ namespace PulseFit.Management.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public async Task<IActionResult> Edit(WorkoutViewModel model)
         {
             if (ModelState.IsValid)
@@ -198,6 +216,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Workouts/Delete/5
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -217,6 +236,7 @@ namespace PulseFit.Management.Web.Controllers
         // POST: Workouts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Employee, PersonalTrainer")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var workout = await _workoutRepository.GetByIdAsync(id);
@@ -225,6 +245,7 @@ namespace PulseFit.Management.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize]
         public async Task<IActionResult> MyBookings()
         {
             var userLoged = User.Identity.Name;
@@ -241,9 +262,7 @@ namespace PulseFit.Management.Web.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-
-
-
+        [Authorize]
         public async Task<IActionResult> CreateBooking(int? id)
         {
             if (id == null)
@@ -306,7 +325,7 @@ namespace PulseFit.Management.Web.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-
+        [Authorize]
         public async Task<IActionResult> MyBookingsDetails(int? id)
         {
             if (id == null)
@@ -329,6 +348,7 @@ namespace PulseFit.Management.Web.Controllers
             return View(workout);
         }
 
+        [Authorize]
         public async Task<IActionResult> CancelBooking(int id)
         {
             var booking = await _bookingRepository.GetByIdAsync(id);

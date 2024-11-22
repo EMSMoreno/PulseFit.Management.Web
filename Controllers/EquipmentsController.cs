@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using PulseFit.Management.Web.Models;
 
 namespace PulseFit.Management.Web.Controllers
 {
+    [Authorize]
     public class EquipmentsController : Controller
     {
         private readonly IEquipmentRepository _equipmentRepository;
@@ -34,6 +36,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Equipments
+        [Authorize]
         public IActionResult Index()
         {
             var equipments = _equipmentRepository.GetAll().ToList() // Loads all devices into memory
@@ -44,6 +47,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Equipments/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -61,6 +65,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Equipments/Create
+        [Authorize(Roles = "Admin, Employee")]
         public IActionResult Create()
         {
             LoadViewBags();
@@ -73,6 +78,7 @@ namespace PulseFit.Management.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Employee")]
         public async Task<IActionResult> Create(EquimentViewModel model)
         {
             if (ModelState.IsValid)
@@ -102,6 +108,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Equipments/Edit/5
+        [Authorize(Roles = "Admin, Employee")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -127,6 +134,7 @@ namespace PulseFit.Management.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Employee")]
         public async Task<IActionResult> Edit(EquimentViewModel model)
         {
             if (ModelState.IsValid)
@@ -178,6 +186,7 @@ namespace PulseFit.Management.Web.Controllers
 
 
         // GET: Equipments/Delete/5
+        [Authorize(Roles = "Admin, Employee")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -195,6 +204,7 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // POST: Equipments/Delete/5
+        [Authorize(Roles = "Admin, Employee")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

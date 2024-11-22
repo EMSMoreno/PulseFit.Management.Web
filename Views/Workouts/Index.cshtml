@@ -12,6 +12,18 @@
     <a asp-action="Create" class="btn btn-neon-pink">Create New Workout</a>
 </div>
 
+<div class="filter-bar mb-4 card-neon p-3">
+    <label for="workoutFilter" class="form-label">Select Type:</label>
+    <select id="workoutFilter" class="form-select input-neon" onchange="filterWorkouts()">
+        <option value="0">All Workouts</option>
+        @foreach (var type in ViewBag.TypeOptions)
+        {
+            <option value="@type.Value">@type.Text</option>
+        }
+    </select>
+</div>
+
+
 @if (!Model.Any())
 {
     <div class="alert-neon text-center">No workouts found.</div>
@@ -43,3 +55,52 @@ else
         </div>
     </div>
 }
+
+<script>
+        function filterWorkouts() {
+        var workoutId = document.getElementById('workoutFilter').value;
+        window.location.href = `?workoutId=${workoutId}`;
+    }
+</script>
+
+<style>
+    /* Card Styles */
+    .card-neon {
+        background-color: var(--light-bg);
+        border: 1px solid var(--neon-pink);
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .card-neon:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-color: var(--neon-blue);
+        }
+
+    .card-img-top {
+        border-bottom: 3px solid var(--neon-pink);
+    }
+
+    .text-neon {
+        color: var(--neon-blue);
+    }
+
+    /* Buttons */
+    .btn-neon-blue, .btn-neon-pink {
+        border-radius: 8px;
+        font-weight: bold;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .btn-neon-blue:hover {
+            background-color: var(--dark-bg);
+            color: var(--neon-blue);
+        }
+
+        .btn-neon-pink:hover {
+            background-color: var(--dark-bg);
+            color: var(--neon-pink);
+        }
+</style>

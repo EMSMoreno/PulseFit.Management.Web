@@ -142,20 +142,7 @@
                             </li>
                         }
 
-                        <!-- Workouts -->
-                        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
-                        {
-                            <li class="nav-item">
-                                <a href="#" class="nav-link text-white" data-toggle="submenu" aria-label="Workouts">
-                                    <i class="fas fa-heartbeat me-2"></i>Workouts
-                                </a>
-                                <ul class="submenu list-unstyled ms-4">
-                                    <li><a href="/Workouts/Index" class="nav-link text-white" aria-label="View Workouts">View Workouts</a></li>
-                                </ul>
-                            </li>
-                        }
-
-                        <!-- Equipments, Online Classes, and Workout Plans -->
+                        <!-- Equipments -->
                         @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                         {
                             <li class="nav-item">
@@ -166,14 +153,36 @@
                                     <li><a href="/Equipments/Index" class="nav-link text-white" aria-label="View Equipments">View Equipments</a></li>
                                 </ul>
                             </li>
+                        }
+
+                        <!-- Workouts, Online Classes, and Workout Plans -->
+                        @if (User.IsInRole("Admin") || User.IsInRole("Employee") || User.IsInRole("PersonalTrainer") || User.IsInRole("Client"))
+                        {
+                            <!-- Workouts -->
+                            <li class="nav-item">
+                                <a href="#" class="nav-link text-white" data-toggle="submenu" aria-label="Workouts">
+                                    <i class="fas fa-heartbeat me-2"></i>Workouts
+                                </a>
+                                <ul class="submenu list-unstyled ms-4">
+                                    <li><a href="/Workouts/Index" class="nav-link text-white" aria-label="View Workouts">View Workouts</a></li>
+                                </ul>
+                            </li>
+                            <!-- Online Classes -->
                             <li class="nav-item">
                                 <a href="#" class="nav-link text-white" data-toggle="submenu" aria-label="Online Classes">
                                     <i class="fas fa-video me-2"></i>Online Classes
                                 </a>
                                 <ul class="submenu list-unstyled ms-4">
-                                    <li><a href="/OnlineClasses/ManageOnlineClasses" class="nav-link text-white" aria-label="View Online Classes">View Online Classes</a></li>
+                                    <li><a href="/OnlineClasses/Index" class="nav-link text-white" aria-label="View Online Classes">View Online Classes</a></li>
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Employee") || User.IsInRole("PersonalTrainer"))
+                                    {
+                                        <li>
+                                            <a href="/OnlineClasses/ManageOnlineClasses" class="nav-link text-white" aria-label="Manage Online Classes">Manage Online Classes</a>
+                                        </li>
+                                    }
                                 </ul>
                             </li>
+                            <!-- Workout Plans -->
                             <li class="nav-item">
                                 <a href="#" class="nav-link text-white" data-toggle="submenu" aria-label="Workout Plans">
                                     <i class="fas fa-dumbbell me-2"></i>Workout Plans
@@ -183,7 +192,6 @@
                                 </ul>
                             </li>
                         }
-
 
                         <!-- My Workouts for Clients -->
                         @if (User.IsInRole("Client"))
