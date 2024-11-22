@@ -7,79 +7,79 @@ namespace PulseFit.Management.Web.Helpers
 {
     public interface IUserHelper
     {
-        // Método que recebe um email e devolve o utilizador correspondente a esse email, caso ele exista.
+        // Method that receives an email and returns the user corresponding to that email, if it exists.
 
         Task<User> GetUserByEmailAsync(string email);
 
-        // Método que adiciona um novo utilizador ao sistema, recebendo um objeto User e a senha para o registo.
+        // Method that adds a new user to the system, receiving a User object and the password for registration.
 
         Task<IdentityResult> AddUserAsync(User user, string password);
 
-        // Método que tenta fazer o login de um utilizador com base nas informações de LoginViewModel.
+        // Method that attempts to log in a user based on information from the LoginViewModel.
 
-        // Devolve um resultado de SignIn que indica se o login foi bem-sucedido ou não.
+        // Returns a SignIn result that indicates whether the login was successful or not.
 
         Task<SignInResult> LoginAsync(LoginViewModel model);
 
-        // Método que realiza o logout do utilizador atual.
+        // Method that logs out the current user.
 
         Task LogoutAsync();
 
-        // Método para atualizar as informações de um utilizador existente no sistema.
+        // Method for updating the information of an existing user in the system.
 
         Task<IdentityResult> UpdateUserAsync(User user);
 
-        // Método para alterar a senha de um utilizador, recebendo a senha antiga e a nova senha.
+        // Method for changing a user's password, receiving the old password and the new password.
 
         Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword);
 
-        //Rolles - Método que verifica se um determinado Role (papel) existe no sistema e, se não existir, cria-o.
+        //Rolles - Method that checks whether a certain Role exists in the system and, if it does not exist, creates it.
 
         Task CheckRoleAsync(string roleName);
 
-        //Rolles - Método que adiciona um papel específico a um utilizador.
+        //Rolles - Method that adds a specific role to a user.
 
         Task AddUserToRoleAsync(User user, string roleName);
 
-        //Rolles - Método que verifica se um utilizador já possui um papel específico atribuído.
+        //Rolles - Method that checks if a user already has a specific role assigned to them.
 
         Task<bool> IsUserInRoleAsync(User user, string roleName);
 
-        // Método que valida a senha de um utilizador, devolvendo o resultado da validação.
+        // Method that validates a user's password, returning the validation result.
 
         Task<SignInResult> ValidatePasswordAsync(User user, string password);
 
-        // Método que gera um token para confirmação de email e o envia para o email do utilizador.
+        // Method that generates a token for email confirmation and sends it to the user's email.
 
-        // Esse token é utilizado para garantir que o email fornecido pelo utilizador é válido.
+        // This token is used to ensure that the email provided by the user is valid.
 
         Task<string> GenerateEmailConfirmationTokenAsync(User user);
 
-        // Método que valida o token de confirmação de email recebido após o usuário clicar no link
+        // Method that validates the email confirmation token received after the user clicks the link
 
-        // de confirmação enviado para o seu email. Se o token for válido, o email do utilizador é confirmado.
+        // confirmation sent to your email. If the token is valid, the user's email is confirmed.
 
         Task<IdentityResult> ConfirmEmailAsync(User user, string token);
 
-        // Método que retorna um objeto User baseado no ID do utilizador.
+        // Method that returns a User object based on the user ID.
 
-        // Esse método é útil para obter informações detalhadas de um utilizador específico usando seu ID.
+        // This method is useful to get detailed information about a specific user using their ID.
 
         Task<User> GetUserByIdAsync(string userId);
 
-        // Método que gera um token para redefinição de senha.
+        // Method that generates a token for password reset.
 
-        // Este token é enviado para o email do utilizador para permitir que ele redefina a sua senha.
+        // This token is sent to the user's email to allow them to reset their password.
 
-        // Retorna o token gerado.
+        // Returns the generated token.
 
         Task<string> GeneratePasswordResetTokenAsync(User user);
 
-        // Método que redefine a senha de um utilizador.
+        // Method that resets a user's password.
 
-        // Recebe o utilizador, o token de redefinição e a nova senha.
+        // Receives the user, reset token and new password.
 
-        // Retorna um IdentityResult indicando se a redefinição da senha foi bem-sucedida ou se ocorreram erros.
+        // Returns an IdentityResult indicating whether the password reset was successful or if errors occurred.
 
         Task<IdentityResult> ResetPasswordAsync(User user, string token, string password);
 
@@ -89,11 +89,9 @@ namespace PulseFit.Management.Web.Helpers
 
         Task<IdentityResult> DeleteUserAsync(User user);
 
-
-        // Adiciona o método para notificar a secretaria sobre novos utilizadores "Pending"
+        // Add method to notify the secretariat about new users "Pending"
 
         //Task NotifySecretaryPendingUserAsync(User user);
-
 
         Task<string> GetUserIdByEmailAsync(string email);
 

@@ -17,16 +17,16 @@ namespace PulseFit.Management.Web.Helpers
         Task<Client> ToClientAsync(ClientViewModel model, Guid imageId, bool isNew);
         ClientViewModel ToClientViewModel(Client client);
 
-        // Converte SubscriptionViewModel para Subscription
+        // Converts SubscriptionViewModel to Subscription
         Task<Subscription> ToSubscriptionAsync(SubscriptionViewModel model, Guid imageId, bool isNew);
 
-        // Converte Subscription para SubscriptionViewModel
+        // Converts Subscription to SubscriptionViewModel
         SubscriptionViewModel ToSubscriptionViewModel(Subscription subscription);
 
-        // Converte UserSubscriptionViewModel para UserSubscription
+        // Converts UserSubscriptionViewModel to UserSubscription
         Task<UserSubscription> ToUserSubscriptionAsync(UserSubscriptionViewModel model, bool isNew);
 
-        // Converte UserSubscription para UserSubscriptionViewModel
+        // Converts UserSubscription to UserSubscriptionViewModel
         UserSubscriptionViewModel ToUserSubscriptionViewModel(UserSubscription userSubscription);
 
         Task<Payment> ToPaymentAsync(PaymentViewModel model, string userId, Guid transactionId, Payment.PaymentStatus status);

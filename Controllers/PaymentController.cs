@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace PulseFit.Management.Web.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class PaymentController : Controller
     {
         private readonly IPaymentRepository _paymentRepository;

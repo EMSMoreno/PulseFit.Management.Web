@@ -55,7 +55,7 @@ namespace PulseFit.Management.Web.Data.Repositories
 
         public async Task<Payment> GetLatestPaymentForSubscriptionAsync(int subscriptionId)
         {
-            // Obtém o pagamento mais recente para a subscrição fornecida
+            // Gets the most recent payment for the given subscription
             return await _context.Payments
                 .Where(p => p.SubscriptionId == subscriptionId)
                 .OrderByDescending(p => p.PaymentDate)

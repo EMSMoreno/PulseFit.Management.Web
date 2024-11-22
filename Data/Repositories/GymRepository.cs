@@ -7,7 +7,7 @@ namespace PulseFit.Management.Web.Data.Repositories
     {
         private readonly DataContext _context;
 
-        //Repositório para ginásios que implementa IGymRepository.
+        //Repository for gyms that implements IGymRepository.
         public GymRepository(DataContext context) : base(context)
         {
             _context = context;

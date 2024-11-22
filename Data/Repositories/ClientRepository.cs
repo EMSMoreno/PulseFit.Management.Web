@@ -20,7 +20,7 @@ namespace PulseFit.Management.Web.Data.Repositories
         public async Task<List<Client>> GetAllWithUsersAsync()
         {
             return await _context.Clients
-                .Include(c => c.User) // Inclui os dados relacionados ao User
+                .Include(c => c.User) // Includes data related to the User
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -28,18 +28,18 @@ namespace PulseFit.Management.Web.Data.Repositories
         public async Task<Client> GetByIdWithUserAsync(int id)
         {
             return await _context.Clients
-                .Include(c => c.User) // Inclui o User para evitar NullReferenceException
+                .Include(c => c.User) // Include User to avoid NullReferenceException
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<IEnumerable<Client>> GetAllClientsWithRoleAsync(string roleName)
         {
-            // Obter os IDs dos usuários que têm a função especificada
+            // Get the IDs of users who have the specified role
             var usersInRole = await _userManager.GetUsersInRoleAsync(roleName);
             var userIds = usersInRole.Select(u => u.Id);
 
-            // Retornar os clientes cujos UserId está na lista dos IDs com a função
+            // Return customers whose UserId is in the list of IDs with the role
             return await _context.Clients
                 .Where(c => userIds.Contains(c.UserId))
                 .ToListAsync();
@@ -56,7 +56,7 @@ namespace PulseFit.Management.Web.Data.Repositories
         public async Task<Client> GetByUserIdAsync(string userId)
         {
             return await _context.Clients
-                .Include(c => c.User) // Inclui os dados relacionados ao User
+                .Include(c => c.User) // Includes data related to the User
                 .FirstOrDefaultAsync(c => c.UserId == userId);
         }
 

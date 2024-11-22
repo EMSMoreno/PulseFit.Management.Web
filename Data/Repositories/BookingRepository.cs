@@ -20,10 +20,10 @@ namespace PulseFit.Management.Web.Data.Repositories
                 throw new Exception("Booking not Found or already canceled/completed.");
             }
 
-            // Penalidade para cancelamentos em menos de 24 horas
+            // Penalty for cancellations in less than 24 hours
             if ((booking.TrainingDate - DateTime.Now).TotalHours < 24)
             {
-                //TODO : Lógica para aplicação de penalidade, se aplicável
+                //TODO : Logic for applying penalty, if applicable
             }
 
             booking.Status = Booking.BookingStatus.Canceled;
@@ -53,7 +53,6 @@ namespace PulseFit.Management.Web.Data.Repositories
             return await _context.Bookings
                 .FirstOrDefaultAsync(b => b.UserId == userId && b.WorkoutId == workoutId);
         }
-
 
         public async Task<IEnumerable<Booking>> GetBookingsByUserAsync(string userId)
         {

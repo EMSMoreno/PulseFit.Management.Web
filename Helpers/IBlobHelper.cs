@@ -2,13 +2,13 @@
 {
     public interface IBlobHelper
     {
-        // Upload de ficheiro via formulário
+        // File upload via form
         Task<Guid> UploadBlobAsync(IFormFile file, string containerName);
 
-        // Upload de ficheiro via array de bytes
+        // File upload via byte array
         Task<Guid> UploadBlobAsync(byte[] file, string containerName);
 
-        // Upload de ficheiro via URL
+        // File upload via URL
         Task<Guid> UploadBlobAsync(string image, string containerName);
     }
 }

@@ -2,6 +2,6 @@
 {
     public class AlertHelper
     {
-        //Envio de alertas e notificações.
+        //Sending alerts and notifications.
     }
 }

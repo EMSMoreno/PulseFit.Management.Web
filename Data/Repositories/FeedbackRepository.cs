@@ -2,6 +2,6 @@
 {
     public class FeedbackRepository
     {
-        //Repositório para feedbacks que implementa IFeedbackRepository.
+        //Repository for feedback that implements IFeedbackRepository.
     }
 }

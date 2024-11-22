@@ -2,6 +2,6 @@
 {
     public class PaymentHelper
     {
-        //Processamento de pagamentos e validação
+        // Payment processing and validation
     }
 }

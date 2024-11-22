@@ -3,73 +3,73 @@ using PulseFit.Management.Web.Data.Entities;
 
 namespace PulseFit.Management.Web.Data.Repositories
 {
-    // A classe genérica GenericRepository vai implementar a interface genérica IGenericRepository
-    // onde "T" é uma classe e também implementa a interface IEntity
+    // The GenericRepository generic class will implement the IGenericRepository generic interface
+    // where "T" is a class and also implements the IEntity interface
     public class GenericRepository<T> : IGenericRepository<T> where T : class, IEntity
     {
         private readonly DataContext _context;
 
-        // Construtor da classe
-        // "Ctrl + ." em cima do context e clicar em "Create and assign field context" vai criar este construtor automaticamente
+        // Class constructor
+        // "Ctrl + ." above the context and clicking on "Create and assign field context" will create this constructor automatically
         public GenericRepository(DataContext context)
         {
             _context = context;
         }
 
-        // Método que devolve todas as entidades do tipo "T"
+        // Method that returns all entities of type "T"
         public IQueryable<T> GetAll()
         {
-            // Vai à tabela correspondente ao tipo "T" e traz todos os registos usando "AsNoTracking"
-            // "AsNoTracking" indica que os objetos retornados não serão monitorados pelo contexto para alterações
+            // Go to the table corresponding to type "T" and bring up all the records using "AsNoTracking"
+            // "AsNoTracking" indicates that the returned objects will not be tracked by the context for changes
             return _context.Set<T>().AsNoTracking();
         }
 
-        // Método que devolve uma entidade pelo seu ID de forma assíncrona
+        // Method that returns an entity by its ID asynchronously
         public async Task<T> GetByIdAsync(int id)
         {
-            // Vai à tabela correspondente ao tipo "T" e procura o primeiro registo com o ID fornecido
+            // Go to the table corresponding to type "T" and look for the first record with the given ID
             return await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        // Método que cria uma nova entidade de forma assíncrona
+        // Method that creates a new entity asynchronously
         public async Task CreateAsync(T entity)
         {
-            // Adiciona a nova entidade à tabela correspondente ao tipo "T"
+            // Adds the new entity to the table corresponding to type "T"
             await _context.Set<T>().AddAsync(entity);
-            // Guarda as alterações no contexto (base de dados)
+            // Saves changes to context (database)
             await SaveAllAsync();
         }
 
-        // Método que atualiza uma entidade existente de forma assíncrona
+        // Method that updates an existing entity asynchronously
         public async Task UpdateAsync(T entity)
         {
-            // Atualiza a entidade na tabela correspondente ao tipo "T"
+            // Updates the entity in the table corresponding to type "T"
             _context.Set<T>().Update(entity);
-            // Guarda as alterações no contexto (base de dados)
+            // Saves changes to context (database)
             await SaveAllAsync();
         }
 
-        // Método que remove uma entidade existente de forma assíncrona
+        // Method that removes an existing entity asynchronously
         public async Task DeleteAsync(T entity)
         {
-            // Remove a entidade da tabela correspondente ao tipo "T"
+            // Removes the entity from the table corresponding to type "T"
             _context.Set<T>().Remove(entity);
-            // Guarda as alterações no contexto (base de dados)
+            // Saves changes to context (database)
             await SaveAllAsync();
         }
 
-        // Método que verifica se uma entidade com um determinado ID existe de forma assíncrona
+        // Method that checks whether an entity with a given ID exists asynchronously
         public async Task<bool> ExistAsync(int id)
         {
-            // Verifica se existe alguma entidade na tabela correspondente ao tipo "T" com o ID fornecido
+            // Checks if there is any entity in the table corresponding to type "T" with the given ID
             return await _context.Set<T>().AnyAsync(e => e.Id == id);
         }
 
-        // Método privado que guarda todas as alterações no contexto (base de dados)
+        // Private method that saves all changes to the context (database)
         private async Task<bool> SaveAllAsync()
         {
-            // SaveChangesAsync guarda as alterações e retorna o número de registos afetados
-            // Se o número de registos afetados for maior que 0, retorna true
+            // SaveChangesAsync saves changes and returns the number of records affected
+            // If the number of affected records is greater than 0, return true
             return await _context.SaveChangesAsync() > 0;
         }
     }

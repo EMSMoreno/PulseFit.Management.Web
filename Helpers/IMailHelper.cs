@@ -5,10 +5,10 @@ namespace PulseFit.Management.Web.Helpers
 {
     public interface IMailHelper
     {
-        // Método para enviar um email. Recebe três parâmetros:
-        // 'to' - o endereço de email do destinatário,
-        // 'subject' - o assunto do email,
-        // 'body' - o corpo da mensagem.
+        // Method to send an email. It takes three parameters:
+        // 'to' - the recipient's email address,
+        // 'subject' - the subject of the email,
+        // 'body' - the body of the message.
         Response SendEmail(string to, string subject, string body);
 
 

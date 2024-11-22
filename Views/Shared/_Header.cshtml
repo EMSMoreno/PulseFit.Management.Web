@@ -5,12 +5,12 @@
             <div class="col-lg-3">
                 <div class="logo">
                     <a asp-area="" asp-controller="Home" asp-action="Index">
-                        <img src="~/img/logo.png" alt="PulseFit Logo" style="height: 30px;">
+                        <img src="~/images/PulseFit Logo.png" alt="PulseFit Logo" style="max-width: 90px; height: auto;">>
                     </a>
                 </div>
             </div>
 
-            <!-- Navegação Principal -->
+            <!-- Main Navegation -->
             <div class="col-lg-6">
                 <nav class="nav-menu">
                     <ul class="d-flex align-items-center">
@@ -87,7 +87,6 @@
                     </div>
                 }
 
-
                 <!-- User Menu -->
                 <div class="d-flex align-items-center">
                     @if (User.Identity.IsAuthenticated)
@@ -133,9 +132,6 @@
     </div>
 
 </header>
-
-
-
 
 <style>
     .user-dropdown .dropdown-menu {

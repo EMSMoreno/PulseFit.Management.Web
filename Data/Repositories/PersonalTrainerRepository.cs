@@ -14,11 +14,11 @@ namespace PulseFit.Management.Web.Data.Repositories
             _context = context;
         }
 
-        // Método para obter todos os personal trainers com os dados do utilizador
+        // Method to get all personal trainers with user data
         public async Task<List<PersonalTrainer>> GetAllWithUsersAsync()
         {
             return await _context.PersonalTrainers
-                .Include(p => p.User)  // Inclui os dados relacionados ao User
+                .Include(p => p.User)  // Includes data related to the User
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -27,7 +27,7 @@ namespace PulseFit.Management.Web.Data.Repositories
         {
             return await _context.PersonalTrainers
                 .Include(pt => pt.User)
-                .Include(pt => pt.Specialties) // Certifique-se de incluir as especialidades
+                .Include(pt => pt.Specialties)
                 .FirstOrDefaultAsync(pt => pt.Id == id);
         }
 

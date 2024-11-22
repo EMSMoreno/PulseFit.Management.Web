@@ -29,7 +29,7 @@ namespace PulseFit.Management.Web.Helpers
                 PhoneNumber = model.PhoneNumber
             };
 
-            // Verifica se o imageId não está vazio e atualiza o ProfilePictureId
+            // Checks if the imageId is not empty and updates the ProfilePictureId
             if (imageId != Guid.Empty)
             {
                 user.ProfilePictureId = imageId;
@@ -51,7 +51,7 @@ namespace PulseFit.Management.Web.Helpers
             };
         }
 
-        // Converte PersonalTrainer para PersonalTrainerViewModel
+        // Converts PersonalTrainer to PersonalTrainerViewModel
         public PersonalTrainerViewModel ToPersonalTrainerViewModel(PersonalTrainer personalTrainer)
         {
             return new PersonalTrainerViewModel
@@ -75,8 +75,6 @@ namespace PulseFit.Management.Web.Helpers
             };
         }
 
-
-
         public async Task<Employee> ToEmployeeAsync(EmployeeViewModel model, Guid imageId, bool isNew)
         {
             var user = await _userHelper.GetUserByIdAsync(model.UserId) ?? new User();
@@ -96,9 +94,9 @@ namespace PulseFit.Management.Web.Helpers
                 Id = isNew ? 0 : model.Id,
                 UserId = user.Id,
                 EmployeeType = model.EmployeeType,
-                HireDate = model.HireDate,  // aceita valor `null`
+                HireDate = model.HireDate,  // aceits `null`
                 Status = model.Status,
-                Shift = model.Shift, // tipo `ShiftType`
+                Shift = model.Shift, // type `ShiftType`
                 User = user
             };
         }
@@ -121,7 +119,7 @@ namespace PulseFit.Management.Web.Helpers
             };
         }
 
-        // Converte NutritionistViewModel em Nutritionist
+        // Converts NutritionistViewModel in Nutritionist
         public async Task<Nutritionist> ToNutritionistAsync(NutritionistViewModel model, Guid imageId, bool isNew)
         {
             var user = await _userHelper.GetUserByIdAsync(model.UserId) ?? new User
@@ -133,7 +131,7 @@ namespace PulseFit.Management.Web.Helpers
                 PhoneNumber = model.PhoneNumber
             };
 
-            // Verifica se o imageId não está vazio e atualiza o ProfilePictureId
+            // Checks if the imageId is not empty and updates the ProfilePictureId
             if (imageId != Guid.Empty)
             {
                 user.ProfilePictureId = imageId;
@@ -224,8 +222,6 @@ namespace PulseFit.Management.Web.Helpers
             };
         }
 
-
-
         public async Task<Subscription> ToSubscriptionAsync(SubscriptionViewModel model, Guid imageId, bool isNew)
         {
             var gyms = await _context.Gyms.Where(g => model.SelectedGymIds.Contains(g.Id)).ToListAsync();
@@ -233,12 +229,12 @@ namespace PulseFit.Management.Web.Helpers
             var nutritionPlans = await _context.NutritionPlans.Where(np => model.SelectedNutritionPlanIds.Contains(np.Id)).ToListAsync();
             var onlineClasses = await _context.OnlineClasses.Where(oc => model.SelectedOnlineClassIds.Contains(oc.Id)).ToListAsync();
 
-            // Recupera a subscrição existente, se não for uma nova
+            // Retrieves the existing subscription if not a new one
             var subscription = isNew
                 ? new Subscription()
                 : await _context.Subscriptions.SingleOrDefaultAsync(s => s.Id == model.Id);
 
-            // Atualiza as propriedades
+            // Update properties
             subscription.Name = model.Name;
             subscription.Description = model.Description;
             subscription.Price = model.Price;
@@ -259,7 +255,7 @@ namespace PulseFit.Management.Web.Helpers
             subscription.PerformanceReportFrequencyInMonths = model.PerformanceReportFrequencyInMonths;
             subscription.DiscountPercentage = model.DiscountPercentage;
 
-            // Define o `ImageId` somente se uma nova imagem foi carregada
+            // Sets the `ImageId` only if a new image has been uploaded
             if (imageId != Guid.Empty)
             {
                 subscription.ImageId = imageId;
@@ -267,7 +263,6 @@ namespace PulseFit.Management.Web.Helpers
 
             return subscription;
         }
-
 
         public SubscriptionViewModel ToSubscriptionViewModel(Subscription subscription)
         {
@@ -292,20 +287,17 @@ namespace PulseFit.Management.Web.Helpers
                 Has24HourAccess = subscription.Has24HourAccess,
                 HasVIPAccess = subscription.HasVIPAccess,
                 PerformanceReportFrequencyInMonths = subscription.PerformanceReportFrequencyInMonths,
-                DiscountPercentage = subscription.DiscountPercentage, // Alteração aqui
+                DiscountPercentage = subscription.DiscountPercentage, // Changed here
                 ImageId = subscription.ImageId
             };
         }
-
-
-
 
         public async Task<UserSubscription> ToUserSubscriptionAsync(UserSubscriptionViewModel model, bool isNew)
         {
             var subscription = await _context.Subscriptions.FindAsync(model.SubscriptionId);
             var client = await _context.Clients.FindAsync(model.ClientId);
 
-            // Calcula a data de término com base na duração da subscrição
+            // Calculates end date based on subscription length
             DateTime endDate = model.StartDate;
             if (subscription != null)
             {
@@ -338,11 +330,10 @@ namespace PulseFit.Management.Web.Helpers
                 EndDate = endDate,
                 Status = model.Status,
                 IsPaid = model.IsPaid,
-                TransactionId = model.TransactionId ?? "MANUAL_" + Guid.NewGuid().ToString(), // Defina um ID de transação padrão se o admin não fornecer
+                TransactionId = model.TransactionId ?? "MANUAL_" + Guid.NewGuid().ToString(), // Set a default transaction ID if the admin does not provide it
                 AmountPaid = model.AmountPaid
             };
         }
-
 
         public UserSubscriptionViewModel ToUserSubscriptionViewModel(UserSubscription userSubscription)
         {
@@ -360,8 +351,6 @@ namespace PulseFit.Management.Web.Helpers
                 AmountPaid = userSubscription.AmountPaid
             };
         }
-
-
 
         public async Task<Payment> ToPaymentAsync(PaymentViewModel model, string userId, Guid transactionId, Payment.PaymentStatus status)
         {
@@ -381,7 +370,7 @@ namespace PulseFit.Management.Web.Helpers
             };
         }
 
-        // Converte Payment para PaymentViewModel
+        // Converts Payment to PaymentViewModel
         public PaymentViewModel ToPaymentViewModel(Payment payment)
         {
             return new PaymentViewModel

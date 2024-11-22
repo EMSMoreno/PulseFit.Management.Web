@@ -14,11 +14,11 @@ namespace PulseFit.Management.Web.Data.Repositories
             _context = context;
         }
 
-        // Método para obter todos os employees com os dados do utilizador
+        // Method to get all employees with user data
         public async Task<List<Employee>> GetAllWithUsersAsync()
         {
             return await _context.Employees
-                .Include(e => e.User)  // Inclui os dados relacionados ao User
+                .Include(e => e.User)  // Includes data related to the User
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -26,7 +26,7 @@ namespace PulseFit.Management.Web.Data.Repositories
         public async Task<Employee> GetByIdWithUserAsync(int id)
         {
             return await _context.Employees
-                .Include(e => e.User) // Inclui o User para evitar NullReferenceException
+                .Include(e => e.User) // Include User to avoid NullReferenceException
                 .AsNoTracking()
                 .FirstOrDefaultAsync(e => e.Id == id);
         }

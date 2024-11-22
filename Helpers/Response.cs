@@ -2,13 +2,13 @@
 {
     public class Response
     {
-        // Indica se a operação foi bem-sucedida ou não.
+        // Indicates whether the operation was successful or not.
         public bool IsSuccess { get; set; }
 
-        // Contém uma mensagem descritiva sobre o resultado da operação.
+        // Contains a descriptive message about the result of the operation.
         public string Message { get; set; }
 
-        // Contém os resultados da operação, se houver algum.
+        // It contains the results of the operation, if any..
         public object Results;
     }
 }

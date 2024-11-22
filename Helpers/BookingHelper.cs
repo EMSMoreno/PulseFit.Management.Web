@@ -2,6 +2,6 @@
 {
     public class BookingHelper
     {
-        //Verificação de disponibilidade e marcação de assiduidade.
+        //Checking availability and scheduling frequency.
     }
 }

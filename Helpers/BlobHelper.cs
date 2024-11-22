@@ -13,9 +13,9 @@ namespace PulseFit.Management.Web.Helpers
         public BlobHelper(IConfiguration configuration)
         {
             var keys = configuration["Blob:ConnectionStrings"];
-            // TODO: Configure a conexão com o Azure Blob Storage antes de ir para produção ESTAMOS A ARMAZENAR LOCALMENTE TENDO ASSIM O BLOB
-            //nao esquecer de por o blob a armazenar no AZURE e modifcar o appsettings com a connection string
-            // Verifique se a chave de conexão está vazia para usar o armazenamento local
+            // TODO: Configure the connection to Azure Blob Storage before going to production WE ARE STORING THE BLOB LOCALLY
+            //don't forget to store the blob in AZURE and modify the appsettings with the connection string
+            // Make sure the connection key is empty to use local storage
             if (string.IsNullOrEmpty(keys))
             {
                 _storagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
@@ -26,7 +26,7 @@ namespace PulseFit.Management.Web.Helpers
             }
             else
             {
-                // Lógica do Azure Blob Storage
+                // Azure Blob Storage Logic
                 // CloudStorageAccount storageAccount = CloudStorageAccount.Parse(keys);
                 // _blobClient = storageAccount.CreateCloudBlobClient();
             }
@@ -59,7 +59,7 @@ namespace PulseFit.Management.Web.Helpers
                 Directory.CreateDirectory(path);
             }
 
-            // Adiciona uma extensão padrão, como .jpg
+            // Adds a default extension, such as .jpg
             var filePath = Path.Combine(path, $"{name}.jpg");
             using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
             {

@@ -5,79 +5,79 @@ namespace PulseFit.Management.Web.Helpers
 {
     public class MailHelper : IMailHelper
     {
-        // Campo privado para armazenar a configuração da aplicação
+        // Private field to store application configuration
         private readonly IConfiguration _configuration;
 
         // Construtor
-        // Injetamos a interface IConfiguration para acessar os dados de configuração do email (armazenados em appsettings.json, por exemplo)
+        // Inject IConfiguration interface to access email configuration data (stored in appsettings.json, for example)
         public MailHelper(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        // Implementação do método SendEmail, que envia um email com base nas informações fornecidas
+        // Implementation of the SendEmail method, which sends an email based on the information provided
         public Response SendEmail(string to, string subject, string body)
         {
-            // Recupera as configurações de email do arquivo de configuração (appsettings.json)
-            var nameFrom = _configuration["Mail:NameFrom"]; // Nome do remetente, recuperado da configuração
-            var from = _configuration["Mail:From"]; // Endereço de email do remetente, recuperado da configuração
-            var smtp = _configuration["Mail:Smtp"]; // Endereço do servidor SMTP, recuperado da configuração
-            var port = _configuration["Mail:Port"]; // Porta SMTP, recuperada da configuração
-            var password = _configuration["Mail:Password"]; // Senha do email, recuperada da configuração
+            // Retrieves email settings from the configuration file (appsettings.json)
+            var nameFrom = _configuration["Mail:NameFrom"]; // Sender name, retrieved from configuration
+            var from = _configuration["Mail:From"]; // Sender email address, retrieved from setup
+            var smtp = _configuration["Mail:Smtp"]; // SMTP server address, retrieved from configuration
+            var port = _configuration["Mail:Port"]; // SMTP port, retrieved from configuration
+            var password = _configuration["Mail:Password"]; // Email password, retrieved from configuration
 
-            // Cria uma nova mensagem de email usando MimeMessage
+            // Create a new email message using MimeMessage
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(nameFrom, from)); // Adiciona o nome e endereço do remetente à mensagem
-            message.To.Add(new MailboxAddress(to, to)); // Adiciona o destinatário à mensagem
-            message.Subject = subject; // Define o assunto do email
+            message.From.Add(new MailboxAddress(nameFrom, from)); // Adds the sender's name and address to the message
+            message.To.Add(new MailboxAddress(to, to)); // Adding the recipient to the message
+            message.Subject = subject; // Set the subject of the email
 
-            // Cria o corpo do email usando BodyBuilder
+            // Create the email body using BodyBuilder
             var bodybuilder = new BodyBuilder
             {
-                HtmlBody = body, // Define o corpo do email como HTML
+                HtmlBody = body, // Sets the email body to HTML
             };
-            message.Body = bodybuilder.ToMessageBody(); // Converte o corpo do email para o formato de mensagem
+            message.Body = bodybuilder.ToMessageBody(); // Converts the email body to message format
 
             try
             {
-                // Usa o SmtpClient para enviar o email
+                // Use SmtpClient to send the email
                 using (var client = new SmtpClient())
                 {
-                    client.Connect(smtp, int.Parse(port), false); // Conecta ao servidor SMTP com a porta especificada
-                    client.Authenticate(from, password); // Autentica com o servidor usando o email e a senha
-                    client.Send(message); // Envia a mensagem de email
-                    client.Disconnect(true); // Desconecta do servidor SMTP
+                    client.Connect(smtp, int.Parse(port), false); // Connects to the SMTP server with the specified port
+                    client.Authenticate(from, password); // Authenticate with the server using email and password
+                    client.Send(message); // Send the email message
+                    client.Disconnect(true); // Disconnect from SMTP server
                 }
             }
             catch (Exception ex)
             {
-                // Se ocorrer uma exceção durante o envio do email, retorna uma resposta de falha
+                // If an exception occurs while sending the email, it returns a failure response
                 return new Response
                 {
-                    IsSuccess = false, // Indica que o envio do email falhou
-                    Message = ex.ToString() // Inclui detalhes da exceção na mensagem de erro
+                    IsSuccess = false, // Indicates that sending the email failed
+                    Message = ex.ToString() // Include exception details in the error message
                 };
             }
 
-            // Retorna uma resposta indicando que o email foi enviado com sucesso
+            // Returns a response indicating that the email was sent successfully
             return new Response
             {
-                IsSuccess = true // Indica que o envio do email foi bem-sucedido
+                IsSuccess = true // Indicates that the email sending was successful
             };
         }
 
         public string LoadAndProcessEmailTemplate(string templatePath, Dictionary<string, string> placeholders)
         {
-            // Lê o template de email a partir do caminho fornecido
+            // Reads the email template from the provided path
             string templateContent = System.IO.File.ReadAllText(templatePath);
 
-            // Adiciona o ano atual aos placeholders, caso não esteja definido
+            // Adds current year to placeholders if not set
             if (!placeholders.ContainsKey("Year"))
             {
                 placeholders["Year"] = DateTime.UtcNow.Year.ToString();
             }
 
-            // Substitui os placeholders no template
+            // Replace placeholders in the template
             foreach (var placeholder in placeholders)
             {
                 templateContent = templateContent.Replace($"{{{{{placeholder.Key}}}}}", placeholder.Value);
@@ -85,8 +85,6 @@ namespace PulseFit.Management.Web.Helpers
 
             return templateContent;
         }
-
-
 
     }
 }

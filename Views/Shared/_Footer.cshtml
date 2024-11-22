@@ -1,73 +1,87 @@
-﻿<section class="footer-section">
+﻿<head>
+    <!-- Link do FontAwesome CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+</head>
+
+<section class="footer-section">
     <div class="container">
         <div class="row">
+            <!-- About Us -->
             <div class="col-lg-4">
                 <div class="fs-about">
                     <div class="fa-logo">
-                        <a href="#"><img src="@Url.Content("~/img/logo.png")" alt=""></a>
+                        <a href="#"><img src="@Url.Content("~/images/PulseFit Logo.png")" alt="PulseFit Logo" style="max-width: 170px; height: auto;"></a>
                     </div>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore dolore magna aliqua endisse ultrices gravida lorem.
+                        At PulseFit, we empower you to achieve your fitness goals with personalized plans, expert guidance, and a supportive community.
+                        Start your journey to a healthier you today!
                     </p>
                     <div class="fa-social">
-                        <a href="#"><i class="fa fa-facebook"></i></a>
-                        <a href="#"><i class="fa fa-twitter"></i></a>
-                        <a href="#"><i class="fa fa-youtube-play"></i></a>
-                        <a href="#"><i class="fa fa-instagram"></i></a>
-                        <a href="#"><i class="fa fa-envelope-o"></i></a>
+                        <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="mailto:contact@pulsefit.com" title="Email"><i class="fas fa-envelope"></i></a>
                     </div>
                 </div>
             </div>
+
+            <!-- Useful links -->
             <div class="col-lg-2 col-md-3 col-sm-6">
                 <div class="fs-widget">
-                    <h4>Useful links</h4>
+                    <h4>Useful Links</h4>
                     <ul>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Classes</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/classes">Classes</a></li>
+                        <li><a href="/contact">Contact</a></li>
                     </ul>
                 </div>
             </div>
+
+            <!-- Support -->
             <div class="col-lg-2 col-md-3 col-sm-6">
                 <div class="fs-widget">
                     <h4>Support</h4>
                     <ul>
-                        <li><a href="#">Login</a></li>
-                        <li><a href="#">My account</a></li>
-                        <li><a href="#">Subscribe</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/account">My Account</a></li>
+                        <li><a href="/subscribe">Subscribe</a></li>
+                        <li><a href="/faq">FAQ</a></li>
                     </ul>
                 </div>
             </div>
+
+            <!-- Tips and Guides -->
             <div class="col-lg-4 col-md-6">
                 <div class="fs-widget">
                     <h4>Tips & Guides</h4>
                     <div class="fw-recent">
-                        <h6><a href="#">Physical fitness may help prevent depression, anxiety</a></h6>
+                        <h6><a href="/blog/physical-fitness-prevents-depression">Physical fitness may help prevent depression, anxiety</a></h6>
                         <ul>
                             <li>3 min read</li>
-                            <li>20 Comment</li>
+                            <li>20 Comments</li>
                         </ul>
                     </div>
                     <div class="fw-recent">
-                        <h6><a href="#">Fitness: The best exercise to lose belly fat and tone up...</a></h6>
+                        <h6><a href="/blog/best-exercise-for-belly-fat">Fitness: The best exercise to lose belly fat and tone up</a></h6>
                         <ul>
                             <li>3 min read</li>
-                            <li>20 Comment</li>
+                            <li>15 Comments</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Copyright -->
         <div class="row">
             <div class="col-lg-12 text-center">
                 <div class="copyright-text">
                     <p>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        &copy; <script>document.write(new Date().getFullYear());</script> PulseFit. All rights reserved.
+                        Inspired <i class="fa fa-heart text-danger" aria-hidden="true"></i> by
+                        <a href="https://colorlib.com" target="_blank" rel="nofollow">Colorlib</a>.
                     </p>
                 </div>
             </div>
