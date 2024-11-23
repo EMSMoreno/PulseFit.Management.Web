@@ -49,10 +49,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\img\classes\class-details\" />
+    <Folder Include="wwwroot\uploads\clients-pics\" />
     <Folder Include="wwwroot\uploads\employees-pics\" />
     <Folder Include="wwwroot\uploads\gyms-pics\" />
+    <Folder Include="wwwroot\uploads\nutritionists-pics\" />
     <Folder Include="wwwroot\uploads\onlineClasses-pics\" />
     <Folder Include="wwwroot\uploads\personaltrainers-pics\" />
+    <Folder Include="wwwroot\uploads\subscription-images\" />
     <Folder Include="wwwroot\uploads\workouts-pics\" />
     <Folder Include="wwwroot\uploads\equipments-pics\" />
     <Folder Include="wwwroot\uploads\workoutsPlans-pics\" />
