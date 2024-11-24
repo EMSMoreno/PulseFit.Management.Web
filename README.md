@@ -20,7 +20,7 @@ The main technologies and tools used in the development of this project are:
 - **Programming Language**: _[C#, .NET Architecture mainly ASP.NET MVC]_
 - **Database**: _[SQL Server]_
 - **Version Control**: _[Git/GitHub]_
-- **Azure Link**: _ [https://pulsefit.management.web.azurewebsites.net/]_
+- **Azure Link**: _[https://pulsefit.management.web.azurewebsites.net/]_
 
 ## Features
 
