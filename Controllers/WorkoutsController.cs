@@ -253,7 +253,8 @@ namespace PulseFit.Management.Web.Controllers
             {
                 string userId = await _userHelper.GetUserIdByEmailAsync(userLoged);
 
-                var bookings = _bookingRepository.GetAll();
+                var bookings = _bookingRepository.GetAll()
+                    .Where(b => b.UserId == userId);
                 var bookingViewModels = bookings.Select(b => _converterHelper.ToBookingViewModel(b)).ToList();
 
                 return View(bookingViewModels);
@@ -333,8 +334,8 @@ namespace PulseFit.Management.Web.Controllers
                 return NotFound();
             }
 
-            var workout = await _workoutRepository.GetByIdAsync(id.Value);
-
+            var booking = await _bookingRepository.GetByIdAsync(id.Value);
+            var workout = await _workoutRepository.GetByIdAsync(booking.WorkoutId);
             if (workout == null)
             {
                 return NotFound();
@@ -343,7 +344,8 @@ namespace PulseFit.Management.Web.Controllers
             ViewBag.Spots = workout.MaxCapacity - workout.Bookings;
             ViewBag.GymImage = await _gymRepository.GetGymImageAsync(workout.GymId);
             ViewBag.PtProfilePic = await _userHelper.GetUserPicAsync(workout.InstructorId);
-
+            ViewBag.BookingStatus = booking.Status;
+            ViewBag.ReservationDate = booking.ReservationDate;
 
             return View(workout);
         }

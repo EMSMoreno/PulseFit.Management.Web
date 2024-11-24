@@ -133,7 +133,7 @@ namespace PulseFit.Management.Web.Controllers
 
             ViewBag.Categories = new SelectList(Enum.GetValues(typeof(OnlineClass.ClassCategory)).Cast<OnlineClass.ClassCategory>());
 
-            return View(onlineClass);
+            return RedirectToAction("ManageOnlineClasses");
         }
 
         // GET: OnlineClasses/Edit/5
@@ -184,7 +184,7 @@ namespace PulseFit.Management.Web.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("ManageOnlineClasses");
             }
 
             ViewBag.Categories = new SelectList(Enum.GetValues(typeof(OnlineClass.ClassCategory)).Cast<OnlineClass.ClassCategory>());
