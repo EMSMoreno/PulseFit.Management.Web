@@ -14,6 +14,7 @@ namespace PulseFit.Management.Web.Data.Repositories
 
         Task<bool> ExistsExclusiveSubscriptionAsync(SubscriptionType subscriptionType);
 
+        Task<IEnumerable<Subscription>> GetSubscriptionsByGymLocationAsync(string location);
 
     }
 }

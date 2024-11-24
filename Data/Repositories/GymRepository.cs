@@ -37,5 +37,18 @@ namespace PulseFit.Management.Web.Data.Repositories
         {
             return await _context.Gyms.ToListAsync();
         }
+
+        public async Task<IEnumerable<Gym>> GetGymBasicInfoAsync()
+        {
+            return await _context.Gyms
+                .Select(g => new Gym
+                {
+                    Id = g.Id,
+                    Name = $"{g.Name} ({g.Location})", // Combina Nome e Localização
+                    Location = g.Location // Opcional, caso precise usar Location isoladamente
+                })
+                .ToListAsync();
+        }
+
     }
 }

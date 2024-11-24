@@ -49,8 +49,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\img\classes\class-details\" />
-    <Folder Include="wwwroot\uploads\clients-pics\" />
+    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\uploads\employees-pics\" />
     <Folder Include="wwwroot\uploads\gyms-pics\" />
     <Folder Include="wwwroot\uploads\nutritionists-pics\" />
@@ -60,6 +59,9 @@
     <Folder Include="wwwroot\uploads\workouts-pics\" />
     <Folder Include="wwwroot\uploads\equipments-pics\" />
     <Folder Include="wwwroot\uploads\workoutsPlans-pics\" />
+	  <None Update="libwkhtmltox.dll">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
   </ItemGroup>
 
   <ItemGroup>

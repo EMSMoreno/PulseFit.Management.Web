@@ -37,17 +37,30 @@ namespace PulseFit.Management.Web.Controllers
         }
 
         // GET: Subscription/Index
-        public async Task<IActionResult> Index(int? gymId)
+        public async Task<IActionResult> Index(string location)
         {
-            var subscriptions = gymId.HasValue
-                ? await _subscriptionRepository.GetSubscriptionsByGymAsync(gymId.Value)
+            var subscriptions = !string.IsNullOrEmpty(location)
+                ? await _subscriptionRepository.GetSubscriptionsByGymLocationAsync(location)
                 : await _subscriptionRepository.GetAllActiveSubscriptionsAsync();
 
             var viewModels = subscriptions.Select(s => _converterHelper.ToSubscriptionViewModel(s)).ToList();
-            ViewBag.GymOptions = new SelectList(await _gymRepository.GetAllAsync(), "Id", "Name");
+
+            // Preencher o ViewBag com as localizações únicas dos gyms
+            ViewBag.GymLocations = (await _gymRepository.GetAllAsync())
+                .Select(g => g.Location)
+                .Distinct()
+                .OrderBy(l => l)
+                .ToList();
+
+            // Passar a localização selecionada
+            ViewBag.SelectedLocation = location;
 
             return View(viewModels);
         }
+
+
+
+
 
         // GET: Subscription/Details/5
         public async Task<IActionResult> Details(int id)
@@ -84,10 +97,8 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (!User.IsInRole("Admin")) return Unauthorized();
 
-            var model = new SubscriptionViewModel
-            {
-                GymOptions = (await _gymRepository.GetAllAsync()).Select(g => new SelectListItem { Text = g.Name, Value = g.Id.ToString() }).ToList()
-            };
+            var model = new SubscriptionViewModel();
+            await PopulateOptions(model);
             return View(model);
         }
 
@@ -226,9 +237,25 @@ namespace PulseFit.Management.Web.Controllers
 
         private async Task PopulateOptions(SubscriptionViewModel model)
         {
-            model.GymOptions = await GetSelectListItems(_gymRepository.GetAllAsync(), "Id", "Name");
-            // Você pode adicionar outras opções aqui, se necessário, como Workouts ou NutritionPlans
+            var gyms = await _gymRepository.GetAllAsync();
+            model.GymOptions = gyms.Select(g => new SelectListItem
+            {
+                Value = g.Id.ToString(),
+                Text = $"{g.Name} ({g.Location})" // Nome seguido da localização
+            }).ToList();
+
+            var workouts = await _workoutRepository.GetAllAsync();
+            model.WorkoutOptions = workouts.Select(w => new SelectListItem
+            {
+                Value = w.Id.ToString(),
+                Text = w.Name
+            }).ToList();
         }
+
+
+
+
+
 
         private async Task<List<SelectListItem>> GetSelectListItems<T>(Task<IEnumerable<T>> items, string dataValueField, string dataTextField)
         {

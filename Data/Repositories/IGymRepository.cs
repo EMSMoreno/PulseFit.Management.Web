@@ -10,5 +10,8 @@ namespace PulseFit.Management.Web.Data.Repositories
         Task<string> GetGymImageAsync(int id);
 
         Task<IEnumerable<Gym>> GetAllAsync();
+
+        Task<IEnumerable<Gym>> GetGymBasicInfoAsync(); // Nova assinatura do método
+
     }
 }

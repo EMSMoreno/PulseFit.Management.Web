@@ -26,7 +26,8 @@ namespace PulseFit.Management.Web.Data.Repositories
         public async Task<Subscription> GetByIdWithDetailsAsync(int id)
         {
             return await _context.Subscriptions
-                .Include(s => s.UserSubscriptions)
+                .Include(s => s.IncludedGyms)
+                .Include(s => s.IncludedWorkouts)
                 .FirstOrDefaultAsync(s => s.Id == id);
         }
 
@@ -51,5 +52,27 @@ namespace PulseFit.Management.Web.Data.Repositories
                                && s.IsExclusive
                                && s.Status == SubscriptionStatus.Active);
         }
+
+        public async Task<IEnumerable<Subscription>> GetSubscriptionsByGymLocationAsync(string location)
+        {
+            // Obter IDs de todos os gyms com a localização fornecida
+            var gymIds = await _context.Gyms
+                .Where(g => g.Location.Contains(location)) // Filtrar gyms pela localização
+                .Select(g => g.Id)
+                .ToListAsync();
+
+            // Obter todas as subscrições e incluir gyms associados
+            var subscriptions = await _context.Subscriptions
+                .Include(s => s.IncludedGyms) // Incluir as associações de gyms
+                .ToListAsync();
+
+            // Filtrar subscrições para exibir as relacionadas à localização ou aquelas acessíveis a todos os gyms
+            return subscriptions.Where(s =>
+                s.IsAllGymsAccessible ||
+                s.IncludedGyms.Any(g => gymIds.Contains(g.Id))
+            );
+        }
+
+
     }
 }

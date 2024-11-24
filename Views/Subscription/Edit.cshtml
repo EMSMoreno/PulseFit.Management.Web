@@ -111,29 +111,38 @@
 
             <!-- Segunda Coluna -->
             <div class="col-md-6">
-                <!-- Benefícios Incluídos -->
                 <div class="mb-3">
                     <label class="form-label text-neon">
                         Included Gyms
-                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Select the gyms that this subscription grants access to."></i>
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Edit the gyms included in this subscription."></i>
                     </label>
-                    <div class="d-flex align-items-center mb-2">
-                        <button type="button" id="selectAllGyms" class="btn btn-secondary me-2">Select All Gyms</button>
-                        <select asp-for="SelectedGymIds" asp-items="Model.GymOptions" class="form-select input-neon" multiple></select>
+                    <div class="form-control input-neon gym-checkbox-container">
+                        @foreach (var gym in Model.GymOptions)
+                        {
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" name="SelectedGymIds" value="@gym.Value" id="gym-@gym.Value" @(Model.SelectedGymIds.Contains(int.Parse(gym.Value)) ? "checked" : "")>
+                                <label for="gym-@gym.Value" class="form-check-label">@gym.Text</label>
+                            </div>
+                        }
                     </div>
                 </div>
-
 
                 <div class="mb-3">
                     <label class="form-label text-neon">
                         Included Workouts
-                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Select the workouts included in this subscription."></i>
+                        <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="Edit the workouts included in this subscription."></i>
                     </label>
-                    <div class="d-flex align-items-center mb-2">
-                        <button type="button" id="selectAllWorkouts" class="btn btn-secondary me-2">Select All Workouts</button>
-                        <select asp-for="SelectedWorkoutIds" asp-items="Model.WorkoutOptions" class="form-select input-neon" multiple></select>
+                    <div class="form-control input-neon workout-checkbox-container">
+                        @foreach (var workout in Model.WorkoutOptions)
+                        {
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" name="SelectedWorkoutIds" value="@workout.Value" id="workout-@workout.Value" @(Model.SelectedWorkoutIds.Contains(int.Parse(workout.Value)) ? "checked" : "")>
+                                <label for="workout-@workout.Value" class="form-check-label">@workout.Text</label>
+                            </div>
+                        }
                     </div>
                 </div>
+
 
 
                 <div class="form-check form-switch mb-3">
@@ -202,22 +211,14 @@
 
 
 <script>
-    // Função genérica para selecionar todos os itens de um campo select múltiplo
-    function selectAllOptions(selectElementId) {
-        const selectElement = document.getElementById(selectElementId);
-        if (selectElement) {
-            Array.from(selectElement.options).forEach(option => option.selected = true);
-        }
-    }
-
-    // Eventos para os botões
-    document.getElementById('selectAllGyms')?.addEventListener('click', function () {
-        selectAllOptions('SelectedGymIds'); // Atualize o ID para o elemento correto
+    document.getElementById('selectAllGymsCheckbox')?.addEventListener('click', function () {
+        document.querySelectorAll("input[name='SelectedGymIds']").forEach(checkbox => checkbox.checked = true);
     });
 
-    document.getElementById('selectAllWorkouts')?.addEventListener('click', function () {
-        selectAllOptions('SelectedWorkoutIds'); // Atualize o ID para o elemento correto
+    document.getElementById('selectAllWorkoutsCheckbox')?.addEventListener('click', function () {
+        document.querySelectorAll("input[name='SelectedWorkoutIds']").forEach(checkbox => checkbox.checked = true);
     });
+
 </script>
 
 <style>
@@ -228,4 +229,23 @@
     .form-check.form-switch .form-check-label {
         padding-left: 50px;
     }
+
+    .gym-checkbox-container {
+        height: 125px; /* Altura fixa */
+        overflow-y: auto; /* Adiciona rolagem para listas maiores */
+        padding: 10px;
+        border: 1px solid var(--neon-pink); /* Bordas em tons neon */
+        border-radius: 5px;
+        color: var(--text-neon); /* Cor do texto neon */
+    }
+
+    .workout-checkbox-container {
+        height: 125px; /* Altura fixa */
+        overflow-y: auto; /* Adiciona rolagem para listas maiores */
+        padding: 10px;
+        border: 1px solid var(--neon-pink); /* Bordas em tons neon */
+        border-radius: 5px;
+        color: var(--text-neon); /* Cor do texto neon */
+    }
+
 </style>

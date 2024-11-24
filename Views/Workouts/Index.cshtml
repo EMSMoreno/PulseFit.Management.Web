@@ -39,7 +39,7 @@ else
                         <a asp-action="Details" asp-route-id="@workout.Id" style="text-decoration: none; color: inherit;">
                             <img src="@Url.Content(workout.WorkoutImageUrl ?? "/images/noimage.png")"
                                  alt="Workout Image" class="card-img-top rounded neon-outline"
-                                 style="max-height: 200px; object-fit: cover;" />
+                                 style="max-height: 200px; object-fit: contain;" />
                         
                             <div class="card-body">
                                 <h5 class="text-neon">@workout.Name</h5>

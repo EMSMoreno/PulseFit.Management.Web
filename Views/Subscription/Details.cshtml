@@ -77,13 +77,13 @@
                 <!-- Included Plans & Services -->
                 <h4 class="text-neon-yellow mt-4">Included Plans & Services:</h4>
                 <ul class="list-group list-group-flush">
-                    @if (Model.SelectedGymIds?.Count > 0)
+                    @if (Model.GymNames?.Count > 0)
                     {
-                        <li class="list-group-item">Included Gyms: @string.Join(", ", Model.SelectedGymIds)</li>
+                        <li class="list-group-item">Included Gyms: @string.Join(", ", Model.GymNames)</li>
                     }
-                    @if (Model.SelectedWorkoutIds?.Count > 0)
+                    @if (Model.WorkoutNames?.Count > 0)
                     {
-                        <li class="list-group-item">Included Workouts: @string.Join(", ", Model.SelectedWorkoutIds)</li>
+                        <li class="list-group-item">Included Workouts: @string.Join(", ", Model.WorkoutNames)</li>
                     }
                     <li class="list-group-item">
                         Online Classes:
@@ -94,6 +94,7 @@
                         <strong class="text-neon-green ms-auto">@((Model.IncludeNutritionPlans ? "Yes" : "No"))</strong>
                     </li>
                 </ul>
+
 
                 <!-- Subscribe Now Button -->
                 <div class="d-grid mt-4">

@@ -14,15 +14,19 @@
     }
 
     <div class="filter-bar mb-4 card-neon p-3">
-        <label for="gymFilter" class="form-label">Select Gym:</label>
-        <select id="gymFilter" class="form-select input-neon" onchange="filterSubscriptions()">
-            <option value="0">All Gyms</option>
-            @foreach (var gym in ViewBag.GymOptions as SelectList)
+        <label for="locationFilter" class="form-label">Filter by Location:</label>
+        <select id="locationFilter" class="form-select input-neon" onchange="filterSubscriptionsByLocation()">
+            <option value="">All Locations</option>
+            @foreach (var location in ViewBag.GymLocations as List<string>)
             {
-                <option value="@gym.Value">@gym.Text</option>
+                <option value="@location">@location</option>
             }
         </select>
     </div>
+
+
+
+
 
     <div id="subscriptionList" class="row row-cols-1 row-cols-md-3 g-4">
         @foreach (var subscription in Model)
@@ -68,11 +72,23 @@
 </div>
 
 <script>
-    function filterSubscriptions() {
-        var gymId = document.getElementById('gymFilter').value;
-        window.location.href = `?gymId=${gymId}`;
+    function filterSubscriptionsByLocation() {
+        const location = document.getElementById('locationFilter').value;
+        const url = location ? `?location=${encodeURIComponent(location)}` : '?';
+        window.location.href = url; // Força o redirecionamento da página
     }
+
+    // Após carregar a página, definir o valor selecionado no filtro
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectedLocation = '@ViewBag.SelectedLocation';
+        const selectElement = document.getElementById('locationFilter');
+        if (selectedLocation && selectElement) {
+            selectElement.value = selectedLocation;
+        }
+    });
 </script>
+
+
 
 <style>
     .subscription-card {

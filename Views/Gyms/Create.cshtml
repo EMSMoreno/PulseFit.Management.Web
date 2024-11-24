@@ -53,15 +53,16 @@
     <div class="row mb-3">
         <div class="col-md-6">
             <label asp-for="OpeningTime" class="text-neon-pink">Opening Time <span class="text-danger">*</span></label>
-            <input asp-for="OpeningTime" class="form-control input-neon" required />
+            <input asp-for="OpeningTime" type="time" class="form-control input-neon" required min="00:00" max="23:59" step="1" />
             <span asp-validation-for="OpeningTime" class="text-warning"></span>
         </div>
         <div class="col-md-6">
             <label asp-for="ClosingTime" class="text-neon-pink">Closing Time <span class="text-danger">*</span></label>
-            <input asp-for="ClosingTime" class="form-control input-neon" required />
+            <input asp-for="ClosingTime" type="time" class="form-control input-neon" required min="00:00" max="23:59" step="1" />
             <span asp-validation-for="ClosingTime" class="text-warning"></span>
         </div>
     </div>
+
 
     <div class="row mb-3">
         <div class="col-md-6">

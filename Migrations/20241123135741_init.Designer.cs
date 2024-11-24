@@ -12,8 +12,8 @@ using PulseFit.Management.Web.Data;
 namespace PulseFit.Management.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241122145159_UpdatedDb")]
-    partial class UpdatedDb
+    [Migration("20241123135741_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

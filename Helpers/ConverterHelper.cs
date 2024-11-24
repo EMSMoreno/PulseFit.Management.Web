@@ -226,13 +226,13 @@ namespace PulseFit.Management.Web.Helpers
         {
             var gyms = await _context.Gyms.Where(g => model.SelectedGymIds.Contains(g.Id)).ToListAsync();
             var workouts = await _context.Workouts.Where(w => model.SelectedWorkoutIds.Contains(w.Id)).ToListAsync();
-            var nutritionPlans = await _context.NutritionPlans.Where(np => model.SelectedNutritionPlanIds.Contains(np.Id)).ToListAsync();
-            var onlineClasses = await _context.OnlineClasses.Where(oc => model.SelectedOnlineClassIds.Contains(oc.Id)).ToListAsync();
 
-            // Retrieves the existing subscription if not a new one
             var subscription = isNew
                 ? new Subscription()
-                : await _context.Subscriptions.SingleOrDefaultAsync(s => s.Id == model.Id);
+                : await _context.Subscriptions
+                    .Include(s => s.IncludedGyms)
+                    .Include(s => s.IncludedWorkouts)
+                    .SingleOrDefaultAsync(s => s.Id == model.Id);
 
             // Update properties
             subscription.Name = model.Name;
@@ -279,8 +279,12 @@ namespace PulseFit.Management.Web.Helpers
                 SubscriptionType = subscription.SubscriptionType,
                 IsExclusive = subscription.IsExclusive,
                 IsAllGymsAccessible = subscription.IsAllGymsAccessible,
-                SelectedGymIds = subscription.IncludedGyms.Select(g => g.Id).ToList(),
-                SelectedWorkoutIds = subscription.IncludedWorkouts.Select(w => w.Id).ToList(),
+                SelectedGymIds = subscription.IncludedGyms?.Select(g => g.Id).ToList() ?? new List<int>(),
+                GymNames = subscription.IncludedGyms?.Select(g => g.Name).ToList() ?? new List<string>(), // Preenchendo os nomes dos gyms
+
+                SelectedWorkoutIds = subscription.IncludedWorkouts?.Select(w => w.Id).ToList() ?? new List<int>(),
+                WorkoutNames = subscription.IncludedWorkouts?.Select(w => w.Name).ToList() ?? new List<string>(), // Preenchendo os nomes dos workouts
+
                 IncludeNutritionPlans = subscription.IncludeNutritionPlans,
                 IncludeOnlineClasses = subscription.IncludeOnlineClasses,
                 MaxPersonalTrainerSessions = subscription.MaxPersonalTrainerSessions,

@@ -49,6 +49,9 @@ namespace PulseFit.Management.Web.Models
         public List<SelectListItem> OnlineClassOptions { get; set; } = new List<SelectListItem>();
         public List<int> SelectedOnlineClassIds { get; set; } = new List<int>();
 
+        public List<string> GymNames { get; set; } = new List<string>(); // Nomes dos gyms
+        public List<string> WorkoutNames { get; set; } = new List<string>(); // Nomes dos workouts
+
         public bool Has24HourAccess { get; set; }
         public bool HasVIPAccess { get; set; }
         public int PerformanceReportFrequencyInMonths { get; set; }

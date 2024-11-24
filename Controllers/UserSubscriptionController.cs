@@ -150,7 +150,7 @@ namespace PulseFit.Management.Web.Controllers
 
         #endregion
 
-        #region Métodos de Cliente (Inalterados)
+        #region Métodos de Cliente
 
         public async Task<IActionResult> ClientSubscriptions()
         {
@@ -202,7 +202,7 @@ namespace PulseFit.Management.Web.Controllers
 <html>
     <body style='font-family: Arial, sans-serif; background-color: #121212; color: #ffffff; padding: 20px;'>
         <header style='text-align: center; margin-bottom: 20px;'>
-            <img src='pulsefitlogo.png' alt='PulseFit Logo' style='width: 150px; display: block; margin: 0 auto;'>
+<img src=""https://i.postimg.cc/26n1YzgM/pulsefitlogo.png"" alt=""PulseFit Logo"" style=""width: 150px; display: block; margin: 0 auto;"">
             <hr style='border: 1px solid #00ffff;'>
         </header>
         <h1 style='color: #00ffff; text-align: center; margin-bottom: 20px;'>Invoice</h1>
