@@ -1,10 +1,10 @@
-# Garage88 - Web Project
+# PulseFit - Final Project
 
 Repository used as a Final Project (w/Azure integration)
 
-This repository contains the official project developed for CINEL's final project focusing on a mechanic website called **PulseFit**.
+This repository contains the official project developed for CINEL's final project focusing on a gym management website called **PulseFit**.
 
-![Logo](https://raw.githubusercontent.com/EMSMoreno/wwwroot/images/pulsefitlogo.png)
+![Logo](https://raw.githubusercontent.com/EMSMoreno/PulseFit.Management.Web/master/wwwroot/images/pulsefitlogo.png)
 
 ## Overview
 PulseFit is a comprehensive gym management system designed to streamline operations and elevate the fitness experience. Built with ASP.NET MVC, it offers features like subscription management, workout and payment tracking, appointment scheduling, and client engagement tools. With a focus on user-friendly interfaces and secure data handling, PulseFit empowers gym owners and members alike to achieve efficiency and fitness goals in a modern, digitally connected way.
