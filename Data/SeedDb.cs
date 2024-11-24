@@ -105,7 +105,7 @@ public class SeedDb
             new Specialty { Name = "Boxing", ImageUrl = "/images/specialties/boxing.png", ImageName = "boxing.png" },
             new Specialty { Name = "Kickboxing", ImageUrl = "/images/specialties/kickboxing.png", ImageName = "kickboxing.png" },
             new Specialty { Name = "Physical Rehabilitation", ImageUrl = "/images/specialties/rehabilitation_training.jpg", ImageName = "rehabilitation_training.jpg" },
-            new Specialty { Name = "Weight Loss", ImageUrl = "/images/specializations/weight_loss.png", ImageName = "weight_loss.png" },
+            new Specialty { Name = "WeightLoss", ImageUrl = "/images/specialties/weig.jpg", ImageName = "weig.jpg" },
             new Specialty { Name = "Sports Conditioning", ImageUrl = "/images/specialties/sports_conditioning.png", ImageName = "sports_conditioning.png" },
             new Specialty { Name = "Prenatal Training", ImageUrl = "/images/specialties/prenatal_training.png", ImageName = "prenatal_training.png" },
             new Specialty { Name = "Postnatal Training", ImageUrl = "/images/specialties/postnatal_training.png", ImageName = "postnatal_training.png" },
