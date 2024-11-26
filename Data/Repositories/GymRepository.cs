@@ -44,8 +44,8 @@ namespace PulseFit.Management.Web.Data.Repositories
                 .Select(g => new Gym
                 {
                     Id = g.Id,
-                    Name = $"{g.Name} ({g.Location})", // Combina Nome e Localização
-                    Location = g.Location // Opcional, caso precise usar Location isoladamente
+                    Name = $"{g.Name} ({g.Location})", 
+                    Location = g.Location 
                 })
                 .ToListAsync();
         }

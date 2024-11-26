@@ -9,7 +9,7 @@ namespace PulseFit.Management.Web.Models.Validations
         private readonly int _minimumAge;
         private readonly int _maximumAge;
 
-        // Construtor que aceita uma idade mínima e máxima como parâmetros
+        // Constructor that accepts a minimum and maximum age as parameters
         public BirthdateValidationAttribute(int minimumAge = 16, int maximumAge = 100, string minDate = "1920-01-01")
         {
             _minimumAge = minimumAge;

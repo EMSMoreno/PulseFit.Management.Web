@@ -280,10 +280,10 @@ namespace PulseFit.Management.Web.Helpers
                 IsExclusive = subscription.IsExclusive,
                 IsAllGymsAccessible = subscription.IsAllGymsAccessible,
                 SelectedGymIds = subscription.IncludedGyms?.Select(g => g.Id).ToList() ?? new List<int>(),
-                GymNames = subscription.IncludedGyms?.Select(g => g.Name).ToList() ?? new List<string>(), // Preenchendo os nomes dos gyms
+                GymNames = subscription.IncludedGyms?.Select(g => g.Name).ToList() ?? new List<string>(), 
 
                 SelectedWorkoutIds = subscription.IncludedWorkouts?.Select(w => w.Id).ToList() ?? new List<int>(),
-                WorkoutNames = subscription.IncludedWorkouts?.Select(w => w.Name).ToList() ?? new List<string>(), // Preenchendo os nomes dos workouts
+                WorkoutNames = subscription.IncludedWorkouts?.Select(w => w.Name).ToList() ?? new List<string>(),
 
                 IncludeNutritionPlans = subscription.IncludeNutritionPlans,
                 IncludeOnlineClasses = subscription.IncludeOnlineClasses,
@@ -291,7 +291,7 @@ namespace PulseFit.Management.Web.Helpers
                 Has24HourAccess = subscription.Has24HourAccess,
                 HasVIPAccess = subscription.HasVIPAccess,
                 PerformanceReportFrequencyInMonths = subscription.PerformanceReportFrequencyInMonths,
-                DiscountPercentage = subscription.DiscountPercentage, // Changed here
+                DiscountPercentage = subscription.DiscountPercentage, 
                 ImageId = subscription.ImageId
             };
         }

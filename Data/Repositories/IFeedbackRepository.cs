@@ -2,6 +2,5 @@
 {
     public interface IFeedbackRepository
     {
-        //Interface para o repositório de feedbacks.
     }
 }

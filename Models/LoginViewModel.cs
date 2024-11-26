@@ -4,19 +4,19 @@ namespace PulseFit.Management.Web.Models
 {
     public class LoginViewModel
     {
-        //O Username é obrigatorio
-        [Required]
-        //O Username será um email
-        [EmailAddress]
+        // Username is required
+        [Required(ErrorMessage = "The Username is required.")]
+        // Username must be a valid email address
+        [EmailAddress(ErrorMessage = "The Username must be a valid email address.")]
         public string Username { get; set; }
 
-        //A Password será obrigatoria
-        [Required]
-        //A Password terá que ter no minimo 6 caracteres
-        [MinLength(6)]
+        // Password is required
+        [Required(ErrorMessage = "The Password is required.")]
+        // Password must have a minimum length of 6 characters
+        [MinLength(6, ErrorMessage = "The Password must be at least 6 characters long.")]
         public string Password { get; set; }
 
-        //Esta propriedade vai servir para a pessoa nao precisar de estar sempre a fazer o Login
+        // This property allows the user to stay logged in without re-entering credentials
         public bool RememberMe { get; set; }
     }
 }

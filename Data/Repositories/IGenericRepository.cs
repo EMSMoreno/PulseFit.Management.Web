@@ -1,41 +1,27 @@
 ﻿namespace PulseFit.Management.Web.Data.Repositories
-
 {
+    // This interface will always receive a class or an entity. Since we don't know which entity, we use "<T>".
 
-    // Esta interface irá receber sempre uma classe ou uma entidade. Como não sabemos qual é a entidade, colocamos "<T>"
-
-    // Esta interface vai-se chamar IGenericRepository e vai injetar um "T" em que o "T" é uma classe
+    // This interface is named IGenericRepository and will inject a "T", where "T" is a class.
 
     public interface IGenericRepository<T> where T : class
-
     {
-
-        // GetAll() será um método que vai devolver todas as entidades que o "T" estiver a usar
-
+        // GetAll() will be a method that returns all entities used by "T".
         IQueryable<T> GetAll();
 
-        // GetByIdAsync(int id) será um método que vai devolver uma entidade pelo seu ID de forma assíncrona
-
+        // GetByIdAsync(int id) will be a method that retrieves an entity by its ID asynchronously.
         Task<T> GetByIdAsync(int id);
 
-        // CreateAsync(T entity) será um método que vai criar uma nova entidade de forma assíncrona
-
+        // CreateAsync(T entity) will be a method that creates a new entity asynchronously.
         Task CreateAsync(T entity);
 
-        // UpdateAsync(T entity) será um método que vai atualizar uma entidade existente de forma assíncrona
-
+        // UpdateAsync(T entity) will be a method that updates an existing entity asynchronously.
         Task UpdateAsync(T entity);
 
-        // DeleteAsync(T entity) será um método que vai apagar uma entidade existente de forma assíncrona
-
+        // DeleteAsync(T entity) will be a method that deletes an existing entity asynchronously.
         Task DeleteAsync(T entity);
 
-        // ExistAsync(int id) será um método que vai verificar se uma entidade existe pelo seu ID de forma assíncrona
-
+        // ExistAsync(int id) will be a method that checks if an entity exists by its ID asynchronously.
         Task<bool> ExistAsync(int id);
-
     }
-
 }
-
-

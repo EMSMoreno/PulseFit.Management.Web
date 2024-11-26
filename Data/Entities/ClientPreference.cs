@@ -3,7 +3,7 @@
     public class ClientPreference : IEntity
     {
         public int Id { get; set; }
-        public string ClientId { get; set; } // Tipo alterado para string
+        public string ClientId { get; set; }
         public User Client { get; set; }
         public string DietaryRestrictions { get; set; }
         public string HealthConditions { get; set; }

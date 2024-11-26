@@ -80,10 +80,10 @@
                     { field: "StatusText", headerText: "Status", width: 120 },
                     { headerText: "Actions", width: 220, template: "#actionTemplate" }
                 ],
-                rowHeight: 60, // Aumenta a altura das linhas
+                rowHeight: 60, 
                 gridLines: 'Horizontal',
                 queryCellInfo: function (args) {
-                    args.cell.style.fontSize = "1.1rem"; // Ajusta o tamanho da fonte
+                    args.cell.style.fontSize = "1.1rem"; 
                 }
             });
             grid.appendTo("#Grid");

@@ -22,9 +22,9 @@ namespace PulseFit.Management.Web.ViewComponents
             {
                 FirstName = t.User.FirstName,
                 LastName = t.User.LastName,
-                ImageId = t.User.ProfilePictureId ?? Guid.Empty // Caso não exista, será vazio
+                ImageId = t.User.ProfilePictureId ?? Guid.Empty 
             })
-            .Take(6) // Limitar a 6 personal trainers, ajustável
+            .Take(6) 
             .ToList();
 
             return View(trainerViewModels);

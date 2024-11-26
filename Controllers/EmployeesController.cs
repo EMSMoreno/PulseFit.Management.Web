@@ -197,7 +197,7 @@ namespace PulseFit.Management.Web.Controllers
                 try
                 {
                     // Check image size
-                    if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 2 * 1024 * 1024) // Limite de 2 MB
+                    if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 2 * 1024 * 1024)
                     {
                         ModelState.AddModelError("ProfilePictureFile", "The file size should not exceed 2 MB.");
                         return View(model);

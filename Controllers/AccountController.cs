@@ -60,11 +60,12 @@ namespace PulseFit.Management.Web.Controllers
                         return Redirect(Request.Query["ReturnUrl"].First());
                     }
 
-                    // Obtém o utilizador e o respetivo role
+
+                    // Gets the user and their role
                     var user = await _userHelper.GetUserByEmailAsync(model.Username);
                     var userRole = await _userHelper.GetRoleAsync(user);
 
-                    // Redireciona o utilizador com base no role
+                    // Redirects the user based on role
                     switch (userRole)
                     {
                         case "Admin":
@@ -84,7 +85,7 @@ namespace PulseFit.Management.Web.Controllers
                 }
                 else
                 {
-                    // Adiciona logs detalhados para cada caso de falha
+                    // Add detailed logs for each failure case
                     _logger.LogWarning("Failed login attempt for user: {Email}", model.Username);
 
                     if (result.IsLockedOut)
@@ -142,7 +143,7 @@ namespace PulseFit.Management.Web.Controllers
 
                 try
                 {
-                    // Criação do novo User
+                    // Creation of new User
                     var user = new User
                     {
                         FirstName = model.FirstName,
@@ -159,7 +160,7 @@ namespace PulseFit.Management.Web.Controllers
                         user.ProfilePictureId = await _blobHelper.UploadBlobAsync(model.ProfilePicture, "clients-pics");
                     }
 
-                    // Adiciona o usuário
+                    // Add the user
                     var createUserResult = await _userHelper.AddUserAsync(user, model.Password);
                     if (!createUserResult.Succeeded)
                     {
@@ -167,11 +168,12 @@ namespace PulseFit.Management.Web.Controllers
                         return View(model);
                     }
 
-                    // Atribui o papel de "Client" e atualiza o estado do e-mail como confirmado
+                    // Assigns the role of "Client" and updates the email status as confirmed
                     await _userHelper.AddUserToRoleAsync(user, "Client");
                     await _userHelper.UpdateUserAsync(user);
 
-                    // Gera e envia o link de confirmação de email com token
+
+                    // Generate and send email confirmation link with token
                     string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
                     string tokenLink = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, token = myToken }, protocol: HttpContext.Request.Scheme);
 
@@ -193,7 +195,7 @@ namespace PulseFit.Management.Web.Controllers
                         return View(model);
                     }
 
-                    // Cria a entidade Client associada
+                    // Creates the associated Client entity
                     var client = new Client
                     {
                         Birthdate = model.Birthdate,
@@ -426,11 +428,13 @@ namespace PulseFit.Management.Web.Controllers
                     return View(model);
                 }
 
-                // Atualiza a senha usando o token de redefinição
+
+                // Update password using reset token
                 var resetPasswordResult = await _userHelper.ResetPasswordAsync(user, model.Token, model.NewPassword);
                 if (resetPasswordResult.Succeeded)
                 {
-                    // Confirma automaticamente o email, caso ainda não esteja
+
+                    // Automatically confirms the email, if it is not already
                     if (!user.EmailConfirmed)
                     {
                         user.EmailConfirmed = true;

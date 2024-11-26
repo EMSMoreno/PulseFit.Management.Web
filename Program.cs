@@ -12,14 +12,14 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Adiciona os serviços ao contêiner.
+// Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Configuração do DbContext com SQL Server
+// Configure DbContext with SQL Server
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configuração do Identity
+// Configure Identity
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.User.RequireUniqueEmail = true;
@@ -31,12 +31,11 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     options.Password.RequireLowercase = true;
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequiredLength = 8;
-
 })
 .AddEntityFrameworkStores<DataContext>()
 .AddDefaultTokenProviders();
 
-// Configuração de Autenticação JWT
+// Configure JWT Authentication
 builder.Services.AddAuthentication()
     .AddCookie()
     .AddJwtBearer(cfg =>
@@ -49,7 +48,7 @@ builder.Services.AddAuthentication()
         };
     });
 
-// Registro de helpers e repositórios
+// Register helpers and repositories
 builder.Services.AddScoped<IUserHelper, UserHelper>();
 builder.Services.AddTransient<IMailHelper, MailHelper>();
 builder.Services.AddScoped<IBlobHelper, BlobHelper>();
@@ -71,15 +70,14 @@ builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
 builder.Services.AddScoped<IWorkoutPlanRepository, WorkoutPlanRepository>();
 builder.Services.AddScoped<INutritionPlanRepository, NutritionPlanRepository>();
 builder.Services.AddScoped<IOnlineClassRepository, OnlineClassRepository>();
-builder.Services.AddScoped<SeedDb>(); // Registro do SeedDb
+builder.Services.AddScoped<SeedDb>(); // Register SeedDb
 
+// Load unmanaged library for wkhtmltopdf
 var context = new CustomAssemblyLoadContext();
 context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "libwkhtmltox.dll"));
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
-
-
-// Configuração de cookies para o Identity
+// Configure Identity cookie settings
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
@@ -89,10 +87,10 @@ builder.Services.ConfigureApplicationCookie(options =>
 var app = builder.Build();
 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NDaF5cWWtCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWH9ec3RTRWhfWUx3XUY=");
 
-// Configuração do pipeline de requisições HTTP
+// Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
-    // Redirects to general error page
+    // Redirect to a general error page in non-development environments
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
@@ -100,20 +98,19 @@ if (!app.Environment.IsDevelopment())
 // Configuration for specific HTTP status codes
 app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
-
-// Configuração de redirecionamento e arquivos estáticos
+// Configure redirect and static files
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Rota padrão
+// Default route configuration
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Executa o seeding dos dados no início da aplicação
+// Execute data seeding at the start of the application
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;

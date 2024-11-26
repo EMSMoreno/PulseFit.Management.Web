@@ -4,13 +4,13 @@ namespace PulseFit.Management.Web.Models
 {
     public class RecoverPasswordViewModel
     {
-        // O atributo [Required] indica que o campo é obrigatório e deve ser preenchido.
-        // Se o campo estiver vazio, uma mensagem de erro será gerada.
-        [Required(ErrorMessage = "O email é obrigatório.")]
-        // O atributo [EmailAddress] valida que o valor inserido é um endereço de email válido.
-        // Garante que o formato do email esteja correto (por exemplo, user@example.com).
-        [EmailAddress(ErrorMessage = "O formato do email é inválido.")]
-        // Propriedade que armazena o endereço de email do utilizador.
+        // The [Required] attribute indicates that this field is mandatory and must be filled.
+        // If the field is empty, an error message will be displayed.
+        [Required(ErrorMessage = "Email is required.")]
+        // The [EmailAddress] attribute validates that the entered value is in a valid email address format.
+        // Ensures the email format is correct (e.g., user@example.com).
+        [EmailAddress(ErrorMessage = "The email format is invalid.")]
+        // Property to store the user's email address.
         public string Email { get; set; }
     }
 }

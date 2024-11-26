@@ -43,10 +43,10 @@ public class HomeController : Controller
     {
         if (ModelState.IsValid)
         {
-            // Calcula o IMC
+            // Calculate BMI
             model.BMI = model.Weight / ((model.Height / 100) * (model.Height / 100));
 
-            // Determina o status baseado no IMC
+            // Determine status based on BMI
             if (model.Age < 18)
             {
                 model.Status = "Consult a pediatrician for BMI evaluation.";
@@ -66,12 +66,11 @@ public class HomeController : Controller
                 else model.Status = "Obese";
             }
 
-            // Log para verificar os valores calculados
+            // Log to check calculated values
             _logger.LogInformation($"BMI Calculation: Height = {model.Height}, Weight = {model.Weight}, BMI = {model.BMI}, Status = {model.Status}");
         }
         else
         {
-            // Log para saber porque o modelo não é válido
             var validationErrors = ModelState.Values.SelectMany(v => v.Errors)
                                                       .Select(e => e.ErrorMessage)
                                                       .ToList();

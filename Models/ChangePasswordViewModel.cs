@@ -1,25 +1,25 @@
 ﻿using System.ComponentModel.DataAnnotations;
- 
+
 namespace PulseFit.Management.Web.Models
 {
     public class ChangePasswordViewModel
     {
-        //Vai ser obrigatorio preencher a Password antiga
+        // The current password is required
         [Required]
         [Display(Name = "Current password")]
-        //Aqui vai por a Password antiga
+        // Field to input the current password
         public string OldPassword { get; set; }
 
-        //Vai ser obrigatorio preencher a Password nova
+        // The new password is required
         [Required]
         [Display(Name = "New password")]
-        //Aqui vai por a Password nova
+        // Field to input the new password
         public string NewPassword { get; set; }
 
-        //Confirmaçao, que serve para o utilizador por a password 2 vexes
+        // Confirmation field to ensure the user inputs the new password twice
         [Required]
-        //Aqui vai confirmar que o valor que o utilizador poem no segundo campo é igual ao valor que defeniu para a New password
-        [Compare("NewPassword")]
+        // Ensures the value entered in this field matches the value of "NewPassword"
+        [Compare("NewPassword", ErrorMessage = "The confirmation password does not match the new password.")]
         public string Confirm { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace PulseFit.Management.Web.Data.Entities
 
         public List<Specialty> Specialties { get; set; } = new List<Specialty>(); // Initializing list
 
-        public CertificationType? Certification { get; set; } // Usando enum for Certifications
+        public CertificationType? Certification { get; set; } 
 
         public List<Client> Clients { get; set; } = new List<Client>(); // Initializing list
 

@@ -45,14 +45,14 @@ namespace PulseFit.Management.Web.Controllers
 
             var viewModels = subscriptions.Select(s => _converterHelper.ToSubscriptionViewModel(s)).ToList();
 
-            // Preencher o ViewBag com as localizações únicas dos gyms
+            // Fill the ViewBag with unique gym locations
             ViewBag.GymLocations = (await _gymRepository.GetAllAsync())
                 .Select(g => g.Location)
                 .Distinct()
                 .OrderBy(l => l)
                 .ToList();
 
-            // Passar a localização selecionada
+            // Pass the selected location
             ViewBag.SelectedLocation = location;
 
             return View(viewModels);
@@ -241,7 +241,7 @@ namespace PulseFit.Management.Web.Controllers
             model.GymOptions = gyms.Select(g => new SelectListItem
             {
                 Value = g.Id.ToString(),
-                Text = $"{g.Name} ({g.Location})" // Nome seguido da localização
+                Text = $"{g.Name} ({g.Location})"
             }).ToList();
 
             var workouts = await _workoutRepository.GetAllAsync();

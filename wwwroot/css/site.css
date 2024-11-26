@@ -234,7 +234,8 @@ a.more-link {
     letter-spacing: 1px;
 }
 
-/* Estilos para o loader de pagamento */
+
+/* Styles for the payment loader */
 .payment-loader-container {
     text-align: center;
     margin-top: 30px;
@@ -337,7 +338,7 @@ h4, h5, h6 {
 
 .btn-neon-green {
     background-color: var(--neon-green);
-    color: var(--btn-text-green); /* Usa a variável para cor do texto */
+    color: var(--btn-text-green); 
     border: 1px solid var(--neon-green);
     border-radius: 6px;
     transition: box-shadow 0.2s ease, transform 0.2s ease;
@@ -495,14 +496,14 @@ h4, h5, h6 {
 
 /* Search Icon */
 .to-search i {
-    color: #fff; /* Branco */
+    color: #fff; 
     font-size: 16px;
     cursor: pointer;
     transition: color 0.3s ease;
 }
 
     .to-search i:hover {
-        color: var(--neon-pink, #E93571); /* Cor de destaque ao passar o mouse */
+        color: var(--neon-pink, #E93571); 
     }
 
 
@@ -518,11 +519,11 @@ h4, h5, h6 {
     }
 
     header {
-        font-size: 14px; /* Ajuste específico para o texto do header */
+        font-size: 14px; 
     }
 
     nav.menu-items {
-        font-size: 12; /* Ajuste para os itens do menu */
+        font-size: 12; 
     }
 }
 

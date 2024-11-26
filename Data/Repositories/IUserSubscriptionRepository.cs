@@ -4,7 +4,7 @@ namespace PulseFit.Management.Web.Data.Repositories
 {
     public interface IUserSubscriptionRepository : IGenericRepository<UserSubscription>
     {
-        Task<IEnumerable<UserSubscription>> GetAllAsync(); // Adiciona esta linha
+        Task<IEnumerable<UserSubscription>> GetAllAsync(); 
 
         Task<IEnumerable<UserSubscription>> GetUserSubscriptionsAsync(int clientId);
         Task<UserSubscription> GetUserSubscriptionByIdAsync(int id);

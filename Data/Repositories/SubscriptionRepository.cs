@@ -46,7 +46,7 @@ namespace PulseFit.Management.Web.Data.Repositories
 
         public async Task<bool> ExistsExclusiveSubscriptionAsync(SubscriptionType subscriptionType)
         {
-            // Verifica se existe uma subscrição ativa do tipo exclusivo
+            // Checks if there is an active subscription of the exclusive type
             return await _context.Subscriptions
                 .AnyAsync(s => s.SubscriptionType == subscriptionType
                                && s.IsExclusive
@@ -55,23 +55,24 @@ namespace PulseFit.Management.Web.Data.Repositories
 
         public async Task<IEnumerable<Subscription>> GetSubscriptionsByGymLocationAsync(string location)
         {
-            // Obter IDs de todos os gyms com a localização fornecida
+            // Get the IDs of all gyms with the provided location
             var gymIds = await _context.Gyms
-                .Where(g => g.Location.Contains(location)) // Filtrar gyms pela localização
+                .Where(g => g.Location.Contains(location)) // Filter gyms by location
                 .Select(g => g.Id)
                 .ToListAsync();
 
-            // Obter todas as subscrições e incluir gyms associados
+            // Retrieve all subscriptions and include associated gyms
             var subscriptions = await _context.Subscriptions
-                .Include(s => s.IncludedGyms) // Incluir as associações de gyms
+                .Include(s => s.IncludedGyms) // Include gym associations
                 .ToListAsync();
 
-            // Filtrar subscrições para exibir as relacionadas à localização ou aquelas acessíveis a todos os gyms
+            // Filter subscriptions to show those related to the location or accessible to all gyms
             return subscriptions.Where(s =>
                 s.IsAllGymsAccessible ||
                 s.IncludedGyms.Any(g => gymIds.Contains(g.Id))
             );
         }
+
 
 
     }

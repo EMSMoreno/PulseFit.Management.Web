@@ -28,9 +28,7 @@
 
     <form asp-action="Create" method="post" enctype="multipart/form-data" class="card-neon p-4 needs-validation" novalidate>
         <div class="row">
-            <!-- Primeira Coluna -->
             <div class="col-md-6">
-                <!-- Nome -->
                 <div class="mb-3">
                     <label asp-for="Name" class="form-label text-neon">
                         Name
@@ -39,7 +37,6 @@
                     <input asp-for="Name" class="form-control input-neon" required>
                 </div>
 
-                <!-- Descrição -->
                 <div class="mb-3">
                     <label asp-for="Description" class="form-label text-neon">
                         Description
@@ -48,7 +45,6 @@
                     <textarea asp-for="Description" class="form-control input-neon" rows="4"></textarea>
                 </div>
 
-                <!-- Preço -->
                 <div class="mb-3">
                     <label asp-for="Price" class="form-label text-neon">
                         Price
@@ -57,7 +53,6 @@
                     <input asp-for="Price" class="form-control input-neon" required>
                 </div>
 
-                <!-- Imagem -->
                 <div class="mb-3">
                     <label asp-for="SubscriptionImageFile" class="form-label text-neon">
                         Image
@@ -66,7 +61,6 @@
                     <input asp-for="SubscriptionImageFile" type="file" class="form-control input-neon">
                 </div>
 
-                <!-- Tipo de Subscrição -->
                 <div class="mb-3">
                     <label asp-for="SubscriptionType" class="form-label text-neon">
                         Subscription Type
@@ -75,7 +69,6 @@
                     <select asp-for="SubscriptionType" class="form-select input-neon" asp-items="Html.GetEnumSelectList<SubscriptionType>()"></select>
                 </div>
 
-                <!-- Exclusividade -->
                 <div class="form-check form-switch mb-3">
                     <input asp-for="IsExclusive" class="form-check-input">
                     <label asp-for="IsExclusive" class="form-check-label text-neon">
@@ -84,7 +77,6 @@
                     </label>
                 </div>
 
-                <!-- Valor de Duração -->
                 <div class="mb-3">
                     <label asp-for="DurationValue" class="form-label text-neon">
                         Duration Value
@@ -93,7 +85,6 @@
                     <input asp-for="DurationValue" class="form-control input-neon" required>
                 </div>
 
-                <!-- Tipo de Duração -->
                 <div class="mb-3">
                     <label asp-for="DurationType" class="form-label text-neon">
                         Duration Type
@@ -103,9 +94,7 @@
                 </div>
             </div>
 
-            <!-- Segunda Coluna -->
             <div class="col-md-6">
-                <!-- Benefícios Incluídos -->
                 <div class="mb-3">
                     <label class="form-label text-neon">
                         Included Gyms
@@ -158,7 +147,6 @@
                 </div>
 
 
-                <!-- Benefícios Extras -->
                 <div class="mb-3">
                     <label asp-for="MaxPersonalTrainerSessions" class="form-label text-neon">
                         Max Personal Trainer Sessions
@@ -226,21 +214,21 @@
     }
 
     .gym-checkbox-container {
-        height: 125px; /* Altura fixa */
-        overflow-y: auto; /* Adiciona rolagem para listas maiores */
+        height: 125px; 
+        overflow-y: auto; 
         padding: 10px;
-        border: 1px solid var(--neon-pink); /* Bordas em tons neon */
+        border: 1px solid var(--neon-pink); 
         border-radius: 5px;
-        color: var(--text-neon); /* Cor do texto neon */
+        color: var(--text-neon); 
     }
 
     .workout-checkbox-container {
-        height: 125px; /* Altura fixa */
-        overflow-y: auto; /* Adiciona rolagem para listas maiores */
+        height: 125px; 
+        overflow-y: auto;
         padding: 10px;
-        border: 1px solid var(--neon-pink); /* Bordas em tons neon */
+        border: 1px solid var(--neon-pink); 
         border-radius: 5px;
-        color: var(--text-neon); /* Cor do texto neon */
+        color: var(--text-neon); 
     }
 
 

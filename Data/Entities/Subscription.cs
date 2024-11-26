@@ -83,7 +83,6 @@ namespace PulseFit.Management.Web.Data.Entities
         Trial            // Temporary trial period.
     }
 
-    // Enum para definir o tipo de duração (dias, semanas, meses ou anos)
     public enum DurationType
     {
         Days,

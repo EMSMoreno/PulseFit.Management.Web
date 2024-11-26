@@ -44,7 +44,7 @@ namespace PulseFit.Management.Web.Controllers
 
         private async Task<bool> UserHasAccessToOnlineClasses()
         {
-            // Obtém o usuário logado
+            // Gets the logged in user
             var user = await _userManager.GetUserAsync(User);
 
             if (user == null)
@@ -78,7 +78,7 @@ namespace PulseFit.Management.Web.Controllers
         {
             if (!await UserHasAccessToOnlineClasses())
             {
-                return RedirectToAction("AccessDenied", "Account"); // Ou outra lógica de redirecionamento
+                return RedirectToAction("AccessDenied", "Account");
             }
 
             var videos = _onlineClassRepository.GetAll().ToList()

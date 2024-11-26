@@ -10,44 +10,44 @@ namespace PulseFit.Management.Web.Models
     {
         public int Id { get; set; }
 
-        // ID e detalhes da assinatura
+        // ID and details of the subscription
         [Required]
         public int SubscriptionId { get; set; }
         public SubscriptionViewModel Subscription { get; set; }
 
-        // ID e detalhes do cliente
+        // ID and details of the client
         [Required]
         public int ClientId { get; set; }
-        public ClientViewModel Client { get; set; } // Pode ser adicionado para representar o cliente
+        public ClientViewModel Client { get; set; } // Can be added to represent the client
 
-        // Datas de início e término
+        // Start and end dates
         [Required]
         public DateTime StartDate { get; set; }
-
         public DateTime EndDate { get; set; }
 
-        // Estado da assinatura e pagamento
+        // Subscription and payment status
         public SubscriptionStatus Status { get; set; }
         public bool IsPaid { get; set; }
 
-        // Propriedades de pagamento
+        // Payment properties
         public string TransactionId { get; set; }
         public decimal AmountPaid { get; set; }
 
-        // Verificação se a assinatura está ativa
+        // Checks if the subscription is active
         public bool IsActive => Status == SubscriptionStatus.Active && EndDate >= DateTime.UtcNow;
 
-        // Propriedades auxiliares para exibição
+        // Helper properties for display
         public string SubscriptionName => Subscription?.Name;
-        public decimal SubscriptionPrice => Subscription?.Price ?? 0; // Acesso ao preço da subscrição
+        public decimal SubscriptionPrice => Subscription?.Price ?? 0; // Accesses subscription price
 
-
+        // List of subscription options for dropdowns or selection
         public IEnumerable<SelectListItem> SubscriptionOptions { get; set; }
 
-        // Métodos auxiliares
+        // Helper method to calculate the end date based on the subscription duration
         public void CalculateEndDate()
         {
             DateTime calculatedEndDate = StartDate;
+
             if (Subscription != null)
             {
                 switch (Subscription.DurationType)
@@ -66,10 +66,11 @@ namespace PulseFit.Management.Web.Models
                         break;
                 }
             }
+
             EndDate = calculatedEndDate;
         }
 
+        // List of payments associated with the subscription
         public List<PaymentViewModel> Payments { get; set; } = new List<PaymentViewModel>();
-
     }
 }

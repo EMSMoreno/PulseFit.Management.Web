@@ -10,7 +10,7 @@ namespace PulseFit.Management.Web.Data.Repositories
         Task<IEnumerable<Payment>> GetPaymentsByUserIdAsync(string userId);
         Task<Payment> GetByIdAsync(int paymentId);
 
-        Task<Payment> GetLatestPaymentForSubscriptionAsync(int subscriptionId);  // Adicionado
+        Task<Payment> GetLatestPaymentForSubscriptionAsync(int subscriptionId);  
 
         Task<IEnumerable<Payment>> GetPaymentsBySubscriptionIdAsync(int subscriptionId);
 

@@ -21,7 +21,6 @@ namespace PulseFit.Management.Web.Models
 
         public int MaxWorkouts { get; set; }
 
-        // Propriedades para definir a duração personalizada da subscrição
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Duration must be greater than zero.")]
         public int DurationValue { get; set; } = 1; // Ex: 1, 7, 30, etc.
@@ -34,7 +33,6 @@ namespace PulseFit.Management.Web.Models
 
         public SubscriptionStatus Status { get; set; } = SubscriptionStatus.Active;
 
-        // Benefícios e configurações de acesso
         public bool IsAllGymsAccessible { get; set; }
         public List<SelectListItem> GymOptions { get; set; } = new List<SelectListItem>();
         public List<int> SelectedGymIds { get; set; } = new List<int>();
@@ -49,8 +47,8 @@ namespace PulseFit.Management.Web.Models
         public List<SelectListItem> OnlineClassOptions { get; set; } = new List<SelectListItem>();
         public List<int> SelectedOnlineClassIds { get; set; } = new List<int>();
 
-        public List<string> GymNames { get; set; } = new List<string>(); // Nomes dos gyms
-        public List<string> WorkoutNames { get; set; } = new List<string>(); // Nomes dos workouts
+        public List<string> GymNames { get; set; } = new List<string>(); 
+        public List<string> WorkoutNames { get; set; } = new List<string>(); 
 
         public bool Has24HourAccess { get; set; }
         public bool HasVIPAccess { get; set; }
@@ -63,7 +61,6 @@ namespace PulseFit.Management.Web.Models
         public bool IncludeOnlineClasses { get; set; }
 
 
-        // Propriedades de Imagem
         public Guid ImageId { get; set; }
         public IFormFile? SubscriptionImageFile { get; set; }
 

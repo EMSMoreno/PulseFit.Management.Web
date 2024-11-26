@@ -7,7 +7,7 @@ namespace PulseFit.Management.Web.Models
 {
     public class PaymentViewModel
     {
-        public int Id { get; set; } // Identificador do pagamento
+        public int Id { get; set; } 
 
         public int SubscriptionId { get; set; }
         public string SubscriptionName { get; set; }
@@ -25,15 +25,15 @@ namespace PulseFit.Management.Web.Models
 
         public List<SelectListItem> PaymentMethodOptions { get; set; } = new List<SelectListItem>();
 
-        public DateTime PaymentDate { get; set; } // Data do pagamento
-        public string TransactionId { get; set; } // Identificador da transação
+        public DateTime PaymentDate { get; set; } 
+        public string TransactionId { get; set; } 
 
         public Dictionary<string, (string Color, string Icon)> PaymentMethodStyles { get; set; } = new()
 {
     { "Credit Card", ("#af4c4c", "credit_card_icon.png") },
     { "PayPal", ("#003087", "paypal_icon.png") },
     { "Cash", ("#FF9800", "cash_icon.png") },
-    { "Crypto", ("#4c4caf", "crypto_icon.png") } // Adiciona a cor e o ícone para "Crypto"
+    { "Crypto", ("#4c4caf", "crypto_icon.png") } 
 };
     }
 }

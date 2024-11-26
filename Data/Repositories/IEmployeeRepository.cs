@@ -7,7 +7,7 @@ namespace PulseFit.Management.Web.Data.Repositories
     public interface IEmployeeRepository : IGenericRepository<Employee>
     {
         Task<List<Employee>> GetAllWithUsersAsync();
-        Task<Employee> GetByIdWithUserAsync(int id); // Novo método para obter Employee com User incluído
+        Task<Employee> GetByIdWithUserAsync(int id); 
 
         Task<Employee> GetEmployeeByUserIdAsync(string userId);
 

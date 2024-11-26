@@ -2,25 +2,33 @@
 
 public class BMICalculatorViewModel
 {
+    // Height in centimeters, required field with a valid range
     [Required(ErrorMessage = "Height is required")]
     [Range(1, 300, ErrorMessage = "Height must be between 1 and 300 cm")]
-    public double? Height { get; set; } // Altura em cm
+    public double? Height { get; set; }
 
+    // Weight in kilograms, required field with a valid range
     [Required(ErrorMessage = "Weight is required")]
     [Range(1, 500, ErrorMessage = "Weight must be between 1 and 500 kg")]
-    public double? Weight { get; set; } // Peso em kg
+    public double? Weight { get; set; }
 
+    // Age in years, required field with a valid range
     [Required(ErrorMessage = "Age is required")]
     [Range(1, 120, ErrorMessage = "Age must be between 1 and 120 years")]
-    public int? Age { get; set; } // Idade em anos
+    public int? Age { get; set; }
 
+    // Sex (Male or Female), required field
     [Required(ErrorMessage = "Sex is required")]
-    public Sex? Sex { get; set; } // Masculino ou Feminino
+    public Sex? Sex { get; set; }
 
-    public double? BMI { get; set; } // Calculado no backend
-    public string? Status { get; set; } // Status baseado no BMI
+    // Calculated BMI (to be set in the backend)
+    public double? BMI { get; set; }
+
+    // Status based on the BMI value (e.g., Underweight, Normal, Overweight, Obese)
+    public string? Status { get; set; }
 }
 
+// Enumeration for Sex
 public enum Sex
 {
     Male,
